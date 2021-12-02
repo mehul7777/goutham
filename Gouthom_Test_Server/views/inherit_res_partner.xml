@@ -9,7 +9,7 @@
                 <xpath expr="//field[@name='property_product_pricelist']" position="after">
                     <field name="is_a_customer"/>
                 </xpath>
-                <xpath expr="//group[@name='purchase']" position="after">
+                <xpath expr="//group[@name='purchase']" position="inside">
                     <field name="is_a_vendor"/>
                 </xpath>
             </field>
