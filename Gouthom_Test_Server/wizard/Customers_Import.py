@@ -126,5 +126,13 @@ class CustomerWizard(models.TransientModel):
                         'property_payment_term_id': property_payment_term_id.id,
                         'property_supplier_payment_term_id': property_supplier_payment_term_id.id,
                     }
-                    customer_id = self.env['res.partner'].create(customer_val)
-                    print("customer_val", customer_id)
+                    if company_type == "company":
+                        company_obj = self.env['res.partner'].search([('name', '=', name), ('company_type', '=', 'company')])
+                        if not company_obj:
+                            company_obj_id = self.env['res.partner'].create(customer_val)
+                            print("customer_val", company_obj_id)
+                    if company_type == 'person':
+                        person_obj = self.env['res.partner'].search([('name', '=', name), ('company_type', '=', 'person')])
+                        if not person_obj:
+                            person_obj_id = self.env['res.partner'].create(customer_val)
+                            print("customer_val", person_obj_id)
