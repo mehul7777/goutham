@@ -69,6 +69,8 @@ class CustomerWizard(models.TransientModel):
                 related_company = value[32]
                 customer_payment_terms = value[33]
                 vendor_payment_terms = value[34]
+                customer_rank = value[35]
+                supplier_rank = value[36]
 
                 state_id = self.env['res.country.state'].search([('name', '=', state)])
                 country_id = self.env['res.country'].search([('name', '=', country)])
@@ -125,8 +127,8 @@ class CustomerWizard(models.TransientModel):
                         'parent_id': parent_id.id,
                         'property_payment_term_id': property_payment_term_id.id,
                         'property_supplier_payment_term_id': property_supplier_payment_term_id.id,
-                        'customer_rank': is_a_customer,
-                        'supplier_rank': is_a_vendor,
+                        'customer_rank': customer_rank,
+                        'supplier_rank': supplier_rank,
                     }
                     if company_type == "company":
                         company_obj = self.env['res.partner'].search([('name', '=', name), ('company_type', '=', 'company')])
