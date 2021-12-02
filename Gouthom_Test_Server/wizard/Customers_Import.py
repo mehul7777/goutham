@@ -125,6 +125,8 @@ class CustomerWizard(models.TransientModel):
                         'parent_id': parent_id.id,
                         'property_payment_term_id': property_payment_term_id.id,
                         'property_supplier_payment_term_id': property_supplier_payment_term_id.id,
+                        'customer_rank': is_a_customer,
+                        'supplier_rank': is_a_vendor,
                     }
                     if company_type == "company":
                         company_obj = self.env['res.partner'].search([('name', '=', name), ('company_type', '=', 'company')])
