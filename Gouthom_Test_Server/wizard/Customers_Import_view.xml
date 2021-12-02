@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_customer_wizard_form" model="ir.ui.view">
+        <field name="name">view.customer.wizard.form</field>
+        <field name="model">customer.wizard</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="load_file"/>
+                </group>
+                <footer>
+                    <button name="import_customer_data" string="Import" type="object" class="oe_highlight"/>
+                    <button string="Cancel" class="btn btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="customer_wizard_action_record" model="ir.actions.act_window">
+        <field name="name">Import Customer(s)</field>
+        <field name="res_model">customer.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_customer_wizard_form"/>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="base.model_res_partner"/>
+        <field name="binding_view_types">list</field>
+    </record>
+
+
+</odoo>
