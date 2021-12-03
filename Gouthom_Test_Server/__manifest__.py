@@ -16,6 +16,7 @@
         'security/ir.model.access.csv',
         'wizard/Customers_Import_view.xml',
         'wizard/Products_Import_view.xml',
+        'wizard/Vendor_Pricelist_Import_view.xml',
         'views/Inherit_Template_view.xml',
         'views/inherit_res_partner.xml',
 
