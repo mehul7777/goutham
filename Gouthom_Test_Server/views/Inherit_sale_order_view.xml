@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="so_inherit_view_training" model="ir.ui.view">
+            <field name="name">so.inherit.view.training</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='partner_id']" position="after">
+                    <field name="customer_po"/>
+                </xpath>
+                <field name="partner_invoice_id" attrs="{'invisible':0}"/>
+            </field>
+        </record>
+    </data>
+</odoo>
