@@ -97,52 +97,52 @@ class SOWizard(models.TransientModel):
                 analytic_account_id = self.env["account.analytic.account"].search([('name', '=', analytic_account)])
                 opportunity_id = self.env["crm.lead"].search([('name', '=', lead_or_opportunity)])
 
-                if status == "done":
-                    if not part_id:
-                        cutomers_val = {
-                            'name': customer
-                        }
-                        part_id = self.env['res.partner'].create(cutomers_val)
+                if not part_id:
+                    cutomers_val = {
+                        'name': customer
+                    }
+                    part_id = self.env['res.partner'].create(cutomers_val)
 
-                    if not invoice_addr:
-                        invoice_addr = part_id
+                if not invoice_addr:
+                    invoice_addr = part_id
 
-                    if not delivery_addr:
-                        delivery_addr = part_id
+                if not delivery_addr:
+                    delivery_addr = part_id
 
-                    if order_reference:
-                        so_val = {
-                            'name': order_reference,
-                            'partner_id': part_id.id,
-                            'partner_invoice_id': invoice_addr.id,
-                            'partner_shipping_id': delivery_addr.id,
-                            'customer_po': customer_po,
-                            'client_order_ref': customer_reference,
-                            'sale_order_template_id': sale_ord_temp_id.id,
-                            'date_order': order_date,
-                            'pricelist_id': priceli_id.id,
-                            'project_start_date': project_start_date,
-                            'project_end_date': project_end_date,
-                            'point_contact': point_of_contact_id.id,
-                            'warehouse_id': warehouse_id.id,
-                            'picking_policy': shipping_policy,
-                            'user_id': user_id.id,
-                            'project_manager': project_manager_id.id,
-                            'team_id': team_id.id,
-                            'require_signature': online_signature,
-                            'require_payment': online_payment,
-                            'company_id': company_id.id,
-                            'commitment_date': confirmation_date,
-                            'fiscal_position_id': fiscal_position_id.id,
-                            'state': status,
-                            'invoice_status': invoice_status,
-                            'origin': source_document,
-                            'payment_term_id': payment_term_id.id,
-                            'carrier_id': carrier_id.id,
-                            'tag_ids': tag_ids.ids,
-                            'analytic_account_id': analytic_account_id.id,
-                            'opportunity_id': opportunity_id.id,
-                        }
+                if order_reference:
+                    so_val = {
+                        'name': order_reference,
+                        'partner_id': part_id.id,
+                        'partner_invoice_id': invoice_addr.id,
+                        'partner_shipping_id': delivery_addr.id,
+                        'customer_po': customer_po,
+                        'client_order_ref': customer_reference,
+                        'sale_order_template_id': sale_ord_temp_id.id,
+                        'date_order': order_date,
+                        'pricelist_id': priceli_id.id,
+                        'project_start_date': project_start_date,
+                        'project_end_date': project_end_date,
+                        'point_contact': point_of_contact_id.id,
+                        'warehouse_id': warehouse_id.id,
+                        'picking_policy': shipping_policy,
+                        'user_id': user_id.id,
+                        'project_manager': project_manager_id.id,
+                        'team_id': team_id.id,
+                        'require_signature': online_signature,
+                        'require_payment': online_payment,
+                        'company_id': company_id.id,
+                        'commitment_date': confirmation_date,
+                        'fiscal_position_id': fiscal_position_id.id,
+                        'state': status,
+                        'invoice_status': invoice_status,
+                        'origin': source_document,
+                        'payment_term_id': payment_term_id.id,
+                        'carrier_id': carrier_id.id,
+                        'tag_ids': tag_ids.ids,
+                        'analytic_account_id': analytic_account_id.id,
+                        'opportunity_id': opportunity_id.id,
+                    }
+                    if status == "done":
                         so_id = self.env['sale.order'].create(so_val)
                         print("so_id", so_id)
                         print(so_val)
