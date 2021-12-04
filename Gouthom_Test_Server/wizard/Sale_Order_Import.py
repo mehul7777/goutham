@@ -76,40 +76,81 @@ class SOWizard(models.TransientModel):
                 analytic_account = value[39]
                 lead_or_opportunity = value[40]
 
-                part_id = self.env["res.partner"].search([('name', '=', customer)])
-                invoice_addr = self.env["res.partner"].search([('parent_id', '=', part_id.id), ("type", "=", 'invoice')], limit=1)
-                delivery_addr = self.env["res.partner"].search([('parent_id', '=', part_id.id), ("type", "=", 'delivery')], limit=1)
-                # part_invo_id = self.env["res.partner"].search([('name', '=', invoice_address)])
-                # part_ship_id = self.env["res.partner"].search([('name', '=', delivery_address)])
-                sale_ord_temp_id = self.env["sale.order.template"].search([('name', '=', quotation_template)])
-                priceli_id = self.env["product.pricelist"].search([('name', '=', pricelist)])
-                point_of_contact_id = self.env["res.partner"].search([('name', '=', point_of_contact)], limit=1)
+                product_id = self.env['product.product'].search([('name', '=', order_lines_product)])
+                product_uom_id = self.env['uom.uom'].search([('name', '=', order_lines_unit_of_measure)])
+                analytic_tags_ids = self.env["account.analytic.tag"].search([('name', '=', order_lines_analytic_tags)])
+                tax_id = self.env["account.tax"].search([('name', '=', order_lines_taxes)])
+                order_lines_warehouse_id = self.env["stock.warehouse"].search([('name', '=', order_lines_warehouse)])
+                print(analytic_tags_ids.ids, tax_id.ids)
 
-                warehouse_id = self.env["stock.warehouse"].search([('name', '=', warehouse)])
-                user_id = self.env["res.users"].search([('name', '=', sales_person)])
-                project_manager_id = self.env["res.users"].search([('name', '=', project_manager)])
-                team_id = self.env["crm.team"].search([('name', '=', sales_team)])
-                company_id = self.env["res.company"].search([('name', '=', company)])
-                fiscal_position_id = self.env["account.fiscal.position"].search([('name', '=', fiscal_position)])
-                payment_term_id = self.env["account.payment.term"].search([('name', '=', payment_terms)])
-                carrier_id = self.env["delivery.carrier"].search([('name', '=', delivery_method)])
-                tag_ids = self.env["crm.tag"].search([('name', '=', tags)])
-                analytic_account_id = self.env["account.analytic.account"].search([('name', '=', analytic_account)])
-                opportunity_id = self.env["crm.lead"].search([('name', '=', lead_or_opportunity)])
-
-                if not part_id:
-                    cutomers_val = {
-                        'name': customer
-                    }
-                    part_id = self.env['res.partner'].create(cutomers_val)
-
-                if not invoice_addr:
-                    invoice_addr = part_id
-
-                if not delivery_addr:
-                    delivery_addr = part_id
-
+                lst = []
                 if order_reference:
+                    if status == "done":
+                        if order_lines_product:
+                            if not product_id:
+                                products_val = {
+                                    'name': order_lines_product
+                                }
+                                product_id = self.env['product.product'].create(products_val)
+
+                            if not analytic_tags_ids:
+                                analytic_tags_vals = {
+                                    'name': analytic_tags_ids
+                                }
+                                analytic_tags_ids = self.env['account.analytic.tag'].create(analytic_tags_vals)
+
+                            so_line_vals = (0, 0, {
+                                'is_service': order_lines_is_a_service,
+                                'product_id': product_id[0].id,
+                                # 'oem_code': order_lines_oem,
+                                'name': order_lines_description,
+                                'product_uom_qty': order_lines_ordered_quantity,
+                                'warehouse_id': order_lines_warehouse_id.id,
+                                'product_uom': product_uom_id.id,
+                                'analytic_tag_ids': [(6, 0, analytic_tags_ids.ids)],
+                                'price_unit': order_lines_unit_price,
+                                'tax_id': [(6, 0, tax_id.ids)],
+                                'discount': order_lines_discount,
+                                # 'order_id': so_id.id
+                            })
+                            lst.append(so_line_vals)
+                            # sol_id = self.env['sale.order.line'].create(so_line_vals)
+                            # print("sol_id", sol_id)
+                            # print(so_line_vals)
+
+                    part_id = self.env["res.partner"].search([('name', '=', customer)])
+                    invoice_addr = self.env["res.partner"].search([('parent_id', '=', part_id.id), ("type", "=", 'invoice')], limit=1)
+                    delivery_addr = self.env["res.partner"].search([('parent_id', '=', part_id.id), ("type", "=", 'delivery')], limit=1)
+                    # part_invo_id = self.env["res.partner"].search([('name', '=', invoice_address)])
+                    # part_ship_id = self.env["res.partner"].search([('name', '=', delivery_address)])
+                    sale_ord_temp_id = self.env["sale.order.template"].search([('name', '=', quotation_template)])
+                    priceli_id = self.env["product.pricelist"].search([('name', '=', pricelist)])
+                    point_of_contact_id = self.env["res.partner"].search([('name', '=', point_of_contact)], limit=1)
+
+                    warehouse_id = self.env["stock.warehouse"].search([('name', '=', warehouse)])
+                    user_id = self.env["res.users"].search([('name', '=', sales_person)])
+                    project_manager_id = self.env["res.users"].search([('name', '=', project_manager)])
+                    team_id = self.env["crm.team"].search([('name', '=', sales_team)])
+                    company_id = self.env["res.company"].search([('name', '=', company)])
+                    fiscal_position_id = self.env["account.fiscal.position"].search([('name', '=', fiscal_position)])
+                    payment_term_id = self.env["account.payment.term"].search([('name', '=', payment_terms)])
+                    carrier_id = self.env["delivery.carrier"].search([('name', '=', delivery_method)])
+                    tag_ids = self.env["crm.tag"].search([('name', '=', tags)])
+                    analytic_account_id = self.env["account.analytic.account"].search([('name', '=', analytic_account)])
+                    opportunity_id = self.env["crm.lead"].search([('name', '=', lead_or_opportunity)])
+
+                    if not part_id:
+                        cutomers_val = {
+                            'name': customer
+                        }
+                        part_id = self.env['res.partner'].create(cutomers_val)
+
+                    if not invoice_addr:
+                        invoice_addr = part_id
+
+                    if not delivery_addr:
+                        delivery_addr = part_id
+
                     so_val = {
                         'name': order_reference,
                         'partner_id': part_id.id,
@@ -141,46 +182,27 @@ class SOWizard(models.TransientModel):
                         'tag_ids': tag_ids.ids,
                         'analytic_account_id': analytic_account_id.id,
                         'opportunity_id': opportunity_id.id,
+                        'order_line': lst,
                     }
-                    if status == "done":
-                        so_id = self.env['sale.order'].create(so_val)
-                        print("so_id", so_id)
-                        print(so_val)
-
-                    product_id = self.env['product.product'].search([('name', '=', order_lines_product)])
-                    product_uom_id = self.env['uom.uom'].search([('name', '=', order_lines_unit_of_measure)])
-                    analytic_tags_ids = self.env["account.analytic.tag"].search([('name', '=', order_lines_analytic_tags)])
-                    tax_id = self.env["account.tax"].search([('name', '=', order_lines_taxes)])
-                    order_lines_warehouse_id = self.env["stock.warehouse"].search([('name', '=', order_lines_warehouse)])
-                    print(analytic_tags_ids.ids, tax_id.ids)
-                    if not product_id:
-                        products_val = {
-                            'name': order_lines_product
-                        }
-                        product_id = self.env['product.product'].create(products_val)
-
-                    if not analytic_tags_ids:
-                        analytic_tags_vals = {
-                            'name': analytic_tags_ids
-                        }
-                        analytic_tags_ids = self.env['account.analytic.tag'].create(analytic_tags_vals)
-
-                    so_line_vals = {
-                        'is_service': order_lines_is_a_service,
-                        'product_id': product_id[0].id,
-                        # 'oem_code': order_lines_oem,
-                        'name': order_lines_description,
-                        'product_uom_qty': order_lines_ordered_quantity,
-                        'warehouse_id': order_lines_warehouse_id.id,
-                        'product_uom': product_uom_id.id,
-                        'analytic_tag_ids': [(6, 0, analytic_tags_ids.ids)],
-                        'price_unit': order_lines_unit_price,
-                        'tax_id':  [(6, 0, tax_id.ids)],
-                        'discount': order_lines_discount,
-                        'order_id': so_id.id
-                    }
-                    sol_id = self.env['sale.order.line'].create(so_line_vals)
-                    print("sol_id", sol_id)
-                    print(so_line_vals)
+                    so_id = self.env['sale.order'].create(so_val)
+                    print("so_id", so_id)
+                    print(so_val)
+                else:
+                    if order_lines_product:
+                        so_line_vals = (0, 0, {
+                            'is_service': order_lines_is_a_service,
+                            'product_id': product_id[0].id,
+                            # 'oem_code': order_lines_oem,
+                            'name': order_lines_description,
+                            'product_uom_qty': order_lines_ordered_quantity,
+                            'warehouse_id': order_lines_warehouse_id.id,
+                            'product_uom': product_uom_id.id,
+                            'analytic_tag_ids': [(6, 0, analytic_tags_ids.ids)],
+                            'price_unit': order_lines_unit_price,
+                            'tax_id': [(6, 0, tax_id.ids)],
+                            'discount': order_lines_discount,
+                            # 'order_id': so_id.id
+                        })
+                        lst.append(so_line_vals)
         return True
 
