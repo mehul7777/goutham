@@ -14,6 +14,7 @@ class SOWizard(models.TransientModel):
     load_file = fields.Binary("Load File")
 
     def import_so_data(self):
+        global so_id
         print("Import is working")
         csv_data = self.load_file
         file_obj = TemporaryFile('wb+')
@@ -33,7 +34,6 @@ class SOWizard(models.TransientModel):
             if key == 0:
                 header_list.append(value)
             else:
-                global so_id
                 print(value)
                 order_reference = value[0]
                 customer = value[1]
