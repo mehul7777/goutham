@@ -17,6 +17,7 @@
         'wizard/Customers_Import_view.xml',
         'wizard/Products_Import_view.xml',
         'wizard/Vendor_Pricelist_Import_view.xml',
+        'wizard/Sale_Order_Import_view.xml',
         'views/Inherit_Template_view.xml',
         'views/inherit_res_partner.xml',
         'views/Inherit_sale_order_view.xml',
