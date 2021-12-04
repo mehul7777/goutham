@@ -168,7 +168,7 @@ class SOWizard(models.TransientModel):
                     so_line_vals = {
                         'is_service': order_lines_is_a_service,
                         'product_id': product_id[0].id,
-                        # 'oem_code': order_lines_oem,
+                        'oem_code': order_lines_oem,
                         'name': order_lines_description,
                         'product_uom_qty': order_lines_ordered_quantity,
                         'warehouse_id': order_lines_warehouse_id.id,
