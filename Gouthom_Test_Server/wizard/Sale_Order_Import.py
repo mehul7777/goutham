@@ -28,6 +28,7 @@ class SOWizard(models.TransientModel):
         for row in lis:
             data_dict.update({row_num: row})
             row_num += 1
+        so_id = ''
         for key, value in data_dict.items():
             # try:
             if key == 0:
@@ -204,5 +205,4 @@ class SOWizard(models.TransientModel):
                             # 'order_id': so_id.id
                         })
                         lst.append(so_line_vals)
-        return True
 
