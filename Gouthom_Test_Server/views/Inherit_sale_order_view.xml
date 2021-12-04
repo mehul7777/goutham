@@ -10,6 +10,9 @@
                     <field name="customer_po"/>
                 </xpath>
                 <field name="partner_invoice_id" attrs="{'invisible':0}"/>
+                <xpath expr="//field[@name='date_order']" position="after">
+                    <field name="project_start_date"/>
+                </xpath>
             </field>
         </record>
     </data>
