@@ -16,6 +16,15 @@
                 <xpath expr="//field[@name='project_start_date']" position="after">
                     <field name="project_end_date"/>
                 </xpath>
+                <xpath expr="//notebook" position="before">
+                    <div>
+                        <h1>Contact Information</h1>
+                        <field name="point_contact"/>
+                    </div>
+                </xpath>
+                <xpath expr="//field[@name='user_id']" position="after">
+                    <field name="project_manager"/>
+                </xpath>
             </field>
         </record>
     </data>

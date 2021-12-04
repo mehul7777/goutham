@@ -123,7 +123,7 @@ class SOWizard(models.TransientModel):
                             'pricelist_id': priceli_id.id,
                             'project_start_date': project_start_date,
                             'project_end_date': project_end_date,
-                            # 'point_of_contact': point_of_contact_id.id,
+                            'point_of_contact': point_of_contact_id.id,
                             'warehouse_id': warehouse_id.id,
                             'picking_policy': shipping_policy,
                             'user_id': user_id.id,
