@@ -13,6 +13,9 @@
                 <xpath expr="//field[@name='date_order']" position="after">
                     <field name="project_start_date"/>
                 </xpath>
+                <xpath expr="//field[@name='project_start_date']" position="after">
+                    <field name="project_end_date"/>
+                </xpath>
             </field>
         </record>
     </data>
