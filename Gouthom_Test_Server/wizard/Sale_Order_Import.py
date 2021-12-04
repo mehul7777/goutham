@@ -33,6 +33,7 @@ class SOWizard(models.TransientModel):
             if key == 0:
                 header_list.append(value)
             else:
+                global so_id
                 print(value)
                 order_reference = value[0]
                 customer = value[1]
