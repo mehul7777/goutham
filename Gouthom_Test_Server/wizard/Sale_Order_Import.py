@@ -86,38 +86,37 @@ class SOWizard(models.TransientModel):
 
                 lst = []
                 if order_reference:
-                    if status == "done":
-                        if order_lines_product:
-                            if not product_id:
-                                products_val = {
-                                    'name': order_lines_product
-                                }
-                                product_id = self.env['product.product'].create(products_val)
+                    if order_lines_product:
+                        if not product_id:
+                            products_val = {
+                                'name': order_lines_product
+                            }
+                            product_id = self.env['product.product'].create(products_val)
 
-                            if not analytic_tags_ids:
-                                analytic_tags_vals = {
-                                    'name': analytic_tags_ids
-                                }
-                                analytic_tags_ids = self.env['account.analytic.tag'].create(analytic_tags_vals)
+                        if not analytic_tags_ids:
+                            analytic_tags_vals = {
+                                'name': analytic_tags_ids
+                            }
+                            analytic_tags_ids = self.env['account.analytic.tag'].create(analytic_tags_vals)
 
-                            so_line_vals = (0, 0, {
-                                'is_service': order_lines_is_a_service,
-                                'product_id': product_id[0].id,
-                                # 'oem_code': order_lines_oem,
-                                'name': order_lines_description,
-                                'product_uom_qty': order_lines_ordered_quantity,
-                                'warehouse_id': order_lines_warehouse_id.id,
-                                'product_uom': product_uom_id.id,
-                                'analytic_tag_ids': [(6, 0, analytic_tags_ids.ids)],
-                                'price_unit': order_lines_unit_price,
-                                'tax_id': [(6, 0, tax_id.ids)],
-                                'discount': order_lines_discount,
-                                # 'order_id': so_id.id
-                            })
-                            lst.append(so_line_vals)
-                            # sol_id = self.env['sale.order.line'].create(so_line_vals)
-                            # print("sol_id", sol_id)
-                            # print(so_line_vals)
+                        so_line_vals = (0, 0, {
+                            'is_service': order_lines_is_a_service,
+                            'product_id': product_id[0].id,
+                            # 'oem_code': order_lines_oem,
+                            'name': order_lines_description,
+                            'product_uom_qty': order_lines_ordered_quantity,
+                            'warehouse_id': order_lines_warehouse_id.id,
+                            'product_uom': product_uom_id.id,
+                            'analytic_tag_ids': [(6, 0, analytic_tags_ids.ids)],
+                            'price_unit': order_lines_unit_price,
+                            'tax_id': [(6, 0, tax_id.ids)],
+                            'discount': order_lines_discount,
+                            # 'order_id': so_id.id
+                        })
+                        lst.append(so_line_vals)
+                        # sol_id = self.env['sale.order.line'].create(so_line_vals)
+                        # print("sol_id", sol_id)
+                        # print(so_line_vals)
 
                     part_id = self.env["res.partner"].search([('name', '=', customer)])
                     invoice_addr = self.env["res.partner"].search([('parent_id', '=', part_id.id), ("type", "=", 'invoice')], limit=1)
@@ -185,9 +184,10 @@ class SOWizard(models.TransientModel):
                         'opportunity_id': opportunity_id.id,
                         'order_line': lst,
                     }
-                    so_id = self.env['sale.order'].create(so_val)
-                    print("so_id", so_id)
-                    print(so_val)
+                    if status == "done":
+                        so_id = self.env['sale.order'].create(so_val)
+                        print("so_id", so_id)
+                        print(so_val)
                 else:
                     if order_lines_product:
                         so_line_vals = (0, 0, {
