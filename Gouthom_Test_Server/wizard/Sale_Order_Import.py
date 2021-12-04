@@ -14,7 +14,6 @@ class SOWizard(models.TransientModel):
     load_file = fields.Binary("Load File")
 
     def import_so_data(self):
-        global so_id
         print("Import is working")
         csv_data = self.load_file
         file_obj = TemporaryFile('wb+')
@@ -148,40 +147,40 @@ class SOWizard(models.TransientModel):
                         print("so_id", so_id)
                         print(so_val)
 
-                product_id = self.env['product.product'].search([('name', '=', order_lines_product)])
-                product_uom_id = self.env['uom.uom'].search([('name', '=', order_lines_unit_of_measure)])
-                analytic_tags_ids = self.env["account.analytic.tag"].search([('name', '=', order_lines_analytic_tags)])
-                tax_id = self.env["account.tax"].search([('name', '=', order_lines_taxes)])
-                order_lines_warehouse_id = self.env["stock.warehouse"].search([('name', '=', order_lines_warehouse)])
-                print(analytic_tags_ids.ids, tax_id.ids)
-                if not product_id:
-                    products_val = {
-                        'name': order_lines_product
-                    }
-                    product_id = self.env['product.product'].create(products_val)
+                    product_id = self.env['product.product'].search([('name', '=', order_lines_product)])
+                    product_uom_id = self.env['uom.uom'].search([('name', '=', order_lines_unit_of_measure)])
+                    analytic_tags_ids = self.env["account.analytic.tag"].search([('name', '=', order_lines_analytic_tags)])
+                    tax_id = self.env["account.tax"].search([('name', '=', order_lines_taxes)])
+                    order_lines_warehouse_id = self.env["stock.warehouse"].search([('name', '=', order_lines_warehouse)])
+                    print(analytic_tags_ids.ids, tax_id.ids)
+                    if not product_id:
+                        products_val = {
+                            'name': order_lines_product
+                        }
+                        product_id = self.env['product.product'].create(products_val)
 
-                if not analytic_tags_ids:
-                    analytic_tags_vals = {
-                        'name': analytic_tags_ids
-                    }
-                    analytic_tags_ids = self.env['account.analytic.tag'].create(analytic_tags_vals)
+                    if not analytic_tags_ids:
+                        analytic_tags_vals = {
+                            'name': analytic_tags_ids
+                        }
+                        analytic_tags_ids = self.env['account.analytic.tag'].create(analytic_tags_vals)
 
-                so_line_vals = {
-                    'is_service': order_lines_is_a_service,
-                    'product_id': product_id[0].id,
-                    # 'oem_code': order_lines_oem,
-                    'name': order_lines_description,
-                    'product_uom_qty': order_lines_ordered_quantity,
-                    'warehouse_id': order_lines_warehouse_id.id,
-                    'product_uom': product_uom_id.id,
-                    'analytic_tag_ids': [(6, 0, analytic_tags_ids.ids)],
-                    'price_unit': order_lines_unit_price,
-                    'tax_id':  [(6, 0, tax_id.ids)],
-                    'discount': order_lines_discount,
-                    'order_id': so_id.id
-                }
-                sol_id = self.env['sale.order.line'].create(so_line_vals)
-                print("sol_id", sol_id)
-                print(so_line_vals)
+                    so_line_vals = {
+                        'is_service': order_lines_is_a_service,
+                        'product_id': product_id[0].id,
+                        # 'oem_code': order_lines_oem,
+                        'name': order_lines_description,
+                        'product_uom_qty': order_lines_ordered_quantity,
+                        'warehouse_id': order_lines_warehouse_id.id,
+                        'product_uom': product_uom_id.id,
+                        'analytic_tag_ids': [(6, 0, analytic_tags_ids.ids)],
+                        'price_unit': order_lines_unit_price,
+                        'tax_id':  [(6, 0, tax_id.ids)],
+                        'discount': order_lines_discount,
+                        'order_id': so_id.id
+                    }
+                    sol_id = self.env['sale.order.line'].create(so_line_vals)
+                    print("sol_id", sol_id)
+                    print(so_line_vals)
         return True
 
