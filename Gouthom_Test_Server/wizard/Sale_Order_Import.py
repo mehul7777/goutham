@@ -78,7 +78,7 @@ class SOWizard(models.TransientModel):
                 analytic_account = value[39]
                 lead_or_opportunity = value[40]
 
-                product_id = self.env['product.product'].search([('name', '=', order_lines_product)])
+                product_id = self.env['product.product'].search([('name', '=', order_lines_product)], limit=1)
                 product_uom_id = self.env['uom.uom'].search([('name', '=', order_lines_unit_of_measure)])
                 analytic_tags_ids = self.env["account.analytic.tag"].search([('name', '=', order_lines_analytic_tags)])
                 tax_id = self.env["account.tax"].search([('name', '=', order_lines_taxes)])
