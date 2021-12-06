@@ -205,6 +205,7 @@ class SOWizard(models.TransientModel):
                             'discount': order_lines_discount,
                             # 'order_id': so_id.id
                         })
-                        lst.append(so_line_vals)
-                        so_line_id = so_id.write({'order_line': lst})
-                        print(so_line_id)
+                        if so_id:
+                            lst.append(so_line_vals)
+                            so_line_id = so_id.write({'order_line': lst})
+                            print(so_line_id)
