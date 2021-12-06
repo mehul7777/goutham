@@ -34,6 +34,7 @@ class SOWizard(models.TransientModel):
             if key == 0:
                 header_list.append(value)
             else:
+                # so_id = ''
                 print(value)
                 order_reference = value[0]
                 customer = value[1]
@@ -192,7 +193,7 @@ class SOWizard(models.TransientModel):
                     if order_lines_product:
                         so_line_vals = (0, 0, {
                             'is_service': order_lines_is_a_service,
-                            'product_id': product_id[0].id,
+                            'product_id': product_id.id,
                             # 'oem_code': order_lines_oem,
                             'name': order_lines_description,
                             'product_uom_qty': order_lines_ordered_quantity,
@@ -205,4 +206,5 @@ class SOWizard(models.TransientModel):
                             # 'order_id': so_id.id
                         })
                         lst.append(so_line_vals)
-
+                        so_line_id = so_id.write({'order_line': lst})
+                        print(so_line_id)
