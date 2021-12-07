@@ -33,51 +33,83 @@ class ProductWizard(models.TransientModel):
             if key == 0:
                 header_list.append(value)
             else:
-                print(value)
+                # print(value)
+                # internal_reference = value[0]
+                # name = value[1]
+                # can_be_sold = value[2]
+                # can_be_purchased = value[3]
+                # can_be_expensed = value[4]
+                # product_type = value[5]
+                # product_category = value[6]
+                # oem = value[7]
+                # barcode = value[8]
+                # order_planner_policy = value[9]
+                # version = value[10]
+                # created_by = value[11]
+                # created_on = value[12]
+                # location = value[13]
+                # warehouse = value[14]
+                # sales_price = value[15]
+                # loaded_cost = value[16]
+                # sales_person_minimum_cost = value[17]
+                # tax_cloud_cost = value[18]
+                # cost = value[19]
+                # company = value[20]
+                # unit_of_measure = value[21]
+                # purchase_unit_of_measure = value[22]
+                # invoice_policy = value[23]
+                # re_invoice_policy = value[24]
+                # routes = value[25]
+                # responsible = value[26]
+                # production_location = value[27]
+                # inventory_location = value[28]
+                # income_account = value[29]
+
                 internal_reference = value[0]
                 name = value[1]
-                can_be_sold = value[2]
-                can_be_purchased = value[3]
-                can_be_expensed = value[4]
-                product_type = value[5]
-                product_category = value[6]
-                oem = value[7]
-                barcode = value[8]
-                order_planner_policy = value[9]
-                version = value[10]
-                created_by = value[11]
-                created_on = value[12]
-                location = value[13]
-                warehouse = value[14]
-                sales_price = value[15]
-                loaded_cost = value[16]
-                sales_person_minimum_cost = value[17]
-                tax_cloud_cost = value[18]
-                cost = value[19]
-                company = value[20]
-                unit_of_measure = value[21]
-                purchase_unit_of_measure = value[22]
-                invoice_policy = value[23]
-                re_invoice_policy = value[24]
-                routes = value[25]
-                responsible = value[26]
-                production_location = value[27]
-                inventory_location = value[28]
-                income_account = value[29]
+                income_account = value[2]
+                oem = value[3]
+                loaded_cost = value[4]
+                create_date = value[5]
+                create_by = value[6]
+                foweller_name = value[7]
+                can_be_expensed = value[8]
+                version = 1
 
-                categ_id = self.env['product.category'].search([('name', '=', product_category)]) #change this before commiting replace display_name to name
-                # order_planner_policy = self.env['sale.order.planning.policy'].search([('name', '=', order_planner_policy)])
-                create_uid = self.env['res.users'].search([('name', '=', created_by)])
-                # location_id = self.env['stock.location'].search([('name', '=', location)], limit=1)
-                # warehouse_id = self.env['stock.warehouse'].search([('name', '=', warehouse)], limit=1)
-                company_id = self.env['res.company'].search([('name', '=', company)])
-                uom_id = self.env['uom.uom'].search([('name', '=', unit_of_measure)])
-                uom_po_id = self.env['uom.uom'].search([('name', '=', purchase_unit_of_measure)])
-                route_ids = self.env['stock.location.route'].search([('name', '=', routes)])
-                responsible_id = self.env['res.users'].search([('name', '=', responsible)])
-                property_stock_production = self.env['stock.location'].search([('name', '=', production_location)], limit=1)
-                property_stock_inventory = self.env['stock.location'].search([('name', '=', inventory_location)], limit=1)
+                # categ_id = self.env['product.category'].search([('name', '=', product_category)]) #change this before commiting replace display_name to name
+                # # order_planner_policy = self.env['sale.order.planning.policy'].search([('name', '=', order_planner_policy)])
+                # create_uid = self.env['res.users'].search([('name', '=', created_by)])
+                # # location_id = self.env['stock.location'].search([('name', '=', location)], limit=1)
+                # # warehouse_id = self.env['stock.warehouse'].search([('name', '=', warehouse)], limit=1)
+                # company_id = self.env['res.company'].search([('name', '=', company)])
+                # uom_id = self.env['uom.uom'].search([('name', '=', unit_of_measure)])
+                # uom_po_id = self.env['uom.uom'].search([('name', '=', purchase_unit_of_measure)])
+                # route_ids = self.env['stock.location.route'].search([('name', '=', routes)])
+                # responsible_id = self.env['res.users'].search([('name', '=', responsible)])
+                # property_stock_production = self.env['stock.location'].search([('name', '=', production_location)], limit=1)
+                # property_stock_inventory = self.env['stock.location'].search([('name', '=', inventory_location)], limit=1)
                 property_account_income_id = self.env['account.account'].search([('name', '=', income_account)])
+
+                create_by_id = self.env['res.users'].search([('name', '=', create_by)])
+                follower_id = self.env['res.partner'].search([('name', '=', foweller_name)])
+
+                if name:
+                    pt_id = self.env['product.template'].search(
+                        [('name', '=', name), ('default_code', '=', internal_reference)])
+                    update_new = {
+                        'oem': oem,
+                        'loaded_cost': loaded_cost,
+                        'property_account_income_id': property_account_income_id.id,
+                        'version': version,
+                        'create_date_custom':create_date,
+                        'create_uid_custom':create_by_id.id,
+                        'can_be_expensed': can_be_expensed,
+                    }
+                    pt_id.write(update_new)
+                    pt_id.message_subscribe([follower_id.id])
+                else:
+                    pt_id.message_subscribe([follower_id.id])
+
 
                 # if name:
                 #     product_val = {
