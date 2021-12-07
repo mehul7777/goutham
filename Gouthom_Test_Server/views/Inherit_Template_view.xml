@@ -33,9 +33,9 @@
                 <xpath expr="//field[@name='loaded_cost']" position="after">
                     <field name="create_date" string="Created On"/>
                 </xpath>
-<!--                <xpath expr="//">-->
-<!--                    <field name="create_uid" string="Created By"/>-->
-<!--                </xpath>-->
+                <xpath expr="//field[@name='create_date']" position="before">
+                    <field name="create_uid" string="Created By"/>
+                </xpath>
             </field>
         </record>
     </data>
