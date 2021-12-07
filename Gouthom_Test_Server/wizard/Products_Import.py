@@ -79,37 +79,37 @@ class ProductWizard(models.TransientModel):
                 property_stock_inventory = self.env['stock.location'].search([('name', '=', inventory_location)], limit=1)
                 property_account_income_id = self.env['account.account'].search([('name', '=', income_account)])
 
-                if name:
-                    product_val = {
-                        'default_code': internal_reference,
-                        'name': name,
-                        'sale_ok': can_be_sold,
-                        'purchase_ok': can_be_purchased,
-                        'can_be_expensed': can_be_expensed,
-                        'type': product_type,
-                        'categ_id': categ_id.id,
-                        'oem': oem, 
-                        'barcode': barcode,
-                        # 'order_planner_policy': order_planner_policy.id,
-                        'version': version,
-                        'create_uid': create_uid.id,
-                        'create_date': created_on,
-                        # 'location_id': location_id.id,
-                        # 'warehouse_id': warehouse_id.id,
-                        'list_price': sales_price,
-                        'loaded_cost': loaded_cost,
-                        'sales_person_minimum_cost': sales_person_minimum_cost,
-                        'standard_price': cost,
-                        'company_id': company_id.id,
-                        'uom_id': uom_id.id,
-                        'uom_po_id': uom_po_id.id,
-                        'invoice_policy': invoice_policy,
-                        'expense_policy': re_invoice_policy,
-                        'route_ids': route_ids.ids,
-                        'responsible_id': responsible_id.id,
-                        'property_stock_production': property_stock_production.id,
-                        'property_stock_inventory': property_stock_inventory.id,
-                        'property_account_income_id': property_account_income_id.id,
-                    }
-                    product_id = self.env['product.template'].create(product_val)
-                    print("product_val", product_id)
+                # if name:
+                #     product_val = {
+                #         'default_code': internal_reference,
+                #         'name': name,
+                #         'sale_ok': can_be_sold,
+                #         'purchase_ok': can_be_purchased,
+                #         'can_be_expensed': can_be_expensed,
+                #         'type': product_type,
+                #         'categ_id': categ_id.id,
+                #         'oem': oem,
+                #         'barcode': barcode,
+                #         # 'order_planner_policy': order_planner_policy.id,
+                #         'version': version,
+                #         'create_uid': create_uid.id,
+                #         'create_date': created_on,
+                #         # 'location_id': location_id.id,
+                #         # 'warehouse_id': warehouse_id.id,
+                #         'list_price': sales_price,
+                #         'loaded_cost': loaded_cost,
+                #         'sales_person_minimum_cost': sales_person_minimum_cost,
+                #         'standard_price': cost,
+                #         'company_id': company_id.id,
+                #         'uom_id': uom_id.id,
+                #         'uom_po_id': uom_po_id.id,
+                #         'invoice_policy': invoice_policy,
+                #         'expense_policy': re_invoice_policy,
+                #         'route_ids': route_ids.ids,
+                #         'responsible_id': responsible_id.id,
+                #         'property_stock_production': property_stock_production.id,
+                #         'property_stock_inventory': property_stock_inventory.id,
+                #         'property_account_income_id': property_account_income_id.id,
+                #     }
+                #     product_id = self.env['product.template'].create(product_val)
+                #     print("product_val", product_id)
