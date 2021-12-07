@@ -9,7 +9,6 @@
                 <xpath expr="//notebook" position="before">
                     <div>
                         <field name="can_be_expensed"/>
-                        <label for="can_be_expensed"/>
                     </div>
                 </xpath>
                 <xpath expr="//field[@name='barcode']" position="after">
