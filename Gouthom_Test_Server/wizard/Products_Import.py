@@ -95,6 +95,8 @@ class ProductWizard(models.TransientModel):
                 property_account_income_id = self.env['account.account'].search([('name', '=', income_account)])
 
                 create_by_id = self.env['res.users'].search([('name', '=', create_by)])
+                if not create_by_id:
+                    create_by_id = self.env['res.users'].search([('name', '=', create_by), ('active', '=', False)])
                 follower_id = self.env['res.partner'].search([('name', '=', foweller_name)])
 
                 if name:
