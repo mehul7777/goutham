@@ -31,8 +31,9 @@
                     <field name="oem"/>
                 </xpath>
                 <xpath expr="//field[@name='loaded_cost']" position="after">
-                    <field name="create_date_custom" string="Created On"/>
-                    <field name="create_uid_custom" string="Created By"/>
+                    <field name="create_date_custom"/>
+                    <field name="create_uid_custom"/>
+
                 </xpath>
             </field>
         </record>
