@@ -30,6 +30,12 @@
                 <xpath expr="//field[@name='default_code']" position="after">
                     <field name="oem"/>
                 </xpath>
+                <xpath expr="//field[@name='loaded_cost']">
+                    <field name="create_date" string="Created On"/>
+                </xpath>
+<!--                <xpath expr="//">-->
+<!--                    <field name="create_uid" string="Created By"/>-->
+<!--                </xpath>-->
             </field>
         </record>
     </data>
