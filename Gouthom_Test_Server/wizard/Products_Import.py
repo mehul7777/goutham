@@ -76,6 +76,10 @@ class ProductWizard(models.TransientModel):
                 can_be_expensed = value[8]
                 version = 1
 
+                if can_be_expensed != '0':
+                    can_be_expensed = True
+                else:
+                    can_be_expensed = False
                 # categ_id = self.env['product.category'].search([('name', '=', product_category)]) #change this before commiting replace display_name to name
                 # # order_planner_policy = self.env['sale.order.planning.policy'].search([('name', '=', order_planner_policy)])
                 # create_uid = self.env['res.users'].search([('name', '=', created_by)])
@@ -105,6 +109,7 @@ class ProductWizard(models.TransientModel):
                         'create_uid_custom':create_by_id.id,
                         'can_be_expensed': can_be_expensed,
                     }
+                    print(update_new)
                     pt_id.write(update_new)
                     pt_id.message_subscribe([follower_id.id])
                 else:
