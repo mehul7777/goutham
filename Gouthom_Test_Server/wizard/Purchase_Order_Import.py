@@ -100,7 +100,7 @@ class PO1Wizard(models.TransientModel):
                             'name': order_lines_description,
                             'date_planned': order_lines_scheduled_date,
                             'account_analytic_id': account_analytic_id.id,
-                            'analytic_tag_ids': [(6, 0, analytic_tag_ids.ids)] if analytic_tag_ids else " ",
+                            'analytic_tag_ids': [(6, 0, analytic_tag_ids.ids)] if len(analytic_tag_ids) else " ",
                             'product_qty': order_lines_quantity,
                             'product_uom': product_uom_id.id,
                             'price_unit': order_lines_price_unit,
