@@ -64,7 +64,7 @@ class PO1Wizard(models.TransientModel):
                 part_id = self.env['res.partner'].search([('name', '=', vendor)])
                 use_id = self.env['res.users'].search([('name', '=', purchase_representative)])
                 com_id = self.env['res.company'].search([('name', '=', company)])
-                pro_id = self.env['product.product'].search([('name', '=', order_lines_product)])
+                pro_id = self.env['product.product'].search([('name', '=', order_lines_product)], limit=1)
                 pick_type_id = self.env['stock.warehouse'].search([('name', '=', deliver_to)]).in_type_id
                 fis_pos_id = self.env['account.fiscal.position'].search([('name', '=', fiscal_position)])
                 tax_id = self.env['account.tax'].search([('name', '=', order_lines_taxes)])
@@ -102,7 +102,7 @@ class PO1Wizard(models.TransientModel):
                             analytic_tag_ids = self.env['account.analytic.tag'].create(analytic_tags_val)
 
                         po_line_vals = (0, 0, {
-                            'product_id': pro_id[0].id,
+                            'product_id': pro_id.id,
                             'name': order_lines_description,
                             'date_planned': order_lines_scheduled_date,
                             'account_analytic_id': account_analytic_id.id,
@@ -138,7 +138,7 @@ class PO1Wizard(models.TransientModel):
                         print(po_id)
                 else:
                     po_line_vals = (0, 0, {
-                        'product_id': pro_id[0].id,
+                        'product_id': pro_id.id,
                         'name': order_lines_description,
                         'date_planned': order_lines_scheduled_date,
                         'account_analytic_id': account_analytic_id.id,
