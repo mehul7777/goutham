@@ -50,7 +50,7 @@ class PO1Wizard(models.TransientModel):
                 order_lines_scheduled_date = value[13]
                 order_lines_company = value[14]
                 order_lines_analytic_account = value[15]
-                order_lines_analytic_tags = value[16] or False
+                order_lines_analytic_tags = value[16]
                 order_lines_quantity = value[17]
                 order_lines_unit_of_measure = value[18]
                 order_lines_price_unit = value[19]
@@ -71,7 +71,8 @@ class PO1Wizard(models.TransientModel):
                 incoterm_id = self.env['account.incoterms'].search([('name', '=', incoterm)])
                 payment_term_id = self.env['account.payment.term'].search([('name', '=', payment_terms)])
                 account_analytic_id = self.env['account.analytic.account'].search([('name', '=', order_lines_analytic_account)])
-                analytic_tag_ids = self.env['account.analytic.tag'].search([('name', '=', order_lines_analytic_tags)])
+                if order_lines_analytic_tags:
+                    analytic_tag_ids = self.env['account.analytic.tag'].search([('name', '=', order_lines_analytic_tags)])
                 product_uom_id = self.env['uom.uom'].search([('name', '=', order_lines_unit_of_measure)])
 
                 if not part_id:
