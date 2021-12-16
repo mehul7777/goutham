@@ -65,7 +65,7 @@ class PO1Wizard(models.TransientModel):
                 use_id = self.env['res.users'].search([('name', '=', purchase_representative)])
                 com_id = self.env['res.company'].search([('name', '=', company)])
                 pro_id = self.env['product.product'].search([('name', '=', order_lines_product)])
-                pick_type_id = self.env['stock.picking.type'].search([('name', '=', deliver_to)])
+                pick_type_id = self.env['stock.warehouse'].search([('name', '=', deliver_to)]).in_type_id
                 fis_pos_id = self.env['account.fiscal.position'].search([('name', '=', fiscal_position)])
                 tax_id = self.env['account.tax'].search([('name', '=', order_lines_taxes)])
                 incoterm_id = self.env['account.incoterms'].search([('name', '=', incoterm)])
@@ -125,7 +125,7 @@ class PO1Wizard(models.TransientModel):
                         'user_id': use_id.id,
                         'invoice_status': billing_status,
                         'company_id': com_id.id,
-                        # 'picking_type_id': pick_type_id.id,
+                        'picking_type_id': pick_type_id.id,
                         'fiscal_position_id': fis_pos_id.id,
                         'state': status,
                         'date_approve': approval_date,
