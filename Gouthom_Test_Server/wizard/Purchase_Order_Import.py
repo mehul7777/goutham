@@ -95,12 +95,6 @@ class PO1Wizard(models.TransientModel):
                             }
                             account_analytic_id = self.env['account.analytic.account'].create(account_analytic_val)
 
-                        if not analytic_tag_ids:
-                            analytic_tags_val = {
-                                'name': analytic_tag_ids
-                            }
-                            analytic_tag_ids = self.env['account.analytic.tag'].create(analytic_tags_val)
-
                         po_line_vals = (0, 0, {
                             'product_id': pro_id.id,
                             'name': order_lines_description,
