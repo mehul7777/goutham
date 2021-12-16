@@ -110,7 +110,7 @@ class PO1Wizard(models.TransientModel):
                             'product_qty': order_lines_quantity,
                             'product_uom': product_uom_id.id,
                             'price_unit': order_lines_price_unit,
-                            'taxes_id': tax_id.id,
+                            'taxes_id': [(6, 0, tax_id.ids)],
                             # 'order_id': po_id.id
                         })
                         lst.append(po_line_vals)
@@ -146,7 +146,7 @@ class PO1Wizard(models.TransientModel):
                         'product_qty': order_lines_quantity,
                         'product_uom': product_uom_id.id,
                         'price_unit': order_lines_price_unit,
-                        'taxes_id': tax_id.id,
+                        'taxes_id': [(6, 0, tax_id.ids)],
                         # 'order_id': po_id.id
                     })
                     if po_id:
