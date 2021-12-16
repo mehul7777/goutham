@@ -102,7 +102,7 @@ class PO1Wizard(models.TransientModel):
                             analytic_tag_ids = self.env['account.analytic.tag'].create(analytic_tags_val)
 
                         po_line_vals = (0, 0, {
-                            'product_id': pro_id.id,
+                            'product_id': pro_id[0].id,
                             'name': order_lines_description,
                             'date_planned': order_lines_scheduled_date,
                             'account_analytic_id': account_analytic_id.id,
