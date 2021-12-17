@@ -12,7 +12,7 @@
                 <xpath expr="//group[@name='purchase']" position="inside">
                     <field name="is_a_vendor"/>
                 </xpath>
-                <xpath expr="//div[@class='o_address_format']" position="before">
+                <xpath expr="//field[@name='street']" position="before">
                     <group>
                         <field name="id"/>
                     </group>
