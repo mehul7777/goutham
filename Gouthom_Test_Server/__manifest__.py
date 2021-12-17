@@ -10,7 +10,7 @@
     'description': "For Test Server",
     'website': 'https://www.odoo.com',
     'depends': [
-        'base', 'product', 'sale', 'purchase', 'account'
+        'base', 'product', 'sale', 'purchase', 'project'
     ],
     'data': [
         'security/ir.model.access.csv',
@@ -23,6 +23,7 @@
         'views/Inherit_Template_view.xml',
         'views/inherit_res_partner.xml',
         'views/Inherit_sale_order_view.xml',
+        'views/Inherit_project_project_view.xml',
 
     ],
     'installable': True,

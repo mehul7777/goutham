@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="project_project_inherit_view_training" model="ir.ui.view">
+            <field name="name">project.project.inherit.view.training</field>
+            <field name="model">project.project</field>
+            <field name="inherit_id" ref="project.edit_project"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='label_tasks']" position="after">
+                    <label for="allow_timesheets"/>
+                    <field name="allow_timesheets"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
