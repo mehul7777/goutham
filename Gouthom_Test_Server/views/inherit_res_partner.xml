@@ -14,7 +14,6 @@
                 </xpath>
                 <xpath expr="//field[@name='name']" position="after">
                     <group>
-                        <label for="id"/>
                         <field name="id"/>
                     </group>
                 </xpath>
