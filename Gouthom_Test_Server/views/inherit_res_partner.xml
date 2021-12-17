@@ -13,7 +13,10 @@
                     <field name="is_a_vendor"/>
                 </xpath>
                 <xpath expr="//field[@name='name']" position="after">
-                    <field name="id"/>
+                    <group>
+                        <label for="id"/>
+                        <field name="id"/>
+                    </group>
                 </xpath>
             </field>
         </record>
