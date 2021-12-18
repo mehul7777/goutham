@@ -4,3 +4,4 @@ from . import Vendor_Pricelist_Import
 from . import Sale_Order_Import
 from . import Purchase_Order_Import
 # from . import Analytic_Account_Import
+from . import CRM_Import
