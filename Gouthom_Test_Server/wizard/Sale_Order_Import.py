@@ -35,7 +35,26 @@ class SOWizard(models.TransientModel):
                 header_list.append(value)
             else:
                 # so_id = ''
-                print(value)
+                order_reference = value[0]
+                payment_terms = value[1]
+                tags = value[2]
+                analytic_account = value[3]
+
+                payment_term_id = self.env["account.payment.term"].search([('name', '=', payment_terms)])
+                tag_ids = self.env["crm.tag"].search([('name', '=', tags)])
+                analytic_account_id = self.env["account.analytic.account"].search([('name', '=', analytic_account)])
+
+                if order_reference:
+                    so_id = self.env['sale.order'].search([('name', '=', order_reference)])
+                    so_val = {
+                        'payment_term_id': payment_term_id.id,
+                        'tag_ids': [(6, 0, tag_ids.ids)],
+                        'analytic_account_id': analytic_account_id.id,
+                    }
+                    so_id.write(so_val)
+                    print("so_id", so_id)
+
+                # print(value)
                 # order_reference = value[0]
                 # customer = value[1]
                 # invoice_address = value[2]
@@ -77,10 +96,6 @@ class SOWizard(models.TransientModel):
                 # tags = value[38]
                 # analytic_account = value[39]
                 # lead_or_opportunity = value[40]
-                order_reference = value[0]
-                payment_terms = value[1]
-                tags = value[2]
-                analytic_account = value[3]
 
                 # product_id = self.env['product.product'].search([('name', '=', order_lines_product)], limit=1)
                 # product_uom_id = self.env['uom.uom'].search([('name', '=', order_lines_unit_of_measure)])
@@ -89,7 +104,7 @@ class SOWizard(models.TransientModel):
                 # order_lines_warehouse_id = self.env["stock.warehouse"].search([('name', '=', order_lines_warehouse)])
                 # print(analytic_tags_ids.ids, tax_id.ids)
 
-                lst = []
+                # lst = []
                 # if order_reference:
                 #     if order_lines_product:
                 #         if not product_id:
@@ -214,16 +229,3 @@ class SOWizard(models.TransientModel):
                 #             so_line_id = so_id.write({'order_line': lst})
                 #             print(so_line_id)
 
-                payment_term_id = self.env["account.payment.term"].search([('name', '=', payment_terms)])
-                tag_ids = self.env["crm.tag"].search([('name', '=', tags)])
-                analytic_account_id = self.env["account.analytic.account"].search([('name', '=', analytic_account)])
-
-                if order_reference:
-                    so_id = self.env['sale.order'].search([('name', '=', order_reference)])
-                    so_val = {
-                        'payment_term_id': payment_term_id.id,
-                        'tag_ids': [(6, 0, tag_ids.ids)],
-                        'analytic_account_id': analytic_account_id.id,
-                    }
-                    so_id.write(so_val)
-                    print("so_id", so_id)
