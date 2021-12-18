@@ -1,8 +1,9 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access.crm.wizard,access_crm_wizard,model_crm_wizard,base.group_user,1,1,1,1
 access.product.wizard,access_product_wizard,model_product_wizard,base.group_user,1,1,1,1
 access.customer.wizard,access_customer_wizard,model_customer_wizard,base.group_user,1,1,1,1
 access.vpi.wizard,access_vpi_wizard,model_vpi_wizard,base.group_user,1,1,1,1
 access.so.wizard,access_so_wizard,model_so_wizard,base.group_user,1,1,1,1
 access.po1.wizard,access_po1_wizard,model_po1_wizard,base.group_user,1,1,1,1
-access.crm.wizard,access_crm_wizard,model_crm_wizard,base.group_user,1,1,1,1
+
 
