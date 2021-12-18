@@ -4,5 +4,5 @@ access.customer.wizard,access_customer_wizard,model_customer_wizard,base.group_u
 access.vpi.wizard,access_vpi_wizard,model_vpi_wizard,base.group_user,1,1,1,1
 access.so.wizard,access_so_wizard,model_so_wizard,base.group_user,1,1,1,1
 access.po1.wizard,access_po1_wizard,model_po1_wizard,base.group_user,1,1,1,1
-
+access.crm.wizard,access_crm_wizard,model_crm_wizard,base.group_user,1,1,1,1
 
