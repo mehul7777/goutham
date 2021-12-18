@@ -40,7 +40,7 @@ class SOWizard(models.TransientModel):
                 tags = value[2]
                 analytic_account = value[3]
 
-                payment_term_id = self.env["account.payment.term"].search([('name', '=', payment_terms)])
+                payment_term_id = self.env['account.payment.term'].search([('name', '=', payment_terms)])
                 tag_ids = self.env["crm.tag"].search([('name', '=', tags)])
                 analytic_account_id = self.env["account.analytic.account"].search([('name', '=', analytic_account)])
 
