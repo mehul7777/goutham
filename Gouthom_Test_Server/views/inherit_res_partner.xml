@@ -14,7 +14,7 @@
                 </xpath>
                 <xpath expr="//div[@class='oe_title']" position="after">
                     <group>
-                        <field name="id"/>
+                        <field name="custom_id"/>
                     </group>
                 </xpath>
             </field>

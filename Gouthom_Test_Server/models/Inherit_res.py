@@ -6,4 +6,5 @@ class ResPartner(models.Model):
 
     is_a_customer = fields.Boolean(string="Is a Customer")
     is_a_vendor = fields.Boolean(string="Is a Vendor")
-    id = fields.Integer(string="ID")
+    id = fields.Integer(string="ID") # No Use
+    custom_id = fields.Integer(string="ID")
