@@ -24,7 +24,7 @@
         'views/Inherit_Template_view.xml',
         'views/inherit_res_partner.xml',
         'views/Inherit_sale_order_view.xml',
-        'views/Inherit_crm_view.xml',
+        # 'views/Inherit_crm_view.xml',
         # 'views/Inherit_project_project_view.xml',
 
     ],
