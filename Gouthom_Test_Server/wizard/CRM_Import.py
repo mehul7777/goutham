@@ -74,6 +74,7 @@ class CRMWizard(models.TransientModel):
                 campaign_id = self.env['utm.campaign'].search([('name', '=', campaign)])
                 source_id = self.env['utm.source'].search([('name', '=', source)])
                 stage_id = self.env['crm.stage'].search([('name', '=', stage)])
+                title_id = self.env['res.partner.title'].search([('name', '=', title)])
 
                 crm_val = {
                     'name': opportunity,
@@ -97,7 +98,7 @@ class CRMWizard(models.TransientModel):
                     'country_id': country_id.id,
                     'website': website,
                     'contact_name': contact_name,
-                    'title': title,
+                    'title': title_id.id,
                     'function': job_position,
                     'mobile': mobile,
                     'campaign_id': campaign_id.id,
