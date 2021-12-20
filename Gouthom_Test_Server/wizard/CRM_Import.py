@@ -40,7 +40,7 @@ class CRMWizard(models.TransientModel):
                 customer = value[3]
                 email = value[4]
                 phone = value[5]
-                expected_closing = value[6]
+                expected_closing = value[6] or False
                 sales_person = value[7]
                 sales_team = value[8]
                 as_9100_from = value[9]
