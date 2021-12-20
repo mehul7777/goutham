@@ -66,7 +66,7 @@ class CRMWizard(models.TransientModel):
                 stage = value[29]
 
                 partner_id = self.env['res.partner'].search([('name', '=', customer)])
-                user_id = self.env['res.users'].search([('name', '=', sales_person)])
+                user_id = self.env['res.users'].search(['|', ('active', '=', True), ('active', '=', False), '&', ('name', '=', sales_person)])
                 team_id = self.env['crm.team'].search([('name', '=', sales_team)])
                 tag_ids = self.env['crm.tag'].search([('name', '=', tags)])
                 state_id = self.env['res.country.state'].search([('name', '=', state)])
