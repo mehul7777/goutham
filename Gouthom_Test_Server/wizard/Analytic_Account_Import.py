@@ -67,7 +67,7 @@ class AnalyticAccountWizard(models.TransientModel):
                     'group_id': group_id.id,
                     'company_id': company_id.id,
                     'currency_id': currency_id.id,
-                    'active': active
+                    'active': False if active == "False" else True
                 }
                 if not self.env['account.analytic.account'].search([('name', '=', analytic_account)]):
                     analytic_account_id = self.env['account.analytic.account'].create(analytic_account_val)
