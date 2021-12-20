@@ -9,8 +9,11 @@
                 <xpath expr="//field[@name='team_id']" position="after">
                     <field name="as_9100_form"/>
                 </xpath>
-                <xpath expr="//field[@name='day_open']" position="replace">
-                    <field name="day_open" groups="base.group_no_one" readonly="0" store="1"/>
+<!--                <xpath expr="//field[@name='day_open']" position="replace">-->
+<!--                    <field name="day_open" groups="base.group_no_one" readonly="0" store="1"/>-->
+<!--                </xpath>-->
+                <xpath expr="//field[@name='day_open']" position="attributes">
+                    <attribute name="readonly">0</attribute>
                 </xpath>
                 <xpath expr="//field[@name='day_close']" position="replace">
                     <field name="day_close" groups="base.group_no_one" readonly="0" store="1"/>
