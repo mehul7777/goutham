@@ -60,8 +60,8 @@ class CRMWizard(models.TransientModel):
                 mobile = value[23]
                 campaign = value[24]
                 source = value[25]
-                days_to_assign = value[26]
-                days_to_close = value[27]
+                days_to_assign = str(value[26])
+                days_to_close = str(value[27])
                 referred_by = value[28]
                 stage = value[29]
 
