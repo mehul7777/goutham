@@ -10,7 +10,7 @@
     'description': "For Test Server",
     'website': 'https://www.odoo.com',
     'depends': [
-        'base', 'product', 'sale', 'purchase', 'project', 'crm'
+        'base', 'product', 'sale', 'purchase', 'project', 'crm', 'account'
     ],
     'data': [
         'security/ir.model.access.csv',
@@ -20,7 +20,7 @@
         'wizard/Sale_Order_Import_view.xml',
         'wizard/Purchase_Order_Import_view.xml',
         'wizard/CRM_Import_view.xml',
-        # 'wizard/Analytic_Account_Import_view.xml',
+        'wizard/Analytic_Account_Import_view.xml',
         'views/Inherit_Template_view.xml',
         'views/inherit_res_partner.xml',
         'views/Inherit_sale_order_view.xml',
