@@ -106,6 +106,7 @@ class CRMWizard(models.TransientModel):
                     'day_close': days_to_close,
                     'referred': referred_by,
                     'stage_id': stage_id.id,
+                    'type': opportunity,
                 }
                 crm_id = self.env['crm.lead'].sudo().create(crm_val)
                 print("crm_val", crm_id)
