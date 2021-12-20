@@ -40,6 +40,7 @@ class AnalyticAccountWizard(models.TransientModel):
                 group = value[4]
                 company = value[5]
                 currency = value[6]
+                active = value[7]
 
                 partner_id = self.env['res.partner'].search([('name', '=', customer)])
                 group_id = self.env['account.analytic.group'].search([('name', '=', group)])
@@ -66,6 +67,7 @@ class AnalyticAccountWizard(models.TransientModel):
                     'group_id': group_id.id,
                     'company_id': company_id.id,
                     'currency_id': currency_id.id,
+                    'active': active
                 }
                 if not self.env['account.analytic.account'].search([('name', '=', analytic_account)]):
                     analytic_account_id = self.env['account.analytic.account'].create(analytic_account_val)
