@@ -9,6 +9,8 @@
                 <xpath expr="//field[@name='team_id']" position="after">
                     <field name="as_9100_form"/>
                 </xpath>
+                 <field name="day_open" readonly="0" />
+                 <field name="day_close" readonly="0" />
             </field>
         </record>
     </data>
