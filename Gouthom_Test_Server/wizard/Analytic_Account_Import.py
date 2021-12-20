@@ -60,7 +60,7 @@ class AnalyticAccountWizard(models.TransientModel):
 
                 analytic_account_val = {
                     'name': analytic_account,
-                    'id': id,
+                    'custom_id': id,
                     'code': reference,
                     'partner_id': partner_id.id,
                     'group_id': group_id.id,
