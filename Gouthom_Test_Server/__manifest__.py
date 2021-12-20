@@ -25,8 +25,8 @@
         'views/inherit_res_partner.xml',
         'views/Inherit_sale_order_view.xml',
         'views/Inherit_crm_view.xml',
-        'views/Inherit_analytic_account_view.xml'
-        # 'views/Inherit_project_project_view.xml',
+        'views/Inherit_analytic_account_view.xml',
+        'views/Inherit_project_project_view.xml',
 
     ],
     'installable': True,

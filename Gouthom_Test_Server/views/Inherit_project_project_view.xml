@@ -7,10 +7,16 @@
             <field name="inherit_id" ref="project.edit_project"/>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='label_tasks']" position="after">
-                    <group>
-                        <label for="allow_timesheets"/>
+                    <div>
                         <field name="allow_timesheets"/>
-                    </group>
+                        <label for="allow_timesheets"/>
+                    </div>
+                </xpath>
+                <xpath expr="//notebook" position="before">
+                    <div>
+                        <field name="allow_forecast"/>
+                        <label for="allow_forecast"/>
+                    </div>
                 </xpath>
             </field>
         </record>
