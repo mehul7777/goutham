@@ -54,6 +54,7 @@ class ProjectWizard(models.TransientModel):
                 alias_name = value[17]
                 alias_contact_name = value[18]
                 sales_order = value[19]
+                active = value[20]
 
                 user_id = self.env['res.users'].search([('name', '=', project_manager), '|', ('active', '=', True), ('active', '=', False)], limit=1)
                 custom_created_by_id = self.env['res.users'].search([('name', '=', created_by), '|', ('active', '=', True), ('active', '=', False)], limit=1)
@@ -92,6 +93,7 @@ class ProjectWizard(models.TransientModel):
                         # 'alias_name': alias_name,
                         'alias_contact': alias_contact_name,
                         'sale_order_id': sale_order_id.id,
+                        'active': True if active == "True" else False,
                     }
                     project_obj_id = self.env['project.project'].create(projects_val)
                     print("projects_val", project_obj_id)
