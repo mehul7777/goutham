@@ -84,10 +84,15 @@ class ProjectTaskWizard(models.TransientModel):
                         'parent_id': parent_id.id,
                         'company_id': company_id.id,
                         'displayed_image_id': displayed_image_id.id,
-                        'date_assign': assigning_date,
-                        'date_last_stage_update': last_stage_update,
+                        # 'date_assign': assigning_date,
+                        # 'date_last_stage_update': last_stage_update,
                         'stage_id': stage_id.id,
                         'active': active,
                     }
                     task_obj_id = self.env['project.task'].create(tasks_val)
+                    dates_val = {
+                        'date_assign': assigning_date,
+                        'date_last_stage_update': last_stage_update,
+                    }
+                    task_obj_id.write(dates_val)
                     print("tasks_val", task_obj_id)
