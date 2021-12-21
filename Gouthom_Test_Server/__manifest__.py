@@ -21,6 +21,7 @@
         'wizard/Purchase_Order_Import_view.xml',
         'wizard/CRM_Import_view.xml',
         'wizard/Analytic_Account_Import_view.xml',
+        'wizard/Project_Project_Import_view.xml',
         'views/Inherit_Template_view.xml',
         'views/inherit_res_partner.xml',
         'views/Inherit_sale_order_view.xml',
