@@ -42,8 +42,8 @@ class ProjectWizard(models.TransientModel):
                 id = value[5]
                 project_type = value[6]
                 created_by = value[7]
-                start_date = value[8]
-                expiration_date = value[9]
+                start_date = value[8] or False
+                expiration_date = value[9] or False
                 privacy = value[10]
                 customer = value[11]
                 analytic_account = value[12]
@@ -89,7 +89,7 @@ class ProjectWizard(models.TransientModel):
                         'sequence': sequence,
                         'company_id': company_id.id,
                         'resource_calendar_id': resource_calendar_id.id,
-                        'alias_name': alias_name,
+                        # 'alias_name': alias_name,
                         'alias_contact': alias_contact_name,
                         'sale_order_id': sale_order_id.id,
                     }
