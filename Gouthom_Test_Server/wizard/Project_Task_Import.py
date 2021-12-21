@@ -55,11 +55,11 @@ class ProjectTaskWizard(models.TransientModel):
                 stage = value[18]
                 active = value[19]
 
-                project_id = self.env['project.project'].search([('name', '=', project)], limit=1)
-                user_id = self.env['res.users'].search([('name', '=', assigned_to)], limit=1)
+                project_id = self.env['project.project'].search([('name', '=', project), '|', ('active', '=', True), ('active', '=', False)], limit=1)
+                user_id = self.env['res.users'].search([('name', '=', assigned_to), '|', ('active', '=', True), ('active', '=', False)], limit=1)
                 sale_line_id = self.env['sale.order.line'].search([('name', '=', sales_order_item)], limit=1)
                 tag_ids = self.env['project.tags'].search([('name', '=', tags)], limit=1)
-                partner_id = self.env['res.partner'].search([('name', '=', customer)], limit=1)
+                partner_id = self.env['res.partner'].search([('name', '=', customer), '|', ('active', '=', True), ('active', '=', False)], limit=1)
                 parent_id = self.env['project.task'].search([('name', '=', parent_task)], limit=1)
                 company_id = self.env['res.company'].search([('name', '=', company)], limit=1)
                 displayed_image_id = self.env['ir.attachment'].search([('name', '=', cover_image)], limit=1)
