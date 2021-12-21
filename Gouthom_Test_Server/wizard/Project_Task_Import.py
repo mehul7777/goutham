@@ -87,7 +87,7 @@ class ProjectTaskWizard(models.TransientModel):
                         # 'date_assign': assigning_date,
                         # 'date_last_stage_update': last_stage_update,
                         'stage_id': stage_id.id,
-                        'active': active,
+                        'active': True if active == "True" else False,
                     }
                     task_obj_id = self.env['project.task'].sudo().create(tasks_val)
                     dates_val = {
