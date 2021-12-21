@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_project_task_wizard_form" model="ir.ui.view">
+        <field name="name">view.project.task.wizard.form</field>
+        <field name="model">project.task.wizard</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="load_file"/>
+                </group>
+                <footer>
+                    <button name="import_task_data" string="Import" type="object" class="oe_highlight"/>
+                    <button string="Cancel" class="btn btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="project_task_wizard_action_record" model="ir.actions.act_window">
+        <field name="name">Import Task(s)</field>
+        <field name="res_model">project.task.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_project_task_wizard_form"/>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="project.model_project_task"/>
+        <field name="binding_view_types">list</field>
+    </record>
+
+</odoo>

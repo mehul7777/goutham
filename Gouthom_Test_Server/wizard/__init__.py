@@ -6,3 +6,4 @@ from . import Purchase_Order_Import
 from . import CRM_Import
 from . import Analytic_Account_Import
 from . import Project_Project_Import
+from . import Project_Task_Import
