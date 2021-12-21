@@ -37,11 +37,11 @@ class ProjectTaskWizard(models.TransientModel):
                 title = value[0]
                 project = value[1]
                 assigned_to = value[2]
-                starting_date = value[3]
-                ending_date = value[4]
+                starting_date = value[3] or False
+                ending_date = value[4] or False
                 sales_order_item = value[5]
                 tags = value[6]
-                deadline = value[7]
+                deadline = value[7] or False
                 created_on = value[8]
                 sequence = value[9]
                 customer = value[10]
@@ -50,8 +50,8 @@ class ProjectTaskWizard(models.TransientModel):
                 parent_task = value[13]
                 company = value[14]
                 cover_image = value[15]
-                assigning_date = value[16]
-                last_stage_update = value[17]
+                assigning_date = value[16] or False
+                last_stage_update = value[17] or False
                 stage = value[18]
                 active = value[19]
 
