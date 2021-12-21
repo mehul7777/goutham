@@ -27,6 +27,10 @@
                 <xpath expr="//field[@name='partner_id']" position="after">
                     <field name="custom_created_by"/>
                 </xpath>
+                <xpath expr="//field[@name='user_id']" position="before">
+                    <field name="date_start"/>
+                    <field name="date"/>
+                </xpath>
             </field>
         </record>
     </data>
