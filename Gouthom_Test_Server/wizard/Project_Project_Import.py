@@ -74,8 +74,8 @@ class ProjectWizard(models.TransientModel):
                     projects_val = {
                         'name': name,
                         'label_tasks': use_tasks_as,
-                        'allow_timesheets': allow_timesheets,
-                        'allow_forecast': allow_forecast,
+                        'allow_timesheets': True if allow_timesheets == "True" else False,
+                        'allow_forecast': True if allow_forecast == "True" else False,
                         'user_id': user_id.id,
                         'custom_id': id,
                         'project_type': project_type,
