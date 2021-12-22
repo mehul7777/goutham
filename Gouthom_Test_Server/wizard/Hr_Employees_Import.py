@@ -84,22 +84,32 @@ class HrEmployeeWizard(models.TransientModel):
                 manual_attendance = value[48]
                 job_description = value[49]
                 active = value[50]
-
+                job_id = False
                 category_ids = self.env['hr.employee.category'].search([('name', '=', tags)], limit=1)
-                address_id = self.env['res.partner'].search([('name', '=', work_address), '|', ('active', '=', True), ('active', '=', False)], limit=1)
-                department_id = self.env['hr.department'].search([('name', '=', department), '|', ('active', '=', True), ('active', '=', False)], limit=1)
-                job_id = self.env['hr.job'].search([('name', '=', job_position)], limit=1)
-                parent_id = self.env['hr.employee'].search([('name', '=', manager), '|', ('active', '=', True), ('active', '=', False)], limit=1)
-                coach_id = self.env['hr.employee'].search([('name', '=', coach), '|', ('active', '=', True), ('active', '=', False)], limit=1)
-                resource_calendar_id = self.env['resource.calendar'].search([('name', '=', working_hours), '|', ('active', '=', True), ('active', '=', False)], limit=1)
+                address_id = self.env['res.partner'].search(
+                    [('name', '=', work_address), '|', ('active', '=', True), ('active', '=', False)], limit=1)
+                department_id = self.env['hr.department'].search(
+                    [('name', '=', department), '|', ('active', '=', True), ('active', '=', False)], limit=1)
+                if job_position:
+                    job_id = self.env['hr.job'].search([('name', '=', job_position)], limit=1)
+                parent_id = self.env['hr.employee'].search(
+                    [('name', '=', manager), '|', ('active', '=', True), ('active', '=', False)], limit=1)
+                coach_id = self.env['hr.employee'].search(
+                    [('name', '=', coach), '|', ('active', '=', True), ('active', '=', False)], limit=1)
+                resource_calendar_id = self.env['resource.calendar'].search(
+                    [('name', '=', working_hours), '|', ('active', '=', True), ('active', '=', False)], limit=1)
                 country_id = self.env['res.country'].search([('name', '=', nationality)], limit=1)
                 # bank_account_id = self.env['res.partner.bank'].search([('name', '=', bank_account_number), '|', ('active', '=', True), ('active', '=', False)], limit=1)
-                address_home_id = self.env['res.partner'].search([('name', '=', private_address), '|', ('active', '=', True), ('active', '=', False)], limit=1)
+                address_home_id = self.env['res.partner'].search(
+                    [('name', '=', private_address), '|', ('active', '=', True), ('active', '=', False)], limit=1)
                 country_of_birth = self.env['res.country'].search([('name', '=', country_birth)], limit=1)
                 company_id = self.env['res.company'].search([('name', '=', company)], limit=1)
-                activity_user_id = self.env['res.users'].search([('name', '=', responsible_user), '|', ('active', '=', True), ('active', '=', False)], limit=1)
-                timesheet_responsible_id = self.env['res.users'].search([('name', '=', timesheet_responsible), '|', ('active', '=', True), ('active', '=', False)], limit=1)
-                expense_responsible_id = self.env['res.users'].search([('name', '=', expense_responsible), '|', ('active', '=', True), ('active', '=', False)], limit=1)
+                activity_user_id = self.env['res.users'].search(
+                    [('name', '=', responsible_user), '|', ('active', '=', True), ('active', '=', False)], limit=1)
+                timesheet_responsible_id = self.env['res.users'].search(
+                    [('name', '=', timesheet_responsible), '|', ('active', '=', True), ('active', '=', False)], limit=1)
+                expense_responsible_id = self.env['res.users'].search(
+                    [('name', '=', expense_responsible), '|', ('active', '=', True), ('active', '=', False)], limit=1)
 
                 if not department_id:
                     department_val = {
@@ -124,7 +134,7 @@ class HrEmployeeWizard(models.TransientModel):
                         'work_phone': work_phone,
                         'custom_id': id,
                         'department_id': department_id.id,
-                        'job_id': job_id.id if job_id else False,
+                        'job_id': job_id.id,
                         'job_title': job_title,
                         'parent_id': parent_id.id,
                         'coach_id': coach_id.id,
