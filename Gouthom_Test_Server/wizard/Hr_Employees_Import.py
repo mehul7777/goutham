@@ -42,7 +42,7 @@ class HrEmployeeWizard(models.TransientModel):
                 work_phone = value[6]
                 id = value[7]
                 department = value[8]
-                job_position = value[9]
+                job_position = value[9] or False
                 job_title = value[10]
                 manager = value[11]
                 coach = value[12]
