@@ -8,4 +8,6 @@ access.crm.wizard,access_crm_wizard,model_crm_wizard,base.group_user,1,1,1,1
 access.analytic.account.wizard,access_analytic_account_wizard,model_analytic_account_wizard,base.group_user,1,1,1,1
 access.project.wizard,access_project_wizard,model_project_wizard,base.group_user,1,1,1,1
 access.project.task.wizard,access_project_task_wizard,model_project_task_wizard,base.group_user,1,1,1,1
+access.timesheet.wizard,access_timesheet_wizard,model_timesheet_wizard,base.group_user,1,1,1,1
+access.hr.employee.wizard,access_hr_employee_wizard,model_hr_employee_wizard,base.group_user,1,1,1,1
 

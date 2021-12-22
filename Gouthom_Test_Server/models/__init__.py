@@ -5,3 +5,4 @@ from . import Inherit_Project_Project
 from . import Inherit_crm
 from . import Inherit_analytic_account
 from . import Inherit_Project_Task
+from . import Inherit_hr_employee
