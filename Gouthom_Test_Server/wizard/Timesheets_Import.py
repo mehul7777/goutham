@@ -52,4 +52,4 @@ class TimesheetWizard(models.TransientModel):
                     'name': description,
                     'unit_amount': quantity,
                 }
-                timesheet_id = self.env['account.analytic.line'].create(timesheet_val)
+                timesheet_id = self.env['account.analytic.line'].sudo().create(timesheet_val)
