@@ -173,7 +173,7 @@ class HrEmployeeWizard(models.TransientModel):
                         'barcode': badge_id,
                         'manual_attendance': manual_attendance,
                         'job_description': job_description,
-                        'active': active
+                        'active': True if active == "True" else False
                     }
                     employee_id = self.env['hr.employee'].sudo().create(employee_val)
 
