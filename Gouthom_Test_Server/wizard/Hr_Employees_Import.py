@@ -124,7 +124,7 @@ class HrEmployeeWizard(models.TransientModel):
                         'work_phone': work_phone,
                         'custom_id': id,
                         'department_id': department_id.id,
-                        'job_id': job_id.id,
+                        # 'job_id': job_id.id,
                         'job_title': job_title,
                         'parent_id': parent_id.id,
                         'coach_id': coach_id.id,
