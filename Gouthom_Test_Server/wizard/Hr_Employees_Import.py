@@ -84,14 +84,13 @@ class HrEmployeeWizard(models.TransientModel):
                 manual_attendance = value[48]
                 job_description = value[49]
                 active = value[50]
-                job_id = False
+
                 category_ids = self.env['hr.employee.category'].search([('name', '=', tags)], limit=1)
                 address_id = self.env['res.partner'].search(
                     [('name', '=', work_address), '|', ('active', '=', True), ('active', '=', False)], limit=1)
                 department_id = self.env['hr.department'].search(
                     [('name', '=', department), '|', ('active', '=', True), ('active', '=', False)], limit=1)
-                if job_position:
-                    job_id = self.env['hr.job'].search([('name', '=', job_position)], limit=1)
+                job_id = self.env['hr.job'].search([('name', '=', job_position)], limit=1)
                 parent_id = self.env['hr.employee'].search(
                     [('name', '=', manager), '|', ('active', '=', True), ('active', '=', False)], limit=1)
                 coach_id = self.env['hr.employee'].search(
@@ -134,7 +133,7 @@ class HrEmployeeWizard(models.TransientModel):
                         'work_phone': work_phone,
                         'custom_id': id,
                         'department_id': department_id.id,
-                        'job_id': job_id.id,
+                        # 'job_id': job_id.id,
                         'job_title': job_title,
                         'parent_id': parent_id.id,
                         'coach_id': coach_id.id,
@@ -177,3 +176,5 @@ class HrEmployeeWizard(models.TransientModel):
                         'active': active
                     }
                     employee_id = self.env['hr.employee'].sudo().create(employee_val)
+                    if employee_id and job_id:
+                        employee_id.write({'job_id': job_id.id})
