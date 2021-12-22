@@ -166,4 +166,4 @@ class HrEmployeeWizard(models.TransientModel):
                         'job_description': job_description,
                         'active': active
                     }
-                    employee_id = self.env['hr.employee'].create(employee_val)
+                    employee_id = self.env['hr.employee'].sudo().create(employee_val)
