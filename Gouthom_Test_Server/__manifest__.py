@@ -25,6 +25,7 @@
         'wizard/Project_Task_Import_view.xml',
         'wizard/Timesheets_Import_view.xml',
         'wizard/Hr_Employees_Import_view.xml',
+        'wizard/Chart_of_Accounts_Import_view.xml',
         'views/Inherit_Template_view.xml',
         'views/inherit_res_partner.xml',
         'views/Inherit_sale_order_view.xml',

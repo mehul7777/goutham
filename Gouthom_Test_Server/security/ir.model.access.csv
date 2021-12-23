@@ -10,4 +10,5 @@ access.project.wizard,access_project_wizard,model_project_wizard,base.group_user
 access.project.task.wizard,access_project_task_wizard,model_project_task_wizard,base.group_user,1,1,1,1
 access.timesheet.wizard,access_timesheet_wizard,model_timesheet_wizard,base.group_user,1,1,1,1
 access.hr.employee.wizard,access_hr_employee_wizard,model_hr_employee_wizard,base.group_user,1,1,1,1
+access.account.account.wizard,access_account_account_wizard,model_account_account_wizard,base.group_user,1,1,1,1
 
