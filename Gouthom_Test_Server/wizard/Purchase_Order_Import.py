@@ -30,6 +30,7 @@ class PO1Wizard(models.TransientModel):
             row_num += 1
         po_id = ''
         for key, value in data_dict.items():
+            print(data_dict.items())
             if key == 0:
                 header_list.append(value)
             else:
@@ -153,5 +154,4 @@ class PO1Wizard(models.TransientModel):
                             lst.append(po_line_vals)
                             po_line_id = po_id.write({'order_line': lst})
                             print(po_line_id)
-            return True
 
