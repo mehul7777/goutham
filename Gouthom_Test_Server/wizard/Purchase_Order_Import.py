@@ -83,21 +83,60 @@ class PO1Wizard(models.TransientModel):
                     }
                     part_id = self.env['res.partner'].create(vendors_val)
 
+                search_name = self.env['purchase.order'].search([('name', '=', order_reference)])
+
                 lst = []
-                if order_reference:
-                    if order_lines_product:
-                        if not pro_id:
-                            products_val = {
-                                'name': order_lines_product
-                            }
-                            pro_id = self.env['product.product'].create(products_val)
+                if not search_name:
+                    if order_reference:
+                        if order_lines_product:
+                            if not pro_id:
+                                products_val = {
+                                    'name': order_lines_product
+                                }
+                                pro_id = self.env['product.product'].create(products_val)
 
-                        if not account_analytic_id:
-                            account_analytic_val = {
-                                'name': order_lines_analytic_account
-                            }
-                            account_analytic_id = self.env['account.analytic.account'].create(account_analytic_val)
+                            if not account_analytic_id:
+                                account_analytic_val = {
+                                    'name': order_lines_analytic_account
+                                }
+                                account_analytic_id = self.env['account.analytic.account'].create(account_analytic_val)
 
+                            po_line_vals = (0, 0, {
+                                'product_id': pro_id.id,
+                                'name': order_lines_description,
+                                'date_planned': order_lines_scheduled_date,
+                                'account_analytic_id': account_analytic_id.id,
+                                'analytic_tag_ids': analytic_tag,
+                                'product_qty': order_lines_quantity,
+                                'product_uom': product_uom_id.id,
+                                'price_unit': order_lines_price_unit,
+                                'taxes_id': [(6, 0, tax_id.ids)],
+                                # 'order_id': po_id.id
+                            })
+                            lst.append(po_line_vals)
+
+                        po_order_val = {
+                            'name': order_reference,
+                            'partner_id': part_id.id,
+                            'partner_ref': vendor_reference,
+                            'currency_id': c_id.id,
+                            'date_order': order_date,
+                            'date_planned': scheduled_date,
+                            'user_id': use_id.id,
+                            'invoice_status': billing_status,
+                            'company_id': com_id.id,
+                            'picking_type_id': pick_type_id.id,
+                            'fiscal_position_id': fis_pos_id.id,
+                            'state': status,
+                            'date_approve': approval_date,
+                            'incoterm_id': incoterm_id.id,
+                            'payment_term_id': payment_term_id.id,
+                            'order_line': lst,
+                        }
+                        if status == "done":
+                            po_id = self.env['purchase.order'].create(po_order_val)
+                            print(po_id)
+                    else:
                         po_line_vals = (0, 0, {
                             'product_id': pro_id.id,
                             'name': order_lines_description,
@@ -110,45 +149,9 @@ class PO1Wizard(models.TransientModel):
                             'taxes_id': [(6, 0, tax_id.ids)],
                             # 'order_id': po_id.id
                         })
-                        lst.append(po_line_vals)
-
-                    po_order_val = {
-                        'name': order_reference,
-                        'partner_id': part_id.id,
-                        'partner_ref': vendor_reference,
-                        'currency_id': c_id.id,
-                        'date_order': order_date,
-                        'date_planned': scheduled_date,
-                        'user_id': use_id.id,
-                        'invoice_status': billing_status,
-                        'company_id': com_id.id,
-                        'picking_type_id': pick_type_id.id,
-                        'fiscal_position_id': fis_pos_id.id,
-                        'state': status,
-                        'date_approve': approval_date,
-                        'incoterm_id': incoterm_id.id,
-                        'payment_term_id': payment_term_id.id,
-                        'order_line': lst,
-                    }
-                    if status == "done":
-                        po_id = self.env['purchase.order'].create(po_order_val)
-                        print(po_id)
-                else:
-                    po_line_vals = (0, 0, {
-                        'product_id': pro_id.id,
-                        'name': order_lines_description,
-                        'date_planned': order_lines_scheduled_date,
-                        'account_analytic_id': account_analytic_id.id,
-                        'analytic_tag_ids': analytic_tag,
-                        'product_qty': order_lines_quantity,
-                        'product_uom': product_uom_id.id,
-                        'price_unit': order_lines_price_unit,
-                        'taxes_id': [(6, 0, tax_id.ids)],
-                        # 'order_id': po_id.id
-                    })
-                    if po_id:
-                        lst.append(po_line_vals)
-                        po_line_id = po_id.write({'order_line': lst})
-                        print(po_line_id)
-        return True
+                        if po_id:
+                            lst.append(po_line_vals)
+                            po_line_id = po_id.write({'order_line': lst})
+                            print(po_line_id)
+            return True
 
