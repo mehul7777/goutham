@@ -17,6 +17,11 @@
                         <field name="id" invisible="1"/>
                     </group>
                 </xpath>
+                <xpath expr="//div[@class='oe_title']" position="after">
+                    <group>
+                        <field name="id_custom" invisible="0"/>
+                    </group>
+                </xpath>
             </field>
         </record>
     </data>
