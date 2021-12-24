@@ -61,17 +61,17 @@ class PO1Wizard(models.TransientModel):
                 payment_terms = value[23]
                 fiscal_position = value[24]
 
-                c_id = self.env['res.currency'].search([('name', '=', currency)])
-                part_id = self.env['res.partner'].search([('name', '=', vendor)])
-                use_id = self.env['res.users'].search([('name', '=', purchase_representative)])
-                com_id = self.env['res.company'].search([('name', '=', company)])
-                pro_id = self.env['product.product'].search([('name', '=', order_lines_product)], limit=1)
-                pick_type_id = self.env['stock.warehouse'].search([('name', '=', deliver_to)]).in_type_id
-                fis_pos_id = self.env['account.fiscal.position'].search([('name', '=', fiscal_position)])
-                tax_id = self.env['account.tax'].search([('name', '=', order_lines_taxes)])
-                incoterm_id = self.env['account.incoterms'].search([('name', '=', incoterm)])
-                payment_term_id = self.env['account.payment.term'].search([('name', '=', payment_terms)])
-                account_analytic_id = self.env['account.analytic.account'].search([('name', '=', order_lines_analytic_account)])
+                c_id = self.env['res.currency'].search([('name', '=', currency)], limit=1)
+                part_id = self.env['res.partner'].search([('name', '=', vendor), '|', ('active', '=', True), ('active', '=', False)], limit=1)
+                use_id = self.env['res.users'].search([('name', '=', purchase_representative), '|', ('active', '=', True), ('active', '=', False)], limit=1)
+                com_id = self.env['res.company'].search([('name', '=', company)], limit=1)
+                pro_id = self.env['product.product'].search([('name', '=', order_lines_product), '|', ('active', '=', True), ('active', '=', False)], limit=1)
+                pick_type_id = self.env['stock.warehouse'].search([('name', '=', deliver_to)], limit=1).in_type_id
+                fis_pos_id = self.env['account.fiscal.position'].search([('name', '=', fiscal_position)], limit=1)
+                tax_id = self.env['account.tax'].search([('name', '=', order_lines_taxes)], limit=1)
+                incoterm_id = self.env['account.incoterms'].search([('name', '=', incoterm)], limit=1)
+                payment_term_id = self.env['account.payment.term'].search([('name', '=', payment_terms)], limit=1)
+                account_analytic_id = self.env['account.analytic.account'].search([('name', '=', order_lines_analytic_account), '|', ('active', '=', True), ('active', '=', False)], limit=1)
                 analytic_tag =False
                 if order_lines_analytic_tags:
                     analytic_tag_ids = self.env['account.analytic.tag'].search([('name', '=', order_lines_analytic_tags)])
