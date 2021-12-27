@@ -118,15 +118,15 @@ class CustomerInvoiceWizard(models.TransientModel):
 
                         lst.append(vals)
 
-                    if tax_lines_tax_account:
-                        tax_lines_val = (0, 0, {
-                            'name': tax_lines_description,
-                            'account_id': tax_account_id.id,
-                            'analytic_account_id': tax_analytic_account_id.id,
-                            'analytic_tag_ids': [(6, 0, tax_analytic_tag_ids.ids)],
-                        })
-
-                        tax_lines_lst.append(tax_lines_val)
+                    # if tax_lines_tax_account:
+                    #     tax_lines_val = (0, 0, {
+                    #         'name': tax_lines_description,
+                    #         'account_id': tax_account_id.id,
+                    #         'analytic_account_id': tax_analytic_account_id.id,
+                    #         'analytic_tag_ids': [(6, 0, tax_analytic_tag_ids.ids)],
+                    #     })
+                    #
+                    #     tax_lines_lst.append(tax_lines_val)
 
                     ci_val = {
                         'move_type': type,
@@ -154,7 +154,7 @@ class CustomerInvoiceWizard(models.TransientModel):
                         'fiscal_position_id': fis_pos_id.id,
                         'state': status,
                         'invoice_line_ids': lst,
-                        'line_ids': tax_lines_lst,
+                        # 'line_ids': tax_lines_lst,
                     }
                     ci_id = self.env['account.move'].create(ci_val)
                     print("ci_val", ci_val)
@@ -176,13 +176,13 @@ class CustomerInvoiceWizard(models.TransientModel):
                         ci_line_id = ci_id.write({'invoice_line_ids': lst})
                         print(ci_line_id)
 
-                    if tax_lines_tax_account:
-                        tax_lines_val = (0, 0, {
-                            'name': tax_lines_description,
-                            'account_id': tax_account_id.id,
-                            'analytic_account_id': tax_analytic_account_id.id,
-                            'analytic_tag_ids': [(6, 0, tax_analytic_tag_ids.ids)],
-                        })
-
-                        tax_lines_lst.append(tax_lines_val)
-                        ci_tax_line_id = ci_id.write({'line_ids': tax_lines_lst})
+                    # if tax_lines_tax_account:
+                    #     tax_lines_val = (0, 0, {
+                    #         'name': tax_lines_description,
+                    #         'account_id': tax_account_id.id,
+                    #         'analytic_account_id': tax_analytic_account_id.id,
+                    #         'analytic_tag_ids': [(6, 0, tax_analytic_tag_ids.ids)],
+                    #     })
+                    #
+                    #     tax_lines_lst.append(tax_lines_val)
+                    #     ci_tax_line_id = ci_id.write({'line_ids': tax_lines_lst})
