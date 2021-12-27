@@ -35,6 +35,7 @@
         'views/Inherit_project_project_view.xml',
         'views/Inherit_Project_Task_view.xml',
         'views/Inherit_hr_employee_view.xml',
+        'views/Inherit_Account_Move_view.xml',
 
     ],
     'installable': True,

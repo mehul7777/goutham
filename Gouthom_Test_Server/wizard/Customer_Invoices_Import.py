@@ -73,22 +73,30 @@ class CustomerInvoiceWizard(models.TransientModel):
                 tax_lines_analytic_tags = value[36]
                 status = value[37]
 
-                part_id = self.env['res.partner'].search([('name', '=', partner)], limit=1)
-                jour_id = self.env['account.journal'].search([('name', '=', journal)])
-                ino_use_id = self.env['res.users'].search([('name', '=', sales_person)])
-                tea_id = self.env['crm.team'].search([('name', '=', sales_team)])
-                cur_id = self.env['res.currency'].search([('name', '=', currency)])
-                com_id = self.env['res.company'].search([('name', '=', company)])
-                fis_pos_id = self.env['account.fiscal.position'].search([('name', '=', fiscal_position)])
-                invoice_payment_term_id = self.env['account.payment.term'].search([('name', '=', payment_terms)])
+                part_id = self.env['res.partner'].search([('name', '=', partner), '|', ('active', '=', True), ('active', '=', False)], limit=1)
+                jour_id = self.env['account.journal'].search([('name', '=', journal)], limit=1)
+                ino_use_id = self.env['res.users'].search([('name', '=', sales_person), '|', ('active', '=', True), ('active', '=', False)], limit=1)
+                tea_id = self.env['crm.team'].search([('name', '=', sales_team), '|', ('active', '=', True), ('active', '=', False)], limit=1)
+                cur_id = self.env['res.currency'].search([('name', '=', currency)], limit=1)
+                com_id = self.env['res.company'].search([('name', '=', company)], limit=1)
+                fis_pos_id = self.env['account.fiscal.position'].search([('name', '=', fiscal_position), '|', ('active', '=', True), ('active', '=', False)], limit=1)
+                invoice_payment_term_id = self.env['account.payment.term'].search([('name', '=', payment_terms)], limit=1)
+                invoice_incoterm_id = self.env['account.incoterms'].search([('name', '=', incoterm)], limit=1)
+                point_of_contact_id = self.env['res.partner'].search([('name', '=', point_of_contact), '|', ('active', '=', True), ('active', '=', False)], limit=1)
+                project_manager_id = self.env['res.users'].search([('name', '=', project_manager), '|', ('active', '=', True), ('active', '=', False)], limit=1)
+                account_id = self.env['account.account'].search([('name', '=', account)], limit=1)
+                journal_entry_id = self.env['account.move'].search([('name', '=', journal_entry)], limit=1)
 
-                pro_id = self.env['product.product'].search([('name', '=', invoice_lines_product)], limit=1)
-                acc_id = self.env['account.account'].search([('code', '=', invoice_lines_account)])
-                ana_acc_id = self.env['account.analytic.account'].search(
-                    [('name', '=', invoice_lines_analytic_account)], limit=1)
-                analytic_tag_ids = self.env['account.analytic.tag'].search([('name', '=', invoice_lines_analytic_tags)])
-                pro_uom_id = self.env['uom.uom'].search([('name', '=', invoice_lines_unit_of_measure)])
+                pro_id = self.env['product.product'].search([('name', '=', invoice_lines_product), '|', ('active', '=', True), ('active', '=', False)], limit=1)
+                acc_id = self.env['account.account'].search([('code', '=', invoice_lines_account)], limit=1)
+                ana_acc_id = self.env['account.analytic.account'].search([('name', '=', invoice_lines_analytic_account), '|', ('active', '=', True), ('active', '=', False)], limit=1)
+                analytic_tag_ids = self.env['account.analytic.tag'].search([('name', '=', invoice_lines_analytic_tags)], limit=1)
+                pro_uom_id = self.env['uom.uom'].search([('name', '=', invoice_lines_unit_of_measure)], limit=1)
                 tax_ids = self.env['account.tax'].search([('name', '=', invoice_lines_taxes)], limit=1)
+
+                tax_account_id = self.env['account.account'].search([('code', '=', tax_lines_tax_account)], limit=1)
+                tax_analytic_account_id = self.env['account.analytic.account'].search([('name', '=', tax_lines_analytic_account), '|', ('active', '=', True), ('active', '=', False)], limit=1)
+                tax_analytic_tag_ids = self.env['account.analytic.tag'].search([('name', '=', tax_lines_analytic_tags)], limit=1)
 
                 lst = []
                 tax_lines_lst = []
@@ -111,11 +119,13 @@ class CustomerInvoiceWizard(models.TransientModel):
 
                     if tax_lines_tax_account:
                         tax_lines_val = (0, 0, {
-                            '': tax_lines_description,
-                            '': tax_lines_tax_account,
-                            '': tax_lines_analytic_account,
-                            '': tax_lines_analytic_tags,
+                            'name': tax_lines_description,
+                            'account_id': tax_account_id.id,
+                            'analytic_account_id': tax_analytic_account_id.id,
+                            'analytic_tag_ids': [(6, 0, tax_analytic_tag_ids.ids)],
                         })
+
+                        tax_lines_lst.append(tax_lines_val)
 
                     ci_val = {
                         'move_type': type,
@@ -124,18 +134,18 @@ class CustomerInvoiceWizard(models.TransientModel):
                         'partner_shipping_id': delivery_address,
                         'invoice_payment_term_id': invoice_payment_term_id.id,
                         'payment_reference': payment_ref,
-                        'customer_po': customer_po, # create this field
-                        'point_of_contact': point_of_contact, # create this field
-                        'point_of_contact_po': point_of_contact_po, # create this field
+                        'customer_po': customer_po,
+                        'point_of_contact_id': point_of_contact_id.id,
+                        'point_of_contact_po': point_of_contact_po,
                         'invoice_date': invoice_date,
                         'invoice_date_due': due_date,
                         'journal_id': jour_id.id,
                         'ref': reference_description,
-                        'project_manager': project_manager, # create this field
-                        'account': account, # create this field
-                        'incoterm': incoterm, # create this field
-                        'journal_entry': journal_entry, # create this field
-                        'source_document': source_document, # create this field
+                        'project_manager_id': project_manager_id.id,
+                        'account_id': account_id.id,
+                        'invoice_incoterm_id': invoice_incoterm_id.id,
+                        'journal_entry_id': journal_entry_id.id,
+                        'source_document': source_document,
                         'invoice_user_id': ino_use_id.id,
                         'team_id': tea_id.id,
                         'currency_id': cur_id.id,
@@ -143,6 +153,7 @@ class CustomerInvoiceWizard(models.TransientModel):
                         'fiscal_position_id': fis_pos_id.id,
                         'state': status,
                         'invoice_line_ids': lst,
+                        'line_ids': tax_lines_lst,
                     }
                     ci_id = self.env['account.move'].create(ci_val)
                     print("ci_val", ci_val)
