@@ -86,15 +86,16 @@ class CustomerInvoiceWizard(models.TransientModel):
                 project_manager_id = self.env['res.users'].search([('name', '=', project_manager), '|', ('active', '=', True), ('active', '=', False)], limit=1)
                 account_id = self.env['account.account'].search([('name', '=', account)], limit=1)
                 journal_entry_id = self.env['account.move'].search([('name', '=', journal_entry)], limit=1)
+                partner_shipping_id = self.env['res.partner'].search([('name', '=', delivery_address), '|', ('active', '=', True), ('active', '=', False)], limit=1)
 
                 pro_id = self.env['product.product'].search([('name', '=', invoice_lines_product), '|', ('active', '=', True), ('active', '=', False)], limit=1)
-                acc_id = self.env['account.account'].search([('code', '=', invoice_lines_account)], limit=1)
+                acc_id = self.env['account.account'].search([('name', '=', invoice_lines_account)], limit=1)
                 ana_acc_id = self.env['account.analytic.account'].search([('name', '=', invoice_lines_analytic_account), '|', ('active', '=', True), ('active', '=', False)], limit=1)
                 analytic_tag_ids = self.env['account.analytic.tag'].search([('name', '=', invoice_lines_analytic_tags)], limit=1)
                 pro_uom_id = self.env['uom.uom'].search([('name', '=', invoice_lines_unit_of_measure)], limit=1)
                 tax_ids = self.env['account.tax'].search([('name', '=', invoice_lines_taxes)], limit=1)
 
-                tax_account_id = self.env['account.account'].search([('code', '=', tax_lines_tax_account)], limit=1)
+                tax_account_id = self.env['account.account'].search([('name', '=', tax_lines_tax_account)], limit=1)
                 tax_analytic_account_id = self.env['account.analytic.account'].search([('name', '=', tax_lines_analytic_account), '|', ('active', '=', True), ('active', '=', False)], limit=1)
                 tax_analytic_tag_ids = self.env['account.analytic.tag'].search([('name', '=', tax_lines_analytic_tags)], limit=1)
 
@@ -131,7 +132,7 @@ class CustomerInvoiceWizard(models.TransientModel):
                         'move_type': type,
                         'name': number,
                         'partner_id': part_id.id,
-                        'partner_shipping_id': delivery_address,
+                        'partner_shipping_id': partner_shipping_id.id,
                         'invoice_payment_term_id': invoice_payment_term_id.id,
                         'payment_reference': payment_ref,
                         'customer_po': customer_po,
@@ -175,3 +176,13 @@ class CustomerInvoiceWizard(models.TransientModel):
                         ci_line_id = ci_id.write({'invoice_line_ids': lst})
                         print(ci_line_id)
 
+                    if tax_lines_tax_account:
+                        tax_lines_val = (0, 0, {
+                            'name': tax_lines_description,
+                            'account_id': tax_account_id.id,
+                            'analytic_account_id': tax_analytic_account_id.id,
+                            'analytic_tag_ids': [(6, 0, tax_analytic_tag_ids.ids)],
+                        })
+
+                        tax_lines_lst.append(tax_lines_val)
+                        ci_tax_line_id = ci_id.write({'line_ids': tax_lines_lst})
