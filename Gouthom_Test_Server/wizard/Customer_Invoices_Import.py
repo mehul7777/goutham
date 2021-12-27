@@ -156,7 +156,7 @@ class CustomerInvoiceWizard(models.TransientModel):
                         'invoice_line_ids': lst,
                         # 'line_ids': tax_lines_lst,
                     }
-                    ci_id = self.env['account.move'].create(ci_val)
+                    ci_id = self.env['account.move'].sudo().create(ci_val)
                     print("ci_val", ci_val)
                 else:
                     if invoice_lines_product:
