@@ -10,3 +10,4 @@ from . import Project_Task_Import
 from . import Timesheets_Import
 from . import Hr_Employees_Import
 from . import Chart_of_Accounts_Import
+from . import Customer_Invoices_Import

@@ -11,4 +11,5 @@ access.project.task.wizard,access_project_task_wizard,model_project_task_wizard,
 access.timesheet.wizard,access_timesheet_wizard,model_timesheet_wizard,base.group_user,1,1,1,1
 access.hr.employee.wizard,access_hr_employee_wizard,model_hr_employee_wizard,base.group_user,1,1,1,1
 access.account.account.wizard,access_account_account_wizard,model_account_account_wizard,base.group_user,1,1,1,1
+access.customer.invoice.wizard,access_customer_invoice_wizard,model_customer_invoice_wizard,base.group_user,1,1,1,1
 
