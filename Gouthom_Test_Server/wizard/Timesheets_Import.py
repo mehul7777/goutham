@@ -39,12 +39,14 @@ class TimesheetWizard(models.TransientModel):
                 task = value[3]
                 description = value[4]
                 quantity = value[5]
-                analytic_account = value[6]
+                company = value[6]
+                analytic_account = value[7]
 
                 employee_id = self.env['hr.employee'].search([('name', '=', employee), '|', ('active', '=', True), ('active', '=', False)], limit=1)
                 project_id = self.env['project.project'].search([('name', '=', project), '|', ('active', '=', True), ('active', '=', False)], limit=1)
                 task_id = self.env['project.task'].search([('name', '=', task), '|', ('active', '=', True), ('active', '=', False)], limit=1)
                 account_id = self.env['account.analytic.account'].search([('name', '=', analytic_account), '|', ('active', '=', True), ('active', '=', False)], limit=1)
+                company_id = self.env['res.company'].search([('name', '=', company)], limit=1)
 
                 timesheet_val = {
                     'date': date,
@@ -53,6 +55,7 @@ class TimesheetWizard(models.TransientModel):
                     'task_id': task_id.id,
                     'name': description,
                     'unit_amount': quantity,
+                    'company_id': company_id.id,
                     'account_id': account_id.id,
                 }
                 timesheet_id = self.env['account.analytic.line'].sudo().create(timesheet_val)
