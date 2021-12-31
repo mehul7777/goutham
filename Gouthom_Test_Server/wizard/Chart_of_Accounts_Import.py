@@ -56,7 +56,7 @@ class AccountAccountWizard(models.TransientModel):
                         'name': name,
                         'user_type_id': user_type_id.id,
                         'company_id': company_id.id,
-                        'reconcile': allow_reconciliation,
+                        'reconcile': True if allow_reconciliation == "True" else False,
                     }
                     coa_id = self.env['account.account'].create(coa_val)
                 else:
