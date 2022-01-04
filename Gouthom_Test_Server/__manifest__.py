@@ -10,7 +10,7 @@
     'description': "For Test Server",
     'website': 'https://www.odoo.com',
     'depends': [
-        'base', 'product', 'sale', 'purchase', 'project', 'crm', 'account', 'hr'
+        'base', 'product', 'sale', 'purchase', 'project', 'crm', 'account', 'hr', 'sale_project'
     ],
     'data': [
         'security/ir.model.access.csv',
