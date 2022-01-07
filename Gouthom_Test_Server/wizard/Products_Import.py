@@ -119,7 +119,7 @@ class ProductWizard(models.TransientModel):
                 vendor_product_uom = self.env['uom.uom'].search([('name', '=', vendor_unit_of_measure)])
                 vendor_currency_id = self.env['res.currency'].search([('name', '=', vendor_currency)])
 
-                search_product = self.env['product.template'].search([('name', '=', name)])
+                search_product = self.env['product.template'].search([('name', '=', name), ('default_code', '=', internal_reference)])
                 lst = []
                 if search_product:
                     if name:
