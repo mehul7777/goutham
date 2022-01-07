@@ -43,7 +43,7 @@ class ProductWizard(models.TransientModel):
                 product_type = value[5]
                 product_category = value[6]
                 oem = value[7]
-                barcode = value[8]
+                barcode = value[8] or False
                 order_planner_policy = value[9]
                 version = value[10]
                 created_by = value[11]
@@ -76,22 +76,22 @@ class ProductWizard(models.TransientModel):
                 inventory_location = value[38]
                 income_account = value[39]
 
-                categ_id = self.env['product.category'].search([('name', '=', product_category)]) #change this before commiting replace display_name to name
+                categ_id = self.env['product.category'].search([('name', '=', product_category)], limit=1) #change this before commiting replace display_name to name
                 # order_planner_policy = self.env['sale.order.planning.policy'].search([('name', '=', order_planner_policy)])
                 # create_uid = self.env['res.users'].search([('name', '=', created_by)])
                 location_id = self.env['stock.location'].search([('name', '=', location)], limit=1)
                 warehouse_id = self.env['stock.warehouse'].search([('name', '=', warehouse)], limit=1)
-                company_id = self.env['res.company'].search([('name', '=', company)])
-                uom_id = self.env['uom.uom'].search([('name', '=', unit_of_measure)])
-                uom_po_id = self.env['uom.uom'].search([('name', '=', purchase_unit_of_measure)])
-                route_ids = self.env['stock.location.route'].search([('name', '=', routes)])
-                responsible_id = self.env['res.users'].search([('name', '=', responsible)])
+                company_id = self.env['res.company'].search([('name', '=', company)], limit=1)
+                uom_id = self.env['uom.uom'].search([('name', '=', unit_of_measure)], limit=1)
+                uom_po_id = self.env['uom.uom'].search([('name', '=', purchase_unit_of_measure)], limit=1)
+                route_ids = self.env['stock.location.route'].search([('name', '=', routes)], limit=1)
+                responsible_id = self.env['res.users'].search([('name', '=', responsible), '|', ('active', '=', True), ('active', '=', False)], limit=1)
                 property_stock_production = self.env['stock.location'].search([('name', '=', production_location)], limit=1)
                 property_stock_inventory = self.env['stock.location'].search([('name', '=', inventory_location)], limit=1)
                 property_account_income_id = self.env['account.account'].search([('name', '=', income_account)])
-                taxes_id = self.env['account.tax'].search([('name', '=', customer_taxes)])
+                taxes_id = self.env['account.tax'].search([('name', '=', customer_taxes)], limit=1)
 
-                create_by_id = self.env['res.users'].search([('name', '=', created_by)], limit=1)
+                create_by_id = self.env['res.users'].search([('name', '=', created_by), '|', ('active', '=', True), ('active', '=', False)], limit=1)
                 # if not create_by_id:
                 #     create_by_id = self.env['res.users'].search([('name', '=', create_by), ('active', '=', False)], limit=1)
                 # follower_id = self.env['res.partner'].search([('name', '=', foweller_name)])
@@ -114,10 +114,10 @@ class ProductWizard(models.TransientModel):
                 # else:
                 #     pt_id.message_subscribe([follower_id.id])
 
-                vendor_name = self.env['res.partner'].search([('name', '=', vendor_vendor)])
-                vendor_product_id = self.env['product.product'].search([('name', '=', vendor_product_variant)])
-                vendor_product_uom = self.env['uom.uom'].search([('name', '=', vendor_unit_of_measure)])
-                vendor_currency_id = self.env['res.currency'].search([('name', '=', vendor_currency)])
+                vendor_name = self.env['res.partner'].search([('name', '=', vendor_vendor), '|', ('active', '=', True), ('active', '=', False)], limit=1)
+                vendor_product_id = self.env['product.product'].search([('name', '=', vendor_product_variant)], limit=1)
+                vendor_product_uom = self.env['uom.uom'].search([('name', '=', vendor_unit_of_measure)], limit=1)
+                vendor_currency_id = self.env['res.currency'].search([('name', '=', vendor_currency)], limit=1)
 
                 search_product = self.env['product.template'].search([('name', '=', name), ('default_code', '=', internal_reference)])
                 lst = []
