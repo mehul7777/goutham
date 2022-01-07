@@ -39,15 +39,30 @@ class SOWizard(models.TransientModel):
                 payment_terms = value[1]
                 tags = value[2]
                 analytic_account = value[3]
+                order_lines_product = value[4]
+                order_lines_analytic_tags = value[5]
+                order_lines_is_a_service = value[6]
+                order_lines_oem = value[7]
+                order_lines_ordered_quantity = value[8]
+                order_lines_delivered_quantity = value[9]
+                order_lines_invoiced_quantity = value[10]
+                order_lines_warehouse = value[11]
+                order_lines_taxes = value[12]
+                order_lines_discount = value[13]
 
                 print(payment_terms)
 
                 payment_term_id = self.env['account.payment.term'].search([('name', '=', payment_terms)])
                 tag_ids = self.env["crm.tag"].search([('name', '=', tags)])
-                analytic_account_id = self.env["account.analytic.account"].search([('name', '=', analytic_account)])
+                analytic_account_id = self.env["account.analytic.account"].search([('name', '=', analytic_account), '|', ('active', '=', True), ('active', '=', False)])
+                analytic_tag_ids = self.env["account.analytic.tag"].search([('name', '=', order_lines_analytic_tags)])
+                warehouse_id = self.env["stock.warehouse"].search([('name', '=', order_lines_warehouse)])
+                tax_id = self.env["account.tax"].search([('name', '=', order_lines_taxes)])
 
-                if order_reference:
-                    so_id = self.env['sale.order'].search([('name', '=', order_reference)])
+                so_id = self.env['sale.order'].search([('name', '=', order_reference)])
+                so_line = self.env['sale.order.line'].search([('name', '=', order_lines_product)])
+
+                if so_id:
                     so_val = {
                         'payment_term_id': payment_term_id.id,
                         'tag_ids': [(6, 0, tag_ids.ids)],
@@ -55,6 +70,22 @@ class SOWizard(models.TransientModel):
                     }
                     so_id.write(so_val)
                     print("so_id", so_id)
+                    lst = []
+                    for line in so_line:
+                        if line.product_id == order_lines_product:
+                            so_line_val = (0, 0, {
+                                'is_service': True if order_lines_is_a_service == "True" else False,
+                                'analytic_tag_ids': [(6, 0, analytic_tag_ids.ids)],
+                                'product_oem_code': order_lines_oem,
+                                'product_uom_qty': order_lines_ordered_quantity,
+                                'qty_delivered': order_lines_delivered_quantity,
+                                'qty_invoiced': order_lines_invoiced_quantity,
+                                'warehouse_id': warehouse_id.id,
+                                'tax_id': [(6, 0, tax_id.ids)],
+                                'discount': order_lines_discount,
+                            })
+                            lst.append(so_line_val)
+                            so_id.write({'order_line': so_line_val})
 
                 # print(value)
                 # order_reference = value[0]
