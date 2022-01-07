@@ -47,7 +47,7 @@ class ProductWizard(models.TransientModel):
                 order_planner_policy = value[9]
                 version = value[10]
                 created_by = value[11]
-                created_on = value[12]
+                created_on = value[12] or False
                 location = value[13]
                 warehouse = value[14]
                 sales_price = value[15]
@@ -68,8 +68,8 @@ class ProductWizard(models.TransientModel):
                 vendor_unit_of_measure = value[30]
                 vendor_price = value[31]
                 vendor_currency = value[32]
-                vendor_start_date = value[33]
-                vendor_end_date = value[34]
+                vendor_start_date = value[33] or False
+                vendor_end_date = value[34] or False
                 routes = value[35]
                 responsible = value[36]
                 production_location = value[37]
