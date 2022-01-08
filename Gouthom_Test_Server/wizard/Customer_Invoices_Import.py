@@ -130,7 +130,7 @@ class CustomerInvoiceWizard(models.TransientModel):
 
                     ci_val = {
                         'move_type': type,
-                        # 'name': number,
+                        'name': number,
                         'partner_id': part_id.id,
                         'partner_shipping_id': partner_shipping_id.id,
                         'invoice_payment_term_id': invoice_payment_term_id.id,
@@ -158,7 +158,6 @@ class CustomerInvoiceWizard(models.TransientModel):
                     }
                     ci_id = self.env['account.move'].sudo().create(ci_val)
                     print("ci_val", ci_val)
-                    ci_id.write({'name': number})
                 else:
                     if invoice_lines_product:
                         vals = (0, 0, {
