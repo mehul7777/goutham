@@ -22,6 +22,12 @@
                         <field name="id_custom" invisible="0"/>
                     </group>
                 </xpath>
+                <xpath expr="//field[@name='category_id']" position="before">
+                    <field name="lang"/>
+                </xpath>
+                <xpath expr="//field[@name='category_id']" position="after">
+                    <field name="create_uid"/>
+                </xpath>
             </field>
         </record>
     </data>
