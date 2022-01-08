@@ -25,9 +25,9 @@
                 <xpath expr="//field[@name='category_id']" position="before">
                     <field name="lang"/>
                 </xpath>
-<!--                <xpath expr="//field[@name='category_id']" position="after">-->
-<!--                    <field name="created_by_custom"/>-->
-<!--                </xpath>-->
+                <xpath expr="//field[@name='category_id']" position="after">
+                    <field name="created_by_custom"/>
+                </xpath>
             </field>
         </record>
     </data>
