@@ -26,7 +26,7 @@
                     <field name="lang"/>
                 </xpath>
                 <xpath expr="//field[@name='category_id']" position="after">
-                    <field name="create_uid"/>
+                    <field name="created_by_custom"/>
                 </xpath>
             </field>
         </record>

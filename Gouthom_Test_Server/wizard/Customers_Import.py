@@ -112,6 +112,7 @@ class CustomerWizard(models.TransientModel):
                         'lang': language,
                         'category_id': category_id.ids,
                         'create_uid': create_uid.id,
+                        'created_by_custom': create_uid.id,
                         'is_a_customer': True if is_a_customer == "True" else False,
                         'user_id': user_id.id,
                         'property_delivery_carrier_id': property_delivery_carrier_id.id,  # make this field
