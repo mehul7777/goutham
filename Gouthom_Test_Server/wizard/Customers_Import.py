@@ -135,14 +135,14 @@ class CustomerWizard(models.TransientModel):
                         'active': True if active == "True" else False,
                     }
                     if company_type == "company":
-                        company_obj = self.env['res.partner'].search([('name', '=', name), ('company_type', '=', 'company')])
+                        company_obj = self.env['res.partner'].search([('name', '=', name), ('company_type', '=', 'company'), '|', ('active', '=', True), ('active', '=', False)])
                         if not company_obj:
                             company_obj_id = self.env['res.partner'].sudo().create(customer_val)
                             print("customer_val", company_obj_id)
                         else:
                             company_obj.write(customer_val)
                     if company_type == 'person':
-                        person_obj = self.env['res.partner'].search([('name', '=', name), ('company_type', '=', 'person')])
+                        person_obj = self.env['res.partner'].search([('name', '=', name), ('company_type', '=', 'person'), '|', ('active', '=', True), ('active', '=', False)])
                         if not person_obj:
                             person_obj_id = self.env['res.partner'].sudo().create(customer_val)
                             print("customer_val", person_obj_id)
