@@ -41,8 +41,8 @@ class CustomerInvoiceWizard(models.TransientModel):
                 payment_terms = value[4]
                 reference_description = value[5]
                 customer_po = value[6]
-                invoice_date = value[7]
-                due_date = value[8]
+                invoice_date = value[7] or False
+                due_date = value[8] or False
                 sales_person = value[9]
                 project_manager = value[10]
                 sales_team = value[11]
@@ -67,11 +67,11 @@ class CustomerInvoiceWizard(models.TransientModel):
                 fiscal_position = value[30]
                 journal_entry = value[31]
                 source_document = value[32]
-                tax_lines_description = value[33]
-                tax_lines_tax_account = value[34]
-                tax_lines_analytic_account = value[35]
-                tax_lines_analytic_tags = value[36]
-                status = value[37]
+                # tax_lines_description = value[33]
+                # tax_lines_tax_account = value[34]
+                # tax_lines_analytic_account = value[35]
+                # tax_lines_analytic_tags = value[36]
+                status = value[33]
 
                 part_id = self.env['res.partner'].search([('name', '=', partner), '|', ('active', '=', True), ('active', '=', False)], limit=1)
                 jour_id = self.env['account.journal'].search([('name', '=', journal)], limit=1)
@@ -95,12 +95,12 @@ class CustomerInvoiceWizard(models.TransientModel):
                 pro_uom_id = self.env['uom.uom'].search([('name', '=', invoice_lines_unit_of_measure)], limit=1)
                 tax_ids = self.env['account.tax'].search([('name', '=', invoice_lines_taxes)], limit=1)
 
-                tax_account_id = self.env['account.account'].search([('name', '=', tax_lines_tax_account)], limit=1)
-                tax_analytic_account_id = self.env['account.analytic.account'].search([('name', '=', tax_lines_analytic_account), '|', ('active', '=', True), ('active', '=', False)], limit=1)
-                tax_analytic_tag_ids = self.env['account.analytic.tag'].search([('name', '=', tax_lines_analytic_tags)], limit=1)
+                # tax_account_id = self.env['account.account'].search([('name', '=', tax_lines_tax_account)], limit=1)
+                # tax_analytic_account_id = self.env['account.analytic.account'].search([('name', '=', tax_lines_analytic_account), '|', ('active', '=', True), ('active', '=', False)], limit=1)
+                # tax_analytic_tag_ids = self.env['account.analytic.tag'].search([('name', '=', tax_lines_analytic_tags)], limit=1)
 
                 lst = []
-                tax_lines_lst = []
+                # tax_lines_lst = []
                 if type:
                     if invoice_lines_product:
                         vals = (0, 0, {
