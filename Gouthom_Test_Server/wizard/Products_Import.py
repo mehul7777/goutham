@@ -131,7 +131,7 @@ class ProductWizard(models.TransientModel):
                     'type': product_type,
                     'categ_id': categ_id.id,
                     'oem': oem,
-                    'barcode': barcode,
+                    # 'barcode': barcode,
                     # 'order_planner_policy': order_planner_policy.id,
                     'version': version,
                     'create_uid_custom': create_by_id.id,
