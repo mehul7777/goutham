@@ -155,7 +155,8 @@ class ProductWizard(models.TransientModel):
                     'property_account_income_id': property_account_income_id.id,
                 }
                 if search_product:
-                    search_product.sudo().write(product_val)
+                    if product_type:
+                        search_product.sudo().write(product_val)
                     if not product_type:
                         search_product.write({'route_ids': route_ids.ids})
                 else:
@@ -163,8 +164,9 @@ class ProductWizard(models.TransientModel):
                         'uom_id': uom_id.id,
                         'uom_po_id': uom_po_id.id,
                     }
-                    product_id = self.env['product.template'].sudo().create(product_val)
-                    product_id.write(uom_val)
+                    if product_type:
+                        product_id = self.env['product.template'].sudo().create(product_val)
+                        product_id.write(uom_val)
                     if not product_type:
                         product_id.write({'route_ids': route_ids.ids})
                     print("product_val", product_id)
