@@ -155,9 +155,9 @@ class ProductWizard(models.TransientModel):
                     'property_account_income_id': property_account_income_id.id,
                 }
                 if search_product:
-                    search_product.write(product_val)
+                    search_product.sudo().write(product_val)
                 else:
-                    product_id = self.env['product.template'].create(product_val)
+                    product_id = self.env['product.template'].sudo().create(product_val)
                     print("product_val", product_id)
                 # lst = []
                 # if name:
