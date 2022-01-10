@@ -144,8 +144,8 @@ class ProductWizard(models.TransientModel):
                     'taxes_id': [(6, 0, taxes_id.ids)],
                     'standard_price': cost,
                     'company_id': company_id.id,
-                    'uom_id': uom_id.id,
-                    'uom_po_id': uom_po_id.id,
+                    # 'uom_id': uom_id.id,
+                    # 'uom_po_id': uom_po_id.id,
                     'invoice_policy': invoice_policy,
                     'expense_policy': re_invoice_policy,
                     'route_ids': route_ids.ids,
@@ -157,7 +157,11 @@ class ProductWizard(models.TransientModel):
                 if search_product:
                     search_product.sudo().write(product_val)
                 else:
-                    product_id = self.env['product.template'].sudo().create(product_val)
+                    uom_val = {
+                        'uom_id': uom_id.id,
+                        'uom_po_id': uom_po_id.id,
+                    }
+                    product_id = self.env['product.template'].sudo().create(product_val, uom_val)
                     print("product_val", product_id)
                 # lst = []
                 # if name:
