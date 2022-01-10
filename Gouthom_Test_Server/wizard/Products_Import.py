@@ -61,20 +61,20 @@ class ProductWizard(models.TransientModel):
                 purchase_unit_of_measure = value[23]
                 invoice_policy = value[24]
                 re_invoice_policy = value[25]
-                vendor_vendor = value[26]
-                vendor_vendor_product_code = value[27]
-                vendor_product_variant = value[28]
-                vendor_minimal_quantity = value[29]
-                vendor_unit_of_measure = value[30]
-                vendor_price = value[31]
-                vendor_currency = value[32]
-                vendor_start_date = value[33] or False
-                vendor_end_date = value[34] or False
-                routes = value[35]
-                responsible = value[36]
-                production_location = value[37]
-                inventory_location = value[38]
-                income_account = value[39]
+                # vendor_vendor = value[26]
+                # vendor_vendor_product_code = value[27]
+                # vendor_product_variant = value[28]
+                # vendor_minimal_quantity = value[29]
+                # vendor_unit_of_measure = value[30]
+                # vendor_price = value[31]
+                # vendor_currency = value[32]
+                # vendor_start_date = value[33] or False
+                # vendor_end_date = value[34] or False
+                routes = value[26]
+                responsible = value[27]
+                production_location = value[28]
+                inventory_location = value[29]
+                income_account = value[30]
 
                 categ_id = self.env['product.category'].search([('name', '=', product_category)], limit=1) #change this before commiting replace display_name to name
                 # order_planner_policy = self.env['sale.order.planning.policy'].search([('name', '=', order_planner_policy)])
@@ -114,80 +114,117 @@ class ProductWizard(models.TransientModel):
                 # else:
                 #     pt_id.message_subscribe([follower_id.id])
 
-                vendor_name = self.env['res.partner'].search([('name', '=', vendor_vendor), '|', ('active', '=', True), ('active', '=', False)], limit=1)
-                vendor_product_id = self.env['product.product'].search([('name', '=', vendor_product_variant)], limit=1)
-                vendor_product_uom = self.env['uom.uom'].search([('name', '=', vendor_unit_of_measure)], limit=1)
-                vendor_currency_id = self.env['res.currency'].search([('name', '=', vendor_currency)], limit=1)
+                # vendor_name = self.env['res.partner'].search([('name', '=', vendor_vendor), '|', ('active', '=', True), ('active', '=', False)], limit=1)
+                # vendor_product_id = self.env['product.product'].search([('name', '=', vendor_product_variant)], limit=1)
+                # vendor_product_uom = self.env['uom.uom'].search([('name', '=', vendor_unit_of_measure)], limit=1)
+                # vendor_currency_id = self.env['res.currency'].search([('name', '=', vendor_currency)], limit=1)
 
                 search_product = self.env['product.template'].search([('name', '=', name), ('default_code', '=', internal_reference)])
 
-                # if search_product:
-                lst = []
-                if name:
-                    if vendor_vendor:
-                        vendors_val = (0, 0, {
-                            'name': vendor_name.id,
-                            'product_code': vendor_vendor_product_code,
-                            'product_id': vendor_product_id.id,
-                            'min_qty': vendor_minimal_quantity,
-                            'product_uom': vendor_product_uom.id,
-                            'price': vendor_price,
-                            'currency_id': vendor_currency_id.id,
-                            'date_start': vendor_start_date,
-                            'date_end': vendor_end_date,
-                        })
-                        lst.append(vendors_val)
 
-                    product_val = {
-                        'default_code': internal_reference,
-                        'name': name,
-                        'sale_ok': True if can_be_sold == "True" else False,
-                        'purchase_ok': True if can_be_purchased == "True" else False,
-                        'can_be_expensed': True if can_be_expensed == "True" else False,
-                        'type': product_type,
-                        'categ_id': categ_id.id,
-                        'oem': oem,
-                        'barcode': barcode,
-                        # 'order_planner_policy': order_planner_policy.id,
-                        'version': version,
-                        'create_uid_custom': create_by_id.id,
-                        'create_date_custom': created_on,
-                        'location_id': location_id.id,
-                        'warehouse_id': warehouse_id.id,
-                        'list_price': sales_price,
-                        'loaded_cost': loaded_cost,
-                        'sales_person_minimum_cost': sales_person_minimum_cost,
-                        'taxes_id': [(6, 0, taxes_id.ids)],
-                        'standard_price': cost,
-                        'company_id': company_id.id,
-                        'uom_id': uom_id.id,
-                        'uom_po_id': uom_po_id.id,
-                        'invoice_policy': invoice_policy,
-                        'expense_policy': re_invoice_policy,
-                        'route_ids': route_ids.ids,
-                        'responsible_id': responsible_id.id,
-                        'property_stock_production': property_stock_production.id,
-                        'property_stock_inventory': property_stock_inventory.id,
-                        'property_account_income_id': property_account_income_id.id,
-                        'seller_ids': lst
-                    }
-                    if search_product:
-                        pro_id = search_product.write(product_val)
-                    # product_id = self.env['product.template'].create(product_val)
-                    # print("product_val", product_id)
+                product_val = {
+                    'default_code': internal_reference,
+                    'name': name,
+                    'sale_ok': True if can_be_sold == "True" else False,
+                    'purchase_ok': True if can_be_purchased == "True" else False,
+                    'can_be_expensed': True if can_be_expensed == "True" else False,
+                    'type': product_type,
+                    'categ_id': categ_id.id,
+                    'oem': oem,
+                    'barcode': barcode,
+                    # 'order_planner_policy': order_planner_policy.id,
+                    'version': version,
+                    'create_uid_custom': create_by_id.id,
+                    'create_date_custom': created_on,
+                    'location_id': location_id.id,
+                    'warehouse_id': warehouse_id.id,
+                    'list_price': sales_price,
+                    'loaded_cost': loaded_cost,
+                    'sales_person_minimum_cost': sales_person_minimum_cost,
+                    'taxes_id': [(6, 0, taxes_id.ids)],
+                    'standard_price': cost,
+                    'company_id': company_id.id,
+                    'uom_id': uom_id.id,
+                    'uom_po_id': uom_po_id.id,
+                    'invoice_policy': invoice_policy,
+                    'expense_policy': re_invoice_policy,
+                    'route_ids': route_ids.ids,
+                    'responsible_id': responsible_id.id,
+                    'property_stock_production': property_stock_production.id,
+                    'property_stock_inventory': property_stock_inventory.id,
+                    'property_account_income_id': property_account_income_id.id,
+                }
+                if search_product:
+                    search_product.write(product_val)
                 else:
-                    if vendor_vendor:
-                        vendors_val = (0, 0, {
-                            'name': vendor_name.id,
-                            'product_code': vendor_vendor_product_code,
-                            'product_id': vendor_product_id.id,
-                            'min_qty': vendor_minimal_quantity,
-                            'product_uom': vendor_product_uom.id,
-                            'price': vendor_price,
-                            'currency_id': vendor_currency_id.id,
-                            'date_start': vendor_start_date,
-                            'date_end': vendor_end_date,
-                        })
-                        if search_product:
-                            lst.append(vendors_val)
-                            pro_id.write({'seller_ids': lst})
+                    product_id = self.env['product.template'].create(product_val)
+                    print("product_val", product_id)
+                # lst = []
+                # if name:
+                #     if vendor_vendor:
+                #         vendors_val = (0, 0, {
+                #             'name': vendor_name.id,
+                #             'product_code': vendor_vendor_product_code,
+                #             'product_id': vendor_product_id.id,
+                #             'min_qty': vendor_minimal_quantity,
+                #             'product_uom': vendor_product_uom.id,
+                #             'price': vendor_price,
+                #             'currency_id': vendor_currency_id.id,
+                #             'date_start': vendor_start_date,
+                #             'date_end': vendor_end_date,
+                #         })
+                #         lst.append(vendors_val)
+                #
+                #     product_val = {
+                #         'default_code': internal_reference,
+                #         'name': name,
+                #         'sale_ok': True if can_be_sold == "True" else False,
+                #         'purchase_ok': True if can_be_purchased == "True" else False,
+                #         'can_be_expensed': True if can_be_expensed == "True" else False,
+                #         'type': product_type,
+                #         'categ_id': categ_id.id,
+                #         'oem': oem,
+                #         'barcode': barcode,
+                #         # 'order_planner_policy': order_planner_policy.id,
+                #         'version': version,
+                #         'create_uid_custom': create_by_id.id,
+                #         'create_date_custom': created_on,
+                #         'location_id': location_id.id,
+                #         'warehouse_id': warehouse_id.id,
+                #         'list_price': sales_price,
+                #         'loaded_cost': loaded_cost,
+                #         'sales_person_minimum_cost': sales_person_minimum_cost,
+                #         'taxes_id': [(6, 0, taxes_id.ids)],
+                #         'standard_price': cost,
+                #         'company_id': company_id.id,
+                #         'uom_id': uom_id.id,
+                #         'uom_po_id': uom_po_id.id,
+                #         'invoice_policy': invoice_policy,
+                #         'expense_policy': re_invoice_policy,
+                #         'route_ids': route_ids.ids,
+                #         'responsible_id': responsible_id.id,
+                #         'property_stock_production': property_stock_production.id,
+                #         'property_stock_inventory': property_stock_inventory.id,
+                #         'property_account_income_id': property_account_income_id.id,
+                #         'seller_ids': lst
+                #     }
+                #     if search_product:
+                #         pro_id = search_product.write(product_val)
+                #     # product_id = self.env['product.template'].create(product_val)
+                #     # print("product_val", product_id)
+                # else:
+                #     if vendor_vendor:
+                #         vendors_val = (0, 0, {
+                #             'name': vendor_name.id,
+                #             'product_code': vendor_vendor_product_code,
+                #             'product_id': vendor_product_id.id,
+                #             'min_qty': vendor_minimal_quantity,
+                #             'product_uom': vendor_product_uom.id,
+                #             'price': vendor_price,
+                #             'currency_id': vendor_currency_id.id,
+                #             'date_start': vendor_start_date,
+                #             'date_end': vendor_end_date,
+                #         })
+                #         if search_product:
+                #             lst.append(vendors_val)
+                #             pro_id.write({'seller_ids': lst})
