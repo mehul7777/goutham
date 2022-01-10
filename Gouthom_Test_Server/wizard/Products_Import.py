@@ -161,8 +161,8 @@ class ProductWizard(models.TransientModel):
                         'uom_id': uom_id.id,
                         'uom_po_id': uom_po_id.id,
                     }
-                    create_product = product_val.update(uom_val)
-                    product_id = self.env['product.template'].sudo().create(create_product)
+                    product_id = self.env['product.template'].sudo().create(product_val)
+                    product_id.write(uom_val)
                     print("product_val", product_id)
                 # lst = []
                 # if name:
