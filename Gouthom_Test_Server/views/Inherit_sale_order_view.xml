@@ -45,7 +45,7 @@
                 <xpath expr="//field[@name='project_start_date']" position="before">
                     <field name="can_be_used_for_forecast"/>
                 </xpath>
-                <xpath expr="/notebook/page[@name='other_information']/group/group[@name='sale_shipping']" position="inside">
+                <xpath expr="//group[@name='sale_shipping']" position="inside">
                     <field name="planned_date"/>
                     <field name="requested_date"/>
                 </xpath>
