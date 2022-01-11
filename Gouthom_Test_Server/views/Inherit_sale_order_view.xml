@@ -17,16 +17,16 @@
                     <field name="project_end_date"/>
                 </xpath>
                 <xpath expr="//notebook" position="before">
-                    <div>
-                        <h1>Contact Information</h1>
-                        <field name="point_contact"/>
-                        <field name="point_of_contact_po"/>
-                    </div>
-                    <div>
-                        <h1>Print</h1>
-                        <field name="appear_on_pdf"/>
-                        <field name="notes"/>
-                    </div>
+                    <group>
+                        <group string="Contact Information">
+                            <field name="point_contact"/>
+                            <field name="point_of_contact_po"/>
+                        </group>
+                        <group string="Print">
+                            <field name="appear_on_pdf"/>
+                            <field name="notes"/>
+                        </group>
+                    </group>
                 </xpath>
                 <xpath expr="//field[@name='user_id']" position="after">
                     <field name="project_manager"/>
