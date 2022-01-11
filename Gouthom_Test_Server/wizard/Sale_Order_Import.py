@@ -160,6 +160,8 @@ class SOWizard(models.TransientModel):
                     if not delivery_addr:
                         delivery_addr = part_id
 
+                    search_sale_order = self.env["sale.order"].search([('name', '=', order_reference)])
+
                     so_val = {
                         'name': order_reference,
                         'partner_id': part_id.id,
@@ -197,30 +199,34 @@ class SOWizard(models.TransientModel):
                         'tag_ids': tag_ids.ids,
                         'analytic_account_id': analytic_account_id.id,
                         'opportunity_id': opportunity_id.id,
-                        'order_line': lst,
+                        # 'order_line': lst,
                     }
-                    if status == "done":
-                        so_id = self.env['sale.order'].create(so_val)
-                        print("so_id", so_id)
-                        print(so_val)
-                else:
-                    if order_lines_product:
-                        so_line_vals = (0, 0, {
-                            'is_service': True if order_lines_is_a_service == "True" else False,
-                            'product_id': product_id.id,
-                            'product_oem_code': order_lines_oem,
-                            'name': order_lines_description,
-                            'product_uom_qty': order_lines_ordered_quantity,
-                            'warehouse_id': order_lines_warehouse_id.id,
-                            'product_uom': product_uom_id.id,
-                            'analytic_tag_ids': [(6, 0, analytic_tags_ids.ids)],
-                            'price_unit': order_lines_unit_price,
-                            'tax_id': [(6, 0, tax_id.ids)],
-                            'discount': order_lines_discount,
-                            # 'order_id': so_id.id
-                        })
-                        if so_id:
-                            lst.append(so_line_vals)
-                            so_line_id = so_id.write({'order_line': lst})
-                            print(so_line_id)
+                    if search_sale_order:
+                        so_id = self.env['sale.order'].write(so_val)
+                    # if not search_sale_order:
+                    #     so_id = self.env['sale.order'].create(so_val)
+                    #     print("so_id", so_id)
+                    #     print(so_val)
+                    # else:
+                    #     search_sale_order.write(so_val)
+                # else:
+                #     if order_lines_product:
+                #         so_line_vals = (0, 0, {
+                #             'is_service': True if order_lines_is_a_service == "True" else False,
+                #             'product_id': product_id.id,
+                #             'product_oem_code': order_lines_oem,
+                #             'name': order_lines_description,
+                #             'product_uom_qty': order_lines_ordered_quantity,
+                #             'warehouse_id': order_lines_warehouse_id.id,
+                #             'product_uom': product_uom_id.id,
+                #             'analytic_tag_ids': [(6, 0, analytic_tags_ids.ids)],
+                #             'price_unit': order_lines_unit_price,
+                #             'tax_id': [(6, 0, tax_id.ids)],
+                #             'discount': order_lines_discount,
+                #             # 'order_id': so_id.id
+                #         })
+                #         if so_id:
+                #             lst.append(so_line_vals)
+                #             so_line_id = so_id.write({'order_line': lst})
+                #             print(so_line_id)
 
