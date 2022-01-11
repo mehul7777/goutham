@@ -14,7 +14,7 @@ class CustomerInvoiceWizard(models.TransientModel):
     load_file = fields.Binary("Load File")
 
     def post_draft_invoice(self):
-        search_cust_invoice = self.env["account.move"].search([('move_type', '=', 'out_invoice'), ('state', '=', 'draft'), ('payment_state', '=', 'not_paid')])
+        search_cust_invoice = self.env["account.move"].search([('move_type', '=', 'out_invoice'), ('state', '=', 'draft'), ('payment_state', '=', 'not_paid')], limit=200)
         for invoice in search_cust_invoice:
             print(invoice.id)
             invoice.action_post()
