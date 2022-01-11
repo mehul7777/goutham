@@ -172,15 +172,15 @@ class SOWizard(models.TransientModel):
                         'pricelist_id': priceli_id.id,
                         'project_start_date': project_start_date,
                         'project_end_date': project_end_date,
-                        'can_be_used_for_forecast': True if can_be_used_for_forecast == "True" else False, #create this field
+                        'can_be_used_for_forecast': True if can_be_used_for_forecast == "True" else False,
                         'point_contact': point_of_contact_id.id,
-                        'point_of_contact_po': point_of_contact_po, #create this field
-                        'appear_on_pdf': True if appear_on_pdf == "True" else False, #create this field
-                        'notes': notes, #create this field
+                        'point_of_contact_po': point_of_contact_po,
+                        'appear_on_pdf': True if appear_on_pdf == "True" else False,
+                        'notes': notes,
                         'warehouse_id': warehouse_id.id,
                         'picking_policy': shipping_policy,
-                        'planned_date': planned_date, #create this field
-                        'requested_date': requested_date, #create this field
+                        'planned_date': planned_date,
+                        'requested_date': requested_date,
                         'user_id': user_id.id,
                         'project_manager': project_manager_id.id,
                         'team_id': team_id.id,

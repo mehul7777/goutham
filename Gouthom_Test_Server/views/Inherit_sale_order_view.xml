@@ -20,6 +20,12 @@
                     <div>
                         <h1>Contact Information</h1>
                         <field name="point_contact"/>
+                        <field name="point_of_contact_po"/>
+                    </div>
+                    <div>
+                        <h1>Print</h1>
+                        <field name="appear_on_pdf"/>
+                        <field name="notes"/>
                     </div>
                 </xpath>
                 <xpath expr="//field[@name='user_id']" position="after">
@@ -36,6 +42,13 @@
                     <field name="warehouse_id"/>
                 </xpath>
 
+                <xpath expr="//field[@name='project_start_date']" position="before">
+                    <field name="can_be_used_for_forecast"/>
+                </xpath>
+                <xpath expr="/notebook/page[@name='other_information']/group/group[@name='sale_shipping']" position="inside">
+                    <field name="planned_date"/>
+                    <field name="requested_date"/>
+                </xpath>
             </field>
         </record>
     </data>
