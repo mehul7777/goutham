@@ -49,6 +49,9 @@
                     <field name="planned_date"/>
                     <field name="requested_date"/>
                 </xpath>
+                <xpath expr="//field[@name='payment_term_id']" position="after">
+                    <field name="carrier_id"/>
+                </xpath>
             </field>
         </record>
     </data>

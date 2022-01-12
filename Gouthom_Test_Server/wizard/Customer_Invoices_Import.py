@@ -19,6 +19,13 @@ class CustomerInvoiceWizard(models.TransientModel):
             print(invoice.id)
             invoice.action_post()
 
+    # def paid_post_invoice(self):
+    #     search_cust_invoice = self.env["account.move"].search(
+    #         [('move_type', '=', 'out_invoice'), ('state', '=', 'posted'), ('payment_state', '=', 'not_paid')], limit=200)
+    #     for invoice in search_cust_invoice:
+    #         print(invoice.id)
+    #         invoice.action_register_payment()
+
     def import_customer_invoice_data(self):
         print("Import is working")
         csv_data = self.load_file
