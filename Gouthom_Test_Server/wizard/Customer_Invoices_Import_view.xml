@@ -13,7 +13,7 @@
                     <button name="import_customer_invoice_data" string="Import" type="object" class="oe_highlight"/>
                     <button string="Cancel" class="btn btn-default" special="cancel"/>
                     <button name="post_draft_invoice" string="Draft to Post" type="object" class="oe_highlight"/>
-<!--                    <button name="paid_post_invoice" string="Draft to Post" type="object" class="oe_highlight"/>-->
+                    <button name="paid_post_invoice" string="Post to Paid" type="object" class="oe_highlight"/>
                 </footer>
             </form>
         </field>

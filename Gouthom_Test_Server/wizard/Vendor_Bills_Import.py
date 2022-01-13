@@ -34,3 +34,36 @@ class VendorBillWizard(models.TransientModel):
                 header_list.append(value)
             else:
                 print(value)
+                type = value[0]
+                number = value[1]
+                partner = value[2]
+                payment_ref = value[3]
+                invoice_date = value[4]
+                due_date = value[5]
+                currency = value[6]
+                invoice_lines_product = value[7]
+                invoice_lines_description = value[8]
+                invoice_lines_asset_category = value[9]
+                invoice_lines_account = value[10]
+                invoice_lines_analytic_account = value[11]
+                invoice_lines_analytic_tags = value[12]
+                invoice_lines_category = value[13]
+                invoice_lines_quantity = value[14]
+                invoice_lines_unit_of_measure = value[15]
+                invoice_lines_unit_price = value[16]
+                invoice_lines_discount = value[17]
+                invoice_lines_taxes = value[18]
+                journal = value[19]
+                account = value[20]
+                accounting_date = value[21]
+                reference_or_description = value[22]
+                incoterm = value[23]
+                fiscal_position = value[24]
+                payment_terms = value[25]
+                journal_entry = value[26]
+                company = value[27]
+                status = value[28]
+
+                vendor_bill_vals = {
+
+                }

@@ -3,6 +3,7 @@ import csv
 import io, base64
 from tempfile import TemporaryFile
 import logging
+import json
 
 _logger = logging.getLogger(__name__)
 
@@ -14,17 +15,79 @@ class CustomerInvoiceWizard(models.TransientModel):
     load_file = fields.Binary("Load File")
 
     def post_draft_invoice(self):
-        search_cust_invoice = self.env["account.move"].search([('move_type', '=', 'out_invoice'), ('state', '=', 'draft'), ('payment_state', '=', 'not_paid')], limit=200)
+        search_cust_invoice = self.env["account.move"].search(
+            [('move_type', '=', 'out_invoice'), ('state', '=', 'draft'), ('payment_state', '=', 'not_paid')], limit=200)
         for invoice in search_cust_invoice:
             print(invoice.id)
             invoice.action_post()
 
-    # def paid_post_invoice(self):
-    #     search_cust_invoice = self.env["account.move"].search(
-    #         [('move_type', '=', 'out_invoice'), ('state', '=', 'posted'), ('payment_state', '=', 'not_paid')], limit=200)
-    #     for invoice in search_cust_invoice:
-    #         print(invoice.id)
-    #         invoice.action_register_payment()
+    def paid_post_invoice(self):
+        # print("Import is working for create payment")
+        csv_data = self.load_file
+        file_obj = TemporaryFile('wb+')
+        csv_data = base64.decodebytes(csv_data)
+        file_obj.write(csv_data)
+        file_obj.seek(0)
+        str_csv_data = file_obj.read().decode('utf-8')
+        lis = csv.reader(io.StringIO(str_csv_data), delimiter=',')
+        row_num = 0
+        header_list = []
+        data_dict = {}
+        for row in lis:
+            data_dict.update({row_num: row})
+            row_num += 1
+        for key, value in data_dict.items():
+            if key == 0:
+                header_list.append(value)
+            else:
+                # print(value)
+                number = value[0]
+                payments_widget = value[1]
+                total = value[2]
+
+                # print(payments_widget)
+
+                payments_widget_dict = json.loads(payments_widget)
+                # print(payments_widget_dict['content'][0])
+
+                journal_name = payments_widget_dict['content'][0]['journal_name']
+                payment_date = payments_widget_dict['content'][0]['date']
+                ref = payments_widget_dict['content'][0]['ref'].split(" ")[0]
+
+                journal_id = self.env["account.journal"].search([('name', '=', journal_name)])
+                # print(journal_name, payment_date)
+                search_cust_invoice = self.env["account.move"].search(
+                    [('name', '=', number), ('move_type', '=', 'out_invoice'), ('state', '=', 'posted'),
+                     ('payment_state', '=', 'not_paid')])
+
+                # payment_val = {
+                #     # 'name': ref,
+                #     'journal_id': journal_id.id,
+                #     'amount': total,
+                #     'date': payment_date,
+                #     'payment_reference': 'INV/1256/92',
+                # }
+                # search_cust_invoice.action_create_payments()
+
+                # payments.action_post()
+                # def _create_payment_vals_from_wizard(self):
+                payment_vals = {
+                    'date': payment_date,
+                    'amount': total,
+                    # 'payment_type': self.payment_type,
+                    # 'partner_type': self.partner_type,
+                    'name': ref,
+                    'journal_id': journal_id.id,
+                    'currency_id': search_cust_invoice.currency_id.id,
+                    'partner_id': search_cust_invoice.partner_id.id,
+                    # 'partner_bank_id': self.partner_bank_id.id,
+                    # 'payment_method_id': self.payment_method_id.id,
+                    # 'destination_account_id': self.line_ids[0].account_id.id
+                }
+
+                payment_id = self.env["account.payment"].create(payment_vals)
+                payment_id.action_post()
+                search_cust_invoice.update({'payment_state': 'paid'})
 
     def import_customer_invoice_data(self):
         print("Import is working")
@@ -86,25 +149,37 @@ class CustomerInvoiceWizard(models.TransientModel):
                 # tax_lines_analytic_tags = value[36]
                 status = value[33]
 
-                part_id = self.env['res.partner'].search([('name', '=', partner), '|', ('active', '=', True), ('active', '=', False)], limit=1)
+                part_id = self.env['res.partner'].search(
+                    [('name', '=', partner), '|', ('active', '=', True), ('active', '=', False)], limit=1)
                 jour_id = self.env['account.journal'].search([('name', '=', journal)], limit=1)
-                ino_use_id = self.env['res.users'].search([('name', '=', sales_person), '|', ('active', '=', True), ('active', '=', False)], limit=1)
-                tea_id = self.env['crm.team'].search([('name', '=', sales_team), '|', ('active', '=', True), ('active', '=', False)], limit=1)
+                ino_use_id = self.env['res.users'].search(
+                    [('name', '=', sales_person), '|', ('active', '=', True), ('active', '=', False)], limit=1)
+                tea_id = self.env['crm.team'].search(
+                    [('name', '=', sales_team), '|', ('active', '=', True), ('active', '=', False)], limit=1)
                 cur_id = self.env['res.currency'].search([('name', '=', currency)], limit=1)
                 com_id = self.env['res.company'].search([('name', '=', company)], limit=1)
-                fis_pos_id = self.env['account.fiscal.position'].search([('name', '=', fiscal_position), '|', ('active', '=', True), ('active', '=', False)], limit=1)
-                invoice_payment_term_id = self.env['account.payment.term'].search([('name', '=', payment_terms)], limit=1)
+                fis_pos_id = self.env['account.fiscal.position'].search(
+                    [('name', '=', fiscal_position), '|', ('active', '=', True), ('active', '=', False)], limit=1)
+                invoice_payment_term_id = self.env['account.payment.term'].search([('name', '=', payment_terms)],
+                                                                                  limit=1)
                 invoice_incoterm_id = self.env['account.incoterms'].search([('name', '=', incoterm)], limit=1)
-                point_of_contact_id = self.env['res.partner'].search([('name', '=', point_of_contact), '|', ('active', '=', True), ('active', '=', False)], limit=1)
-                project_manager_id = self.env['res.users'].search([('name', '=', project_manager), '|', ('active', '=', True), ('active', '=', False)], limit=1)
+                point_of_contact_id = self.env['res.partner'].search(
+                    [('name', '=', point_of_contact), '|', ('active', '=', True), ('active', '=', False)], limit=1)
+                project_manager_id = self.env['res.users'].search(
+                    [('name', '=', project_manager), '|', ('active', '=', True), ('active', '=', False)], limit=1)
                 account_id = self.env['account.account'].search([('name', '=', account)], limit=1)
                 journal_entry_id = self.env['account.move'].search([('name', '=', journal_entry)], limit=1)
-                partner_shipping_id = self.env['res.partner'].search([('name', '=', delivery_address), '|', ('active', '=', True), ('active', '=', False)], limit=1)
+                partner_shipping_id = self.env['res.partner'].search(
+                    [('name', '=', delivery_address), '|', ('active', '=', True), ('active', '=', False)], limit=1)
 
-                pro_id = self.env['product.product'].search([('name', '=', invoice_lines_product), '|', ('active', '=', True), ('active', '=', False)], limit=1)
+                pro_id = self.env['product.product'].search(
+                    [('name', '=', invoice_lines_product), '|', ('active', '=', True), ('active', '=', False)], limit=1)
                 acc_id = self.env['account.account'].search([('name', '=', invoice_lines_account)], limit=1)
-                ana_acc_id = self.env['account.analytic.account'].search([('name', '=', invoice_lines_analytic_account), '|', ('active', '=', True), ('active', '=', False)], limit=1)
-                analytic_tag_ids = self.env['account.analytic.tag'].search([('name', '=', invoice_lines_analytic_tags)], limit=1)
+                ana_acc_id = self.env['account.analytic.account'].search(
+                    [('name', '=', invoice_lines_analytic_account), '|', ('active', '=', True), ('active', '=', False)],
+                    limit=1)
+                analytic_tag_ids = self.env['account.analytic.tag'].search([('name', '=', invoice_lines_analytic_tags)],
+                                                                           limit=1)
                 pro_uom_id = self.env['uom.uom'].search([('name', '=', invoice_lines_unit_of_measure)], limit=1)
                 tax_ids = self.env['account.tax'].search([('name', '=', invoice_lines_taxes)], limit=1)
 
@@ -121,7 +196,7 @@ class CustomerInvoiceWizard(models.TransientModel):
                             'name': invoice_lines_description,
                             'account_id': acc_id.id,
                             'analytic_account_id': ana_acc_id.id,
-                            'analytic_tag_ids':  [(6, 0, analytic_tag_ids.ids)],
+                            'analytic_tag_ids': [(6, 0, analytic_tag_ids.ids)],
                             'quantity': invoice_lines_quantity,
                             'product_uom_id': pro_uom_id.id,
                             'price_unit': invoice_lines_unit_price,
