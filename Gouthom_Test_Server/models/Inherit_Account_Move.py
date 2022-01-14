@@ -11,3 +11,9 @@ class InheritAccountMove(models.Model):
     account_id = fields.Many2one(comodel_name="account.account", string="Account")
     journal_entry_id = fields.Many2one(comodel_name="account.move", string="Journal Entry")
     source_document = fields.Char(string="Source Document")
+
+
+class InheritAccountPayment(models.Model):
+    _inherit = "account.payment"
+
+    custom_number = fields.Char(string="Number")
