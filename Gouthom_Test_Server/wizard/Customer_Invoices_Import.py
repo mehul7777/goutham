@@ -58,26 +58,27 @@ class CustomerInvoiceWizard(models.TransientModel):
                 # print(journal_name, payment_date)
                 search_cust_invoice = self.env["account.move"].search(
                     [('name', '=', number), ('move_type', '=', 'out_invoice'), ('state', '=', 'posted'),
-                     ('payment_state', '=', 'not_paid')])
+                     ('payment_state', '=', 'paid')])
 
-                payment_vals = {
-                    'date': payment_date,
-                    'amount': total,
-                    # 'payment_type': self.payment_type,
-                    # 'partner_type': self.partner_type,
-                    'name': ref,
-                    'journal_id': journal_id.id,
-                    'currency_id': search_cust_invoice.currency_id.id,
-                    'partner_id': search_cust_invoice.partner_id.id,
-                    # 'partner_bank_id': self.partner_bank_id.id,
-                    # 'payment_method_id': self.payment_method_id.id,
-                    # 'destination_account_id': self.line_ids[0].account_id.id
-                }
-
-                if search_cust_invoice:
-                    payment_id = self.env["account.payment"].create(payment_vals)
-                    payment_id.action_post()
-                    search_cust_invoice.update({'payment_state': 'paid'})
+                search_cust_invoice.update({'payment_state': 'not_paid'})
+                # payment_vals = {
+                #     'date': payment_date,
+                #     'amount': total,
+                #     # 'payment_type': self.payment_type,
+                #     # 'partner_type': self.partner_type,
+                #     'custom_number': ref,
+                #     'journal_id': journal_id.id,
+                #     'currency_id': search_cust_invoice.currency_id.id,
+                #     'partner_id': search_cust_invoice.partner_id.id,
+                #     # 'partner_bank_id': self.partner_bank_id.id,
+                #     # 'payment_method_id': self.payment_method_id.id,
+                #     # 'destination_account_id': self.line_ids[0].account_id.id
+                # }
+                #
+                # if search_cust_invoice:
+                #     payment_id = self.env["account.payment"].create(payment_vals)
+                #     payment_id.action_post()
+                #     search_cust_invoice.update({'payment_state': 'paid'})
 
     def import_customer_invoice_data(self):
         print("Import is working")
