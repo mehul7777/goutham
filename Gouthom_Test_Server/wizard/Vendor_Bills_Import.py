@@ -78,7 +78,7 @@ class VendorBillWizard(models.TransientModel):
                 # For one2many
                 product_id = self.env["product.product"].search([('name', '=', invoice_lines_product)], limit=1)
                 asset_category_id = self.env["account.asset.category"].search([('name', '=', invoice_lines_asset_category)], limit=1)
-                account_id = self.env["account.account"].search([('name', '=', invoice_lines_account)], limit=1)
+                invoice_line_account_id = self.env["account.account"].search([('name', '=', invoice_lines_account)], limit=1)
                 analytic_account_id = self.env['account.analytic.account'].search(
                     [('name', '=', invoice_lines_analytic_account), '|', ('active', '=', True), ('active', '=', False)],
                     limit=1)
@@ -94,7 +94,7 @@ class VendorBillWizard(models.TransientModel):
                             'product_id': product_id.id,
                             'name': invoice_lines_description,
                             'asset_category_id': asset_category_id.id,
-                            'account_id': account_id.id,
+                            'account_id': invoice_line_account_id.id,
                             'analytic_account_id': analytic_account_id.id,
                             'analytic_tag_ids': [(6, 0, analytic_tag_ids.ids)],
                             'invoice_lines_category': invoice_lines_category, # create this field
@@ -121,12 +121,13 @@ class VendorBillWizard(models.TransientModel):
                         'invoice_incoterm_id': invoice_incoterm_id.id,
                         'fiscal_position_id': fiscal_position_id.id,
                         'invoice_payment_term_id': invoice_payment_term_id.id,
-                        'journal_entry_id': journal_entry_id.id,
+                        # 'journal_entry_id': journal_entry_id.id,
                         'company_id': company_id.id,
                         'state': "draft",
                         'invoice_line_ids': lst,
                     }
                     vb_id = self.env['account.move'].sudo().create(vendor_bill_vals)
+                    vb_id.write({'journal_entry_id': journal_entry_id.id})
                     print("vendor_bill_vals", vendor_bill_vals)
                 else:
                     if invoice_lines_product:
@@ -134,7 +135,7 @@ class VendorBillWizard(models.TransientModel):
                             'product_id': product_id.id,
                             'name': invoice_lines_description,
                             'asset_category_id': asset_category_id.id,
-                            'account_id': account_id.id,
+                            'account_id': invoice_line_account_id.id,
                             'analytic_account_id': analytic_account_id.id,
                             'analytic_tag_ids': [(6, 0, analytic_tag_ids.ids)],
                             'invoice_lines_category': invoice_lines_category, # create this field
