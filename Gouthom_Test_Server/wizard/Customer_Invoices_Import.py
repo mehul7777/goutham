@@ -56,10 +56,16 @@ class CustomerInvoiceWizard(models.TransientModel):
 
                 journal_id = self.env["account.journal"].search([('name', '=', journal_name)])
                 # print(journal_name, payment_date)
+                # search_cust_invoice = self.env["account.move"].search(
+                #     [('name', '=', number), ('move_type', '=', 'out_invoice'), ('state', '=', 'posted'),
+                #      ('payment_state', '=', 'not_paid')])
                 search_cust_invoice = self.env["account.move"].search(
-                    [('name', '=', number), ('move_type', '=', 'out_invoice'), ('state', '=', 'posted'),
-                     ('payment_state', '=', 'not_paid')])
+                    [('name', '=', number), ('payment_state', '=', 'paid')])
 
+                print(search_cust_invoice)
+
+                if search_cust_invoice:
+                    search_cust_invoice.update({'payment_state': 'not_paid'})
                 payment_vals = {
                     'date': payment_date,
                     'amount': total,
@@ -74,10 +80,10 @@ class CustomerInvoiceWizard(models.TransientModel):
                     # 'destination_account_id': self.line_ids[0].account_id.id
                 }
 
-                if search_cust_invoice:
-                    payment_id = self.env["account.payment"].create(payment_vals)
-                    payment_id.action_post()
-                    search_cust_invoice.update({'payment_state': 'paid'})
+                # if search_cust_invoice:
+                #     payment_id = self.env["account.payment"].create(payment_vals)
+                #     payment_id.action_post()
+                #     search_cust_invoice.update({'payment_state': 'paid'})
 
     def import_customer_invoice_data(self):
         print("Import is working")
