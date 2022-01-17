@@ -113,7 +113,7 @@ class VendorBillWizard(models.TransientModel):
                         'partner_id': partner_id.id,
                         'payment_reference': payment_ref,
                         'invoice_date': invoice_date,
-                        'due_date': due_date,
+                        'invoice_date_due': due_date,
                         'currency_id': currency_id.id,
                         'journal_id': journal_id.id,
                         'account_id': account_id.id,
