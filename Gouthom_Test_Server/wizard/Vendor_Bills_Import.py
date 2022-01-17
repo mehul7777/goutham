@@ -123,7 +123,7 @@ class VendorBillWizard(models.TransientModel):
                         'invoice_payment_term_id': invoice_payment_term_id.id,
                         'journal_entry_id': journal_entry_id.id,
                         'company_id': company_id.id,
-                        'status': "draft",
+                        'state': "draft",
                         'invoice_line_ids': lst,
                     }
                     vb_id = self.env['account.move'].sudo().create(vendor_bill_vals)
