@@ -52,13 +52,18 @@ class CustomerInvoiceWizard(models.TransientModel):
 
                 journal_name = payments_widget_dict['content'][0]['journal_name']
                 payment_date = payments_widget_dict['content'][0]['date']
-                ref = payments_widget_dict['content'][0]['ref'].split(" ")[0]
+                ref = payments_widget_dict['content'][-1]['ref'].split(" ")[0]
 
                 journal_id = self.env["account.journal"].search([('name', '=', journal_name)])
                 # print(journal_name, payment_date)
+                # search_cust_invoice = self.env["account.move"].search(
+                #     [('name', '=', number), ('move_type', '=', 'out_invoice'), ('state', '=', 'posted'),
+                #      ('payment_state', '=', 'not_paid')])
                 search_cust_invoice = self.env["account.move"].search(
                     [('name', '=', number), ('move_type', '=', 'out_invoice'), ('state', '=', 'posted'),
                      ('payment_state', '=', 'not_paid')])
+
+                print(search_cust_invoice.id)
 
                 payment_vals = {
                     'date': payment_date,
@@ -73,10 +78,12 @@ class CustomerInvoiceWizard(models.TransientModel):
                     # 'payment_method_id': self.payment_method_id.id,
                     # 'destination_account_id': self.line_ids[0].account_id.id
                 }
+                print(payment_vals)
 
                 if search_cust_invoice:
                     payment_id = self.env["account.payment"].create(payment_vals)
                     payment_id.action_post()
+                    print(payment_id)
                     search_cust_invoice.update({'payment_state': 'paid'})
 
     def import_customer_invoice_data(self):
