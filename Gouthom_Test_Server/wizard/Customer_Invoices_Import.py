@@ -50,15 +50,13 @@ class CustomerInvoiceWizard(models.TransientModel):
                 payments_widget_dict = json.loads(payments_widget)
                 # print(payments_widget_dict['content'][0])
 
-                journal_name = payments_widget_dict['content'][0]['journal_name']
+                journal_name = payments_widget_dict['content'][-1]['journal_name']
                 payment_date = payments_widget_dict['content'][0]['date']
                 ref = payments_widget_dict['content'][-1]['ref'].split(" ")[0]
 
                 journal_id = self.env["account.journal"].search([('name', '=', journal_name)])
                 # print(journal_name, payment_date)
-                # search_cust_invoice = self.env["account.move"].search(
-                #     [('name', '=', number), ('move_type', '=', 'out_invoice'), ('state', '=', 'posted'),
-                #      ('payment_state', '=', 'not_paid')])
+
                 search_cust_invoice = self.env["account.move"].search(
                     [('name', '=', number), ('move_type', '=', 'out_invoice'), ('state', '=', 'posted'),
                      ('payment_state', '=', 'not_paid')])
