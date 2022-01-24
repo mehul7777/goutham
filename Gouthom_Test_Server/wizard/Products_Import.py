@@ -91,7 +91,7 @@ class ProductWizard(models.TransientModel):
                 property_account_income_id = self.env['account.account'].search([('name', '=', income_account)])
                 taxes_id = self.env['account.tax'].search([('name', '=', customer_taxes)], limit=1)
 
-                # create_by_id = self.env['res.users'].search([('name', '=', created_by), '|', ('active', '=', True), ('active', '=', False)], limit=1)
+                create_by_id = self.env['res.users'].search([('name', '=', created_by), '|', ('active', '=', True), ('active', '=', False)], limit=1)
                 # if not create_by_id:
                 #     create_by_id = self.env['res.users'].search([('name', '=', created_by), ('active', '=', False)], limit=1)
                 # follower_id = self.env['res.partner'].search([('name', '=', foweller_name)])
@@ -168,9 +168,7 @@ class ProductWizard(models.TransientModel):
                         'property_account_income_id': property_account_income_id.id,
                         'seller_ids': lst
                     }
-                    if search_product:
-                        pro_id = search_product.write(product_val)
-                    # product_id = self.env['product.template'].create(product_val)
+                    product_id = self.env['product.template'].create(product_val)
                     # print("product_val", product_id)
                 else:
                     if vendor_vendor:
@@ -185,6 +183,4 @@ class ProductWizard(models.TransientModel):
                             'date_start': vendor_start_date,
                             'date_end': vendor_end_date,
                         })
-                        if search_product:
-                            lst.append(vendors_val)
-                            pro_id.write({'seller_ids': lst})
+                        lst.append(vendors_val)

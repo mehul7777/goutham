@@ -105,14 +105,14 @@ class CustomerInvoiceWizard(models.TransientModel):
                 }
                 print(payment_vals)
                 # invoice_active = self.env['account.move'].browse(self.env.context['active_id'])
-                payment = self.env['account.payment'].create(payment_vals)
+                # payment = self.env['account.payment'].create(payment_vals)
                 # if search_cust_invoice:
                 # payment = self.env['account.payment.register'].with_context(active_model='account.move',
                 #                                                             active_id=search_cust_invoice.id).create(payment_vals)._create_payments()
                 # payment = self.env['account.payment.register'].create(payment_vals)
                 # payment._create_payments()
-                search_cust_invoice.action_invoice_paid()
-                payment.action_post()
+                search_cust_invoice._post()
+                # search_cust_invoice.action_post()
                 # search_cust_invoice.write({'invoice_payments_widget': payments_widget_dict})
                 # search_cust_invoice._compute_payments_widget_to_reconcile_info()
 
