@@ -50,15 +50,7 @@ class CustomerInvoiceWizard(models.TransientModel):
                 # print(payments_widget)
 
                 payments_widget_dict = json.loads(payments_widget)
-                # print(payments_widget_dict['content'][0])
-
-                journal_name = payments_widget_dict['content'][-1]['journal_name']
-                payment_date = payments_widget_dict['content'][0]['date']
-                ref = payments_widget_dict['content'][-1]['ref'].split(" ")[0]
-                amount = payments_widget_dict['content'][-1]['amount']
-
-                journal_id = self.env["account.journal"].search([('name', '=', journal_name)])
-                # print(journal_name, payment_date)
+                print(payments_widget_dict['content'])
 
                 search_cust_invoice = self.env["account.move"].search(
                     [('name', '=', number), ('move_type', '=', 'out_invoice'), ('state', '=', 'posted'),
@@ -66,55 +58,45 @@ class CustomerInvoiceWizard(models.TransientModel):
 
                 print(search_cust_invoice)
 
-                # payment_vals = {
-                #     'date': payment_date,
-                #     'amount': total,
-                #     'payment_type': 'inbound' if float(total) > 0 else 'outbound',
-                #     'currency_id': search_cust_invoice.currency_id.id,
-                #     'partner_id': search_cust_invoice.partner_id.id,
-                #     'partner_type': 'customer',
-                #     'journal_id': journal_id.id,
+                for payment_values in payments_widget_dict['content']:
+                    # print("\n")
+                    # print(payment_values['journal_name'])
+                    # print(payment_values['amount'])
+                    # print(payment_values['date'])
+                    # print(payment_values['ref'])
+
+                    journal_id = self.env["account.journal"].search([('name', '=', payment_values['journal_name'])])
+                    # journal_id_stripe = self.env['account.journal'].sudo().search([('code', '=', 'BANK')], limit=1).id
+                    payment_wizard = self.env['account.payment.register'].with_context(active_model='account.move',
+                                                                                   active_ids=search_cust_invoice.ids).create(
+                        {
+                            'journal_id': journal_id.id,
+                            'amount': payment_values['amount'],
+                            'company_id': search_cust_invoice.company_id.id,
+                            'currency_id': search_cust_invoice.currency_id.id,
+                            'partner_type': 'customer',
+                            'payment_date': payment_values['date'],
+                            'payment_type': 'inbound',
+                            # 'payment_method_code': "CASH" if payment_values['ref'][0]=="C" else "BANK",
+                        })
+                    account_payment = payment_wizard._create_payments()
+                    account_payment.write({'custom_number': payment_values['ref']})
+
+                """"# payment_vals = {
+                #     'amount': amount,
+                #     # 'communication': search_cust_invoice.payment_reference,
                 #     'company_id': search_cust_invoice.company_id.id,
-                #     # 'payment_method_id': search_cust_invoice.env.ref('payment.account_payment_method_electronic_in').id,
-                #     # 'payment_token_id': search_cust_invoice.payment_token_id and search_cust_invoice.payment_token_id.id or None,
-                #     # 'payment_transaction_id': search_cust_invoice.id,
+                #     'currency_id': search_cust_invoice.currency_id.id,
+                #     'journal_id': journal_id.id,
+                #     'line_ids': [(6, 0, i.ids)],
+                #     # 'partner_bank_id': ,
+                #     'partner_type': 'customer',
+                #     'date': payment_date,
+                #     # 'payment_method_id': ,
+                #     'payment_type': 'inbound',
                 #     'custom_number': ref,
-                #     'tax_cash_basis_move_id': search_cust_invoice.id,
                 #     # 'payment_difference_handling': 'reconcile',
-                #     # **add_payment_vals,
-                # }
-                # payment = self.env['account.payment'].create(payment_vals)
-                # payment.action_post()
-                for i in search_cust_invoice.line_ids:
-                    if i.debit > 0:
-                        print(i.debit)
-                payment_vals = {
-                    'amount': amount,
-                    # 'communication': search_cust_invoice.payment_reference,
-                    'company_id': search_cust_invoice.company_id.id,
-                    'currency_id': search_cust_invoice.currency_id.id,
-                    'journal_id': journal_id.id,
-                    'line_ids': [(6, 0, i.ids)],
-                    # 'partner_bank_id': ,
-                    'partner_type': 'customer',
-                    'date': payment_date,
-                    # 'payment_method_id': ,
-                    'payment_type': 'inbound',
-                    'custom_number': ref,
-                    # 'payment_difference_handling': 'reconcile',
-                }
-                print(payment_vals)
-                # invoice_active = self.env['account.move'].browse(self.env.context['active_id'])
-                # payment = self.env['account.payment'].create(payment_vals)
-                # if search_cust_invoice:
-                # payment = self.env['account.payment.register'].with_context(active_model='account.move',
-                #                                                             active_id=search_cust_invoice.id).create(payment_vals)._create_payments()
-                # payment = self.env['account.payment.register'].create(payment_vals)
-                # payment._create_payments()
-                search_cust_invoice._post()
-                # search_cust_invoice.action_post()
-                # search_cust_invoice.write({'invoice_payments_widget': payments_widget_dict})
-                # search_cust_invoice._compute_payments_widget_to_reconcile_info()
+                # }"""
 
     def import_customer_invoice_data(self):
         print("Import is working")
