@@ -75,6 +75,7 @@ class CustomerInvoiceWizard(models.TransientModel):
                                 'amount': payment_values['amount'],
                                 'company_id': search_cust_invoice.company_id.id,
                                 'currency_id': search_cust_invoice.currency_id.id,
+                                'partner_id': search_cust_invoice.partner_id.id,
                                 'partner_type': 'customer',
                                 'payment_date': payment_values['date'],
                                 'payment_type': 'inbound',
