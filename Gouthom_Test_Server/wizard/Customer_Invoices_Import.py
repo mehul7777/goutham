@@ -67,20 +67,21 @@ class CustomerInvoiceWizard(models.TransientModel):
 
                     journal_id = self.env["account.journal"].search([('name', '=', payment_values['journal_name'])])
                     # journal_id_stripe = self.env['account.journal'].sudo().search([('code', '=', 'BANK')], limit=1).id
-                    payment_wizard = self.env['account.payment.register'].with_context(active_model='account.move',
-                                                                                   active_ids=search_cust_invoice.ids).create(
-                        {
-                            'journal_id': journal_id.id,
-                            'amount': payment_values['amount'],
-                            'company_id': search_cust_invoice.company_id.id,
-                            'currency_id': search_cust_invoice.currency_id.id,
-                            'partner_type': 'customer',
-                            'payment_date': payment_values['date'],
-                            'payment_type': 'inbound',
-                            # 'payment_method_code': "CASH" if payment_values['ref'][0]=="C" else "BANK",
-                        })
-                    account_payment = payment_wizard._create_payments()
-                    account_payment.write({'custom_number': payment_values['ref']})
+                    if search_cust_invoice:
+                        payment_wizard = self.env['account.payment.register'].with_context(active_model='account.move',
+                                                                                       active_ids=search_cust_invoice.ids).create(
+                            {
+                                'journal_id': journal_id.id,
+                                'amount': payment_values['amount'],
+                                'company_id': search_cust_invoice.company_id.id,
+                                'currency_id': search_cust_invoice.currency_id.id,
+                                'partner_type': 'customer',
+                                'payment_date': payment_values['date'],
+                                'payment_type': 'inbound',
+                                # 'payment_method_code': "CASH" if payment_values['ref'][0]=="C" else "BANK",
+                            })
+                        account_payment = payment_wizard._create_payments()
+                        account_payment.write({'custom_number': payment_values['ref']})
 
                 """"# payment_vals = {
                 #     'amount': amount,
