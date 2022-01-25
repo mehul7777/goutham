@@ -65,16 +65,16 @@ class CRMWizard(models.TransientModel):
                 referred_by = value[28]
                 stage = value[29]
 
-                partner_id = self.env['res.partner'].search([('name', '=', customer)])
-                user_id = self.env['res.users'].search([('name', '=', sales_person), '|', ('active', '=', True), ('active', '=', False)])
-                team_id = self.env['crm.team'].search([('name', '=', sales_team)])
+                partner_id = self.env['res.partner'].search([('name', '=', customer)], limit=1)
+                user_id = self.env['res.users'].search([('name', '=', sales_person), '|', ('active', '=', True), ('active', '=', False)], limit=1)
+                team_id = self.env['crm.team'].search([('name', '=', sales_team)], limit=1)
                 tag_ids = self.env['crm.tag'].search([('name', '=', tags)])
-                state_id = self.env['res.country.state'].search([('name', '=', state)])
-                country_id = self.env['res.country'].search([('name', '=', country)])
-                campaign_id = self.env['utm.campaign'].search([('name', '=', campaign)])
-                source_id = self.env['utm.source'].search([('name', '=', source)])
+                state_id = self.env['res.country.state'].search([('name', '=', state)], limit=1)
+                country_id = self.env['res.country'].search([('name', '=', country)], limit=1)
+                campaign_id = self.env['utm.campaign'].search([('name', '=', campaign)], limit=1)
+                source_id = self.env['utm.source'].search([('name', '=', source)], limit=1)
                 stage_id = self.env['crm.stage'].search([('name', '=', stage)])
-                title_id = self.env['res.partner.title'].search([('name', '=', title)])
+                title_id = self.env['res.partner.title'].search([('name', '=', title)], limit=1)
 
                 search_opportunity = self.env["crm.lead"].search([('name', '=', opportunity)])
 
