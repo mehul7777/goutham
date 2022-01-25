@@ -76,6 +76,8 @@ class CRMWizard(models.TransientModel):
                 stage_id = self.env['crm.stage'].search([('name', '=', stage)])
                 title_id = self.env['res.partner.title'].search([('name', '=', title)])
 
+                search_opportunity = self.env["crm.lead"].search([('name', '=', opportunity)])
+
                 crm_val = {
                     'name': opportunity,
                     'expected_revenue': expected_revenue,
@@ -107,13 +109,14 @@ class CRMWizard(models.TransientModel):
                     # 'day_close': days_to_close,
                     'referred': referred_by,
                     # 'stage_id': stage_id.id,
-                    'type': 'lead',
+                    'type': 'opportunity',
                 }
                 print(crm_val)
-                crm_id = self.env['crm.lead'].sudo().create(crm_val)
-                days_val = {
-                    'day_open': days_to_assign,
-                    'day_close': days_to_close,
-                }
-                crm_id.write(days_val)
-                print("crm_val", crm_id)
+                if not search_opportunity:
+                    crm_id = self.env['crm.lead'].sudo().create(crm_val)
+                    days_val = {
+                        'day_open': days_to_assign,
+                        'day_close': days_to_close,
+                    }
+                    crm_id.write(days_val)
+                    print("crm_val", crm_id)
