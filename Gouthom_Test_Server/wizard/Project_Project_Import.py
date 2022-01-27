@@ -65,6 +65,7 @@ class ProjectWizard(models.TransientModel):
                 resource_calendar_id = self.env['resource.calendar'].search([('name', '=', working_time)], limit=1)
                 sale_order_id = self.env['sale.order'].search([('name', '=', sales_order)], limit=1)
 
+                search_project = self.env['project.project'].search([('name', '=', name)])
                 if not resource_calendar_id:
                     resource_calendar_id_val = {
                         'name': working_time
@@ -95,5 +96,6 @@ class ProjectWizard(models.TransientModel):
                         'sale_order_id': sale_order_id.id,
                         'active': True if active == "True" else False,
                     }
-                    project_obj_id = self.env['project.project'].create(projects_val)
-                    print("projects_val", project_obj_id)
+                    if not search_project:
+                        project_obj_id = self.env['project.project'].create(projects_val)
+                        print("projects_val", project_obj_id)
