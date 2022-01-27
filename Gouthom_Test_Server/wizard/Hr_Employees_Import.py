@@ -122,6 +122,8 @@ class HrEmployeeWizard(models.TransientModel):
                     }
                     job_id = self.env['hr.department'].create(job_position_val)
 
+                search_employee = self.env['hr.employee'].search([('name', '=', name)])
+
                 if name:
                     employee_val = {
                         'name': name,
@@ -171,9 +173,10 @@ class HrEmployeeWizard(models.TransientModel):
                         'medical_examination_date': medical_examination_date,
                         # 'vehicle': company_vehicle,
                         'barcode': badge_id,
-                        'manual_attendance': manual_attendance,
+                        'manual_attendance': True if manual_attendance == "True" else False,
                         'job_description': job_description,
                         'active': True if active == "True" else False
                     }
-                    employee_id = self.env['hr.employee'].sudo().create(employee_val)
+                    if not search_employee:
+                        employee_id = self.env['hr.employee'].sudo().create(employee_val)
 
