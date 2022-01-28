@@ -199,7 +199,7 @@ class SOWizard(models.TransientModel):
                         'origin': source_document,
                         'payment_term_id': payment_term_id.id,
                         'carrier_id': carrier_id.id,
-                        'tag_ids': tag_ids.ids,
+                        'tag_ids': [(6, 0, tag_ids.ids)],
                         'analytic_account_id': analytic_account_id.id,
                         'opportunity_id': opportunity_id.id,
                         'order_line': lst,
