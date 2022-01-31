@@ -1,3 +1,4 @@
+import json
 from odoo import api, fields, models
 import csv
 import io, base64
@@ -12,6 +13,97 @@ class VendorBillWizard(models.TransientModel):
     _description = "Vendor Bill Wizard"
 
     load_file = fields.Binary("Load File")
+
+    def post_draft_bills(self):
+        # search_vendor_bills = self.env["account.move"].search(
+        #     [('move_type', '=', 'in_invoice'), ('state', '=', 'draft'), ('payment_state', '=', 'not_paid')], limit=200)
+        # for bill in search_vendor_bills:
+        #     print(bill.id)
+        #     bill.action_post()
+        csv_data = self.load_file
+        file_obj = TemporaryFile('wb+')
+        csv_data = base64.decodebytes(csv_data)
+        file_obj.write(csv_data)
+        file_obj.seek(0)
+        str_csv_data = file_obj.read().decode('utf-8')
+        lis = csv.reader(io.StringIO(str_csv_data), delimiter=',')
+        row_num = 0
+        header_list = []
+        data_dict = {}
+        for row in lis:
+            data_dict.update({row_num: row})
+            row_num += 1
+        for key, value in data_dict.items():
+            if key == 0:
+                header_list.append(value)
+            else:
+                # print(value)
+                number = value[0]
+                partner = value[1]
+
+                search_vendor_bill = self.env['account.move'].search([('name', '=', number)])
+
+                partner_id = self.env["res.partner"].search(
+                    [('name', '=', partner), '|', ('active', '=', True), ('active', '=', False)], limit=1)
+                if search_vendor_bill:
+                    search_vendor_bill.write({'partner_id': partner_id.id})
+
+    def paid_post_bills(self):
+        print("Import is working for vendor bill payment")
+        csv_data = self.load_file
+        file_obj = TemporaryFile('wb+')
+        csv_data = base64.decodebytes(csv_data)
+        file_obj.write(csv_data)
+        file_obj.seek(0)
+        str_csv_data = file_obj.read().decode('utf-8')
+        lis = csv.reader(io.StringIO(str_csv_data), delimiter=',')
+        row_num = 0
+        header_list = []
+        data_dict = {}
+        for row in lis:
+            data_dict.update({row_num: row})
+            row_num += 1
+        for key, value in data_dict.items():
+            if key == 0:
+                header_list.append(value)
+            else:
+                print(value)
+                number = value[0]
+                payments_widget = value[1]
+
+                payments_widget_dict = json.loads(payments_widget)
+                print(payments_widget_dict['content'])
+
+                search_vendor_bills = self.env["account.move"].search(
+                    [('name', '=', number), ('move_type', '=', 'in_invoice'), ('state', '=', 'posted'),
+                     ('payment_state', '=', 'not_paid')])
+
+                print(search_vendor_bills)
+
+                for payment_values in payments_widget_dict['content']:
+                    print("\n")
+                    print("journal_name :", payment_values['journal_name'])
+                    print("amount :", payment_values['amount'])
+                    print("date :", payment_values['date'])
+                    print("ref :", payment_values['ref'])
+
+                    journal_id = self.env["account.journal"].search([('name', '=', payment_values['journal_name'])])
+                    # # journal_id_stripe = self.env['account.journal'].sudo().search([('code', '=', 'BANK')], limit=1).id
+                    if search_vendor_bills:
+                        payment_wizard = self.env['account.payment.register'].with_context(active_model='account.move',
+                                                                                       active_ids=search_vendor_bills.ids).create(
+                            {
+                                'journal_id': journal_id.id,
+                                'amount': payment_values['amount'],
+                                'company_id': search_vendor_bills.company_id.id,
+                                'currency_id': search_vendor_bills.currency_id.id,
+                                'partner_id': search_vendor_bills.partner_id.id,
+                                'partner_type': 'supplier',
+                                'payment_date': payment_values['date'],
+                                'payment_type': 'outbound',
+                            })
+                        account_payment = payment_wizard._create_payments()
+                        account_payment.write({'custom_number': payment_values['ref']})
 
     def import_vendor_bill_data(self):
         print("Import is working")

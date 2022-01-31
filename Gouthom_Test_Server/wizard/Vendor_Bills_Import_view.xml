@@ -12,6 +12,8 @@
                 <footer>
                     <button name="import_vendor_bill_data" string="Import" type="object" class="oe_highlight"/>
                     <button string="Cancel" class="btn btn-default" special="cancel"/>
+                    <button name="post_draft_bills" string="Draft to Post" type="object" class="oe_highlight"/>
+                    <button name="paid_post_bills" string="Post to Paid" type="object" class="oe_highlight"/>
                 </footer>
             </form>
         </field>

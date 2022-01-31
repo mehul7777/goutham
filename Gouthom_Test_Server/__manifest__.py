@@ -33,7 +33,7 @@
         'views/Inherit_sale_order_view.xml',
         'views/Inherit_crm_view.xml',
         'views/Inherit_analytic_account_view.xml',
-        'views/Inherit_project_project_view.xml',
+        # 'views/Inherit_project_project_view.xml',
         'views/Inherit_Project_Task_view.xml',
         'views/Inherit_hr_employee_view.xml',
         'views/Inherit_Account_Move_view.xml',
