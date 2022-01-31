@@ -16,7 +16,7 @@ class VendorBillWizard(models.TransientModel):
 
     def post_draft_bills(self):
         search_vendor_bills = self.env["account.move"].search(
-            [('move_type', '=', 'in_invoice'), ('state', '=', 'draft'), ('payment_state', '=', 'not_paid')], limit=200)
+            [('move_type', '=', 'in_invoice'), ('state', '=', 'draft'), ('payment_state', '=', 'not_paid')], limit=1000)
         for bill in search_vendor_bills:
             print(bill.id)
             bill.action_post()
