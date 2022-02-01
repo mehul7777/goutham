@@ -78,7 +78,7 @@ class VendorBillWizard(models.TransientModel):
                         try:
                             account_payment = payment_wizard._create_payments()
                             account_payment.write({'custom_number': payment_values['ref']})
-                        except:
+                        except Exception:
                             not_done.append(payment_values)
                             pass
                 if len(not_done):
