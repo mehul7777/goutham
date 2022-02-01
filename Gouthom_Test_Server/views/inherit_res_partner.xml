@@ -6,31 +6,31 @@
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="base.view_partner_form"/>
             <field name="arch" type="xml">
-<!--                <xpath expr="//field[@name='property_product_pricelist']" position="after">-->
-<!--                    <field name="is_a_customer"/>-->
-<!--                </xpath>-->
+                <xpath expr="//field[@name='property_product_pricelist']" position="after">
+                    <field name="is_a_customer"/>
+                </xpath>
                 <xpath expr="//group[@name='purchase']" position="inside">
                     <field name="is_a_vendor"/>
                 </xpath>
-<!--                <xpath expr="//div[@class='oe_title']" position="after">-->
-<!--                    <group>-->
-<!--                        <field name="id" invisible="1"/>-->
-<!--                    </group>-->
-<!--                </xpath>-->
-<!--                <xpath expr="//div[@class='oe_title']" position="after">-->
-<!--                    <group>-->
-<!--                        <field name="id_custom" invisible="0"/>-->
-<!--                    </group>-->
-<!--                </xpath>-->
-<!--                <xpath expr="//field[@name='category_id']" position="before">-->
-<!--                    <field name="lang"/>-->
-<!--                </xpath>-->
-<!--                <xpath expr="//field[@name='category_id']" position="after">-->
-<!--                    <field name="created_by_custom"/>-->
-<!--                </xpath>-->
-<!--                <xpath expr="//field[@name='created_by_custom']" position="after">-->
-<!--                    <field name="company_id"/>-->
-<!--                </xpath>-->
+                <xpath expr="//div[@class='oe_title']" position="after">
+                    <group>
+                        <field name="id" invisible="1"/>
+                    </group>
+                </xpath>
+                <xpath expr="//div[@class='oe_title']" position="after">
+                    <group>
+                        <field name="id_custom" invisible="0"/>
+                    </group>
+                </xpath>
+                <xpath expr="//field[@name='category_id']" position="before">
+                    <field name="lang"/>
+                </xpath>
+                <xpath expr="//field[@name='category_id']" position="after">
+                    <field name="created_by_custom"/>
+                </xpath>
+                <xpath expr="//field[@name='created_by_custom']" position="after">
+                    <field name="company_id"/>
+                </xpath>
             </field>
         </record>
     </data>
