@@ -82,7 +82,9 @@ class VendorBillWizard(models.TransientModel):
                             not_done.append(payment_values)
                             pass
                 if len(not_done):
+                    search_vendor_bills.button_drfat()
                     search_vendor_bills.write({'narration': not_done})
+                    search_vendor_bills.action_post()
 
     def import_vendor_bill_data(self):
         print("Import is working")
