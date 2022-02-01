@@ -52,7 +52,7 @@ class VendorBillWizard(models.TransientModel):
                      ('payment_state', '=', 'not_paid')])
 
                 print(search_vendor_bills)
-
+                not_done =[]
                 for payment_values in payments_widget_dict['content']:
                     print("\n")
                     print("journal_name :", payment_values['journal_name'])
@@ -75,8 +75,14 @@ class VendorBillWizard(models.TransientModel):
                                 'payment_date': payment_values['date'],
                                 'payment_type': 'outbound',
                             })
-                        account_payment = payment_wizard._create_payments()
-                        account_payment.write({'custom_number': payment_values['ref']})
+                        try:
+                            account_payment = payment_wizard._create_payments()
+                            account_payment.write({'custom_number': payment_values['ref']})
+                        except:
+                            not_done.append(payment_values)
+                            pass
+                if len(not_done):
+                    search_vendor_bills.write({'narration': not_done})
 
     def import_vendor_bill_data(self):
         print("Import is working")
