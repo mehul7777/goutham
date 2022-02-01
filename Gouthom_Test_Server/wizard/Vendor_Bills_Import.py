@@ -75,16 +75,18 @@ class VendorBillWizard(models.TransientModel):
                                 'payment_date': payment_values['date'],
                                 'payment_type': 'outbound',
                             })
-                        try:
-                            account_payment = payment_wizard._create_payments()
-                            account_payment.write({'custom_number': payment_values['ref']})
-                        except Exception:
-                            not_done.append(payment_values)
-                            pass
-                if len(not_done):
-                    search_vendor_bills.write({'state': 'draft'})
-                    search_vendor_bills.write({'narration': not_done})
-                    search_vendor_bills.action_post()
+                        account_payment = payment_wizard._create_payments()
+                        account_payment.write({'custom_number': payment_values['ref']})
+                #         try:
+                #             account_payment = payment_wizard._create_payments()
+                #             account_payment.write({'custom_number': payment_values['ref']})
+                #         except Exception:
+                #             not_done.append(payment_values)
+                #             pass
+                # if len(not_done):
+                #     search_vendor_bills.write({'state': 'draft'})
+                #     search_vendor_bills.write({'narration': not_done})
+                #     search_vendor_bills.action_post()
 
     def import_vendor_bill_data(self):
         print("Import is working")
