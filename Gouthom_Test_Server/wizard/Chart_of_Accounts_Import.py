@@ -36,28 +36,36 @@ class AccountAccountWizard(models.TransientModel):
                 code = value[0]
                 name = value[1]
                 type = value[2]
-                company = value[3]
-                allow_reconciliation = value[4]
+                tags = value[3]
+                default_taxes = value[4]
+                company = value[5]
+                allow_reconciliation = value[6]
 
                 user_type_id = self.env['account.account.type'].search([('name', '=', type)])
                 company_id = self.env['res.company'].search([('name', '=', company)])
+                tag_ids = self.env['account.account.tag'].search([('name', '=', tags)])
+                tax_ids = self.env['account.tax'].search([('name', '=', default_taxes)])
 
-                if not user_type_id:
-                    user_type_id_val = {
-                        'name': type
-                    }
-                    user_type_id = self.env['account.account.type'].create(user_type_id_val)
-
-                search_name = self.env['account.account'].search([('name', '=', name)])
+                search_name = self.env['account.account'].search([('name', '=', name), ('code', '=', code)])
 
                 if not search_name:
                     coa_val = {
                         'code': code,
                         'name': name,
                         'user_type_id': user_type_id.id,
+                        'tag_ids': [(6, 0, tag_ids.ids)],
+                        'tax_ids': [(6, 0, tax_ids.ids)],
                         'company_id': company_id.id,
                         'reconcile': True if allow_reconciliation == "True" else False,
                     }
                     coa_id = self.env['account.account'].create(coa_val)
                 else:
-                    search_name.write({'code': code})
+                    search_name.write({
+                        'code': code,
+                        'name': name,
+                        'user_type_id': user_type_id.id,
+                        'tag_ids': [(6, 0, tag_ids.ids)],
+                        'tax_ids': [(6, 0, tax_ids.ids)],
+                        'company_id': company_id.id,
+                        'reconcile': True if allow_reconciliation == "True" else False,
+                    })
