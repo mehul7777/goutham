@@ -13,4 +13,5 @@ access.hr.employee.wizard,access_hr_employee_wizard,model_hr_employee_wizard,bas
 access.account.account.wizard,access_account_account_wizard,model_account_account_wizard,base.group_user,1,1,1,1
 access.customer.invoice.wizard,access_customer_invoice_wizard,model_customer_invoice_wizard,base.group_user,1,1,1,1
 access.vendor.bill.wizard,access_vendor_bill_wizard,model_vendor_bill_wizard,base.group_user,1,1,1,1
+access.journal.account.wizard,access_journal_account_wizard,model_journal_account_wizard,base.group_user,1,1,1,1
 
