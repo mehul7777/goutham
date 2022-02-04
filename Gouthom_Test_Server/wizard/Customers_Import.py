@@ -112,60 +112,59 @@ class CustomerWizard(models.TransientModel):
                 property_payment_term_id = self.env['account.payment.term'].search([('name', '=', customer_payment_terms)], limit=1)
                 property_supplier_payment_term_id = self.env['account.payment.term'].search([('name', '=', vendor_payment_terms)], limit=1)
 
-                if name:
-                    customer_val = {
-                        'company_type': company_type,
-                        'name': name,
-                        'id_custom': id,
-                        'ref': internal_reference,
-                        'street': street,
-                        'street2': street2,
-                        'city': city,
-                        'state_id': state_id.id,
-                        'zip': zip,
-                        'country_id': country_id.id,
-                        'vat': tax_id,
-                        'phone': phone,
-                        'mobile': mobile,
-                        'email': email,
-                        'website': website,
-                        'lang': language,
-                        'category_id': category_id.ids,
-                        'create_uid': create_uid.id,
-                        'created_by_custom': create_uid.id,
-                        'is_a_customer': True if is_a_customer == "True" else False,
-                        'user_id': user_id.id,
-                        'property_delivery_carrier_id': property_delivery_carrier_id.id,  # make this field
-                        'message_bounce': bounce,
-                        'property_product_pricelist': property_product_pricelist_id.id,
-                        'is_a_vendor': True if is_a_vendor == "True" else False,
-                        'property_purchase_currency_id': property_purchase_currency_id.id,
-                        'barcode': barcode,
-                        'company_id': company_id.id,
-                        'property_account_position_id': property_account_position_id.id,
-                        'property_stock_customer': property_stock_customer_id.id,
-                        'property_stock_supplier': property_stock_supplier_id.id,
-                        'property_account_receivable_id': property_account_receivable_id.id,
-                        'property_account_payable_id': property_account_payable_id.id,
-                        'credit_limit': credit_limit,
-                        'parent_id': parent_id.id,
-                        'property_payment_term_id': property_payment_term_id.id,
-                        'property_supplier_payment_term_id': property_supplier_payment_term_id.id,
-                        'customer_rank': customer_rank,
-                        'supplier_rank': supplier_rank,
-                        'active': True if active == "True" else False,
-                    }
-                    if company_type == "company":
-                        company_obj = self.env['res.partner'].search([('name', '=', name), ('company_type', '=', 'company'), '|', ('active', '=', True), ('active', '=', False)], limit=1)
-                        if not company_obj:
-                            company_obj_id = self.env['res.partner'].sudo().create(customer_val)
-                            print("customer_val", company_obj_id)
-                        else:
-                            company_obj.sudo().write(customer_val)
-                    if company_type == 'person':
-                        person_obj = self.env['res.partner'].search([('name', '=', name), ('company_type', '=', 'person'), '|', ('active', '=', True), ('active', '=', False)], limit=1)
-                        if not person_obj:
-                            person_obj_id = self.env['res.partner'].sudo().create(customer_val)
-                            print("customer_val", person_obj_id)
-                        else:
-                            person_obj.sudo().write(customer_val)
+                customer_val = {
+                    'company_type': company_type,
+                    'name': name if name else "No Name",
+                    'id_custom': id,
+                    'ref': internal_reference,
+                    'street': street,
+                    'street2': street2,
+                    'city': city,
+                    'state_id': state_id.id,
+                    'zip': zip,
+                    'country_id': country_id.id,
+                    'vat': tax_id,
+                    'phone': phone,
+                    'mobile': mobile,
+                    'email': email,
+                    'website': website,
+                    'lang': language,
+                    'category_id': category_id.ids,
+                    'create_uid': create_uid.id,
+                    'created_by_custom': create_uid.id,
+                    'is_a_customer': True if is_a_customer == "True" else False,
+                    'user_id': user_id.id,
+                    'property_delivery_carrier_id': property_delivery_carrier_id.id,  # make this field
+                    'message_bounce': bounce,
+                    'property_product_pricelist': property_product_pricelist_id.id,
+                    'is_a_vendor': True if is_a_vendor == "True" else False,
+                    'property_purchase_currency_id': property_purchase_currency_id.id,
+                    'barcode': barcode,
+                    'company_id': company_id.id,
+                    'property_account_position_id': property_account_position_id.id,
+                    'property_stock_customer': property_stock_customer_id.id,
+                    'property_stock_supplier': property_stock_supplier_id.id,
+                    'property_account_receivable_id': property_account_receivable_id.id,
+                    'property_account_payable_id': property_account_payable_id.id,
+                    'credit_limit': credit_limit,
+                    'parent_id': parent_id.id,
+                    'property_payment_term_id': property_payment_term_id.id,
+                    'property_supplier_payment_term_id': property_supplier_payment_term_id.id,
+                    'customer_rank': customer_rank,
+                    'supplier_rank': supplier_rank,
+                    'active': True if active == "True" else False,
+                }
+                if company_type == "company":
+                    company_obj = self.env['res.partner'].search([('name', '=', name), ('company_type', '=', 'company'), ('id_custom', '=', id), '|', ('active', '=', True), ('active', '=', False)], limit=1)
+                    if not company_obj:
+                        company_obj_id = self.env['res.partner'].sudo().create(customer_val)
+                        print("customer_val", company_obj_id)
+                    else:
+                        company_obj.sudo().write(customer_val)
+                if company_type == 'person':
+                    person_obj = self.env['res.partner'].search([('name', '=', name), ('company_type', '=', 'person'), ('id_custom', '=', id),'|', ('active', '=', True), ('active', '=', False)], limit=1)
+                    if not person_obj:
+                        person_obj_id = self.env['res.partner'].sudo().create(customer_val)
+                        print("customer_val", person_obj_id)
+                    else:
+                        person_obj.sudo().write(customer_val)
