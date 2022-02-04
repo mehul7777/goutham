@@ -35,13 +35,13 @@ class ProductWizard(models.TransientModel):
                 header_list.append(value)
             else:
                 # print(value)
-                internal_reference = value[0]
-                name = value[1]
-                can_be_sold = value[2]
-                can_be_purchased = value[3]
-                can_be_expensed = value[4]
-                product_type = value[5]
-                product_category = value[6]
+                name = value[0]
+                can_be_sold = value[1]
+                can_be_purchased = value[2]
+                can_be_expensed = value[3]
+                product_type = value[4]
+                product_category = value[5]
+                internal_reference = value[6]
                 oem = value[7]
                 barcode = value[8] or False
                 order_planner_policy = value[9]
@@ -70,11 +70,12 @@ class ProductWizard(models.TransientModel):
                 vendor_currency = value[32]
                 vendor_start_date = value[33] or False
                 vendor_end_date = value[34] or False
-                routes = value[26]
-                responsible = value[27]
-                production_location = value[28]
-                inventory_location = value[29]
-                income_account = value[30]
+                routes = value[35]
+                responsible = value[36]
+                production_location = value[37]
+                inventory_location = value[38]
+                income_account = value[39]
+                expense_account = value[40]
 
                 categ_id = self.env['product.category'].search([('name', '=', product_category)], limit=1) #change this before commiting replace display_name to name
                 # order_planner_policy = self.env['sale.order.planning.policy'].search([('name', '=', order_planner_policy)])
@@ -89,6 +90,7 @@ class ProductWizard(models.TransientModel):
                 property_stock_production = self.env['stock.location'].search([('name', '=', production_location)], limit=1)
                 property_stock_inventory = self.env['stock.location'].search([('name', '=', inventory_location)], limit=1)
                 property_account_income_id = self.env['account.account'].search([('name', '=', income_account)])
+                property_account_expense_id = self.env['account.account'].search([('name', '=', expense_account)])
                 taxes_id = self.env['account.tax'].search([('name', '=', customer_taxes)], limit=1)
 
                 create_by_id = self.env['res.users'].search([('name', '=', created_by), '|', ('active', '=', True), ('active', '=', False)], limit=1)
@@ -166,9 +168,10 @@ class ProductWizard(models.TransientModel):
                         'property_stock_production': property_stock_production.id,
                         'property_stock_inventory': property_stock_inventory.id,
                         'property_account_income_id': property_account_income_id.id,
+                        'property_account_expense_id': property_account_expense_id.id,
                         'seller_ids': lst
                     }
-                    product_id = self.env['product.template'].create(product_val)
+                    pro_id = self.env['product.template'].create(product_val)
                     # print("product_val", product_id)
                 else:
                     if vendor_vendor:
@@ -183,4 +186,6 @@ class ProductWizard(models.TransientModel):
                             'date_start': vendor_start_date,
                             'date_end': vendor_end_date,
                         })
-                        lst.append(vendors_val)
+                        if pro_id:
+                            lst.append(vendors_val)
+                            pro_id.write({'seller_ids': lst})
