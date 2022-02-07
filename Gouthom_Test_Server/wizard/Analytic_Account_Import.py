@@ -37,27 +37,18 @@ class AnalyticAccountWizard(models.TransientModel):
                 id = value[1]
                 reference = value[2]
                 customer = value[3]
-                group = value[4]
-                company = value[5]
-                currency = value[6]
-                active = value[7]
+                customer_id = value[4]
+                group = value[5]
+                company = value[6]
+                currency = value[7]
+                active = value[8]
 
-                partner_id = self.env['res.partner'].search([('name', '=', customer)])
+                search_analytic_account = self.env['account.analytic.account'].search([('name', '=', analytic_account)])
+
+                partner_id = self.env['res.partner'].search([('name', '=', customer), ('id_custom', '=', customer_id)])
                 group_id = self.env['account.analytic.group'].search([('name', '=', group)])
                 company_id = self.env['res.company'].search([('name', '=', company)])
                 currency_id = self.env['res.currency'].search([('name', '=', currency)])
-
-                if not partner_id:
-                    customer_val = {
-                        'name': customer
-                    }
-                    partner_id = self.env['res.partner'].create(customer_val)
-
-                if not group_id:
-                    group_val = {
-                        'name': group
-                    }
-                    group_id = self.env['account.analytic.group'].create(group_val)
 
                 analytic_account_val = {
                     'name': analytic_account,
@@ -69,6 +60,9 @@ class AnalyticAccountWizard(models.TransientModel):
                     'currency_id': currency_id.id,
                     'active': False if active == "False" else True
                 }
-                if not self.env['account.analytic.account'].search([('name', '=', analytic_account)]):
+                if not search_analytic_account:
                     analytic_account_id = self.env['account.analytic.account'].create(analytic_account_val)
                     print(analytic_account_id)
+                else:
+                    search_analytic_account.write(analytic_account_val)
+
