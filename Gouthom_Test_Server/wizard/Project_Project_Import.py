@@ -46,19 +46,20 @@ class ProjectWizard(models.TransientModel):
                 expiration_date = value[9] or False
                 privacy = value[10]
                 customer = value[11]
-                analytic_account = value[12]
-                sub_task_project = value[13]
-                sequence = value[14]
-                company = value[15]
-                working_time = value[16]
-                alias_name = value[17]
-                alias_contact_name = value[18]
-                sales_order = value[19]
-                active = value[20]
+                customer_id = value[12]
+                analytic_account = value[13]
+                sub_task_project = value[14]
+                sequence = value[15]
+                company = value[16]
+                working_time = value[17]
+                alias_name = value[18]
+                alias_contact_name = value[19]
+                sales_order = value[20]
+                active = value[21]
 
                 user_id = self.env['res.users'].search([('name', '=', project_manager), '|', ('active', '=', True), ('active', '=', False)], limit=1)
                 custom_created_by_id = self.env['res.users'].search([('name', '=', created_by), '|', ('active', '=', True), ('active', '=', False)], limit=1)
-                partner_id = self.env['res.partner'].search([('name', '=', customer)], limit=1)
+                partner_id = self.env['res.partner'].search([('name', '=', customer), ('custom_id', '=', customer_id)], limit=1)
                 analytic_account_id = self.env['account.analytic.account'].search([('name', '=', analytic_account), '|', ('active', '=', True), ('active', '=', False)], limit=1)
                 subtask_project_id = self.env['project.project'].search([('name', '=', sub_task_project)], limit=1)
                 company_id = self.env['res.company'].search([('name', '=', company)], limit=1)
@@ -99,3 +100,5 @@ class ProjectWizard(models.TransientModel):
                     if not search_project:
                         project_obj_id = self.env['project.project'].create(projects_val)
                         print("projects_val", project_obj_id)
+                    else:
+                        search_project.write(projects_val)
