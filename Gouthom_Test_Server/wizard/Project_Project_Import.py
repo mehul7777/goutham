@@ -59,7 +59,7 @@ class ProjectWizard(models.TransientModel):
 
                 user_id = self.env['res.users'].search([('name', '=', project_manager), '|', ('active', '=', True), ('active', '=', False)], limit=1)
                 custom_created_by_id = self.env['res.users'].search([('name', '=', created_by), '|', ('active', '=', True), ('active', '=', False)], limit=1)
-                partner_id = self.env['res.partner'].search([('name', '=', customer), ('custom_id', '=', customer_id)], limit=1)
+                partner_id = self.env['res.partner'].search([('name', '=', customer), ('id_custom', '=', customer_id)], limit=1)
                 analytic_account_id = self.env['account.analytic.account'].search([('name', '=', analytic_account), '|', ('active', '=', True), ('active', '=', False)], limit=1)
                 subtask_project_id = self.env['project.project'].search([('name', '=', sub_task_project)], limit=1)
                 company_id = self.env['res.company'].search([('name', '=', company)], limit=1)
