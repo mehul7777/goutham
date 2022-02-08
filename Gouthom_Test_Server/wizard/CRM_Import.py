@@ -38,34 +38,36 @@ class CRMWizard(models.TransientModel):
                 expected_revenue = value[1]
                 probability = value[2]
                 customer = value[3]
-                email = value[4]
-                phone = value[5]
-                expected_closing = value[6] or False
-                sales_person = value[7]
-                sales_team = value[8]
-                as_9100_from = value[9]
-                priority = value[10]
-                tags = value[11]
-                customer_name = value[12]
-                street = value[13]
-                street2 = value[14]
-                city = value[15]
-                state = value[16]
-                zip = value[17]
-                country = value[18]
-                website = value[19]
-                contact_name = value[20]
-                title = value[21]
-                job_position = value[22]
-                mobile = value[23]
-                campaign = value[24]
-                source = value[25]
-                days_to_assign = value[26]
-                days_to_close = value[27]
-                referred_by = value[28]
-                stage = value[29]
+                customer_id = value[4]
+                email = value[5]
+                phone = value[6]
+                expected_closing = value[7] or False
+                sales_person = value[8]
+                sales_team = value[9]
+                as_9100_from = value[10]
+                priority = value[11]
+                tags = value[12]
+                customer_name = value[13]
+                street = value[14]
+                street2 = value[15]
+                city = value[16]
+                state = value[17]
+                zip = value[18]
+                country = value[19]
+                website = value[20]
+                contact_name = value[21]
+                title = value[22]
+                job_position = value[23]
+                mobile = value[24]
+                campaign = value[25]
+                source = value[26]
+                days_to_assign = value[27]
+                days_to_close = value[28]
+                referred_by = value[29]
+                stage = value[30]
+                type = value[31]
 
-                partner_id = self.env['res.partner'].search([('name', '=', customer)], limit=1)
+                partner_id = self.env['res.partner'].search([('name', '=', customer), ('id_custom', '=', customer_id), '|', ('active', '=', True), ('active', '=', False)], limit=1)
                 user_id = self.env['res.users'].search([('name', '=', sales_person), '|', ('active', '=', True), ('active', '=', False)], limit=1)
                 team_id = self.env['crm.team'].search([('name', '=', sales_team)], limit=1)
                 tag_ids = self.env['crm.tag'].search([('name', '=', tags)])
@@ -108,8 +110,8 @@ class CRMWizard(models.TransientModel):
                     # 'day_open': days_to_assign,
                     # 'day_close': days_to_close,
                     'referred': referred_by,
-                    # 'stage_id': stage_id.id,
-                    'type': 'opportunity',
+                    'stage_id': stage_id.id,
+                    'type': type,
                 }
                 print(crm_val)
                 if not search_opportunity:

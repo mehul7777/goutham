@@ -45,21 +45,22 @@ class ProjectTaskWizard(models.TransientModel):
                 created_on = value[8]
                 sequence = value[9]
                 customer = value[10]
-                email = value[11]
-                watchers_emails = value[12]
-                parent_task = value[13]
-                company = value[14]
-                cover_image = value[15]
-                assigning_date = value[16] or False
-                last_stage_update = value[17] or False
-                stage = value[18]
-                active = value[19]
+                customer_id = value[11]
+                email = value[12]
+                watchers_emails = value[13]
+                parent_task = value[14]
+                company = value[15]
+                cover_image = value[16]
+                assigning_date = value[17] or False
+                last_stage_update = value[18] or False
+                stage = value[19]
+                active = value[20]
 
                 project_id = self.env['project.project'].search([('name', '=', project), '|', ('active', '=', True), ('active', '=', False)], limit=1)
                 user_id = self.env['res.users'].search([('name', '=', assigned_to), '|', ('active', '=', True), ('active', '=', False)], limit=1)
                 sale_line_id = self.env['sale.order.line'].search([('name', '=', sales_order_item)], limit=1)
                 tag_ids = self.env['project.tags'].search([('name', '=', tags)], limit=1)
-                partner_id = self.env['res.partner'].search([('name', '=', customer), '|', ('active', '=', True), ('active', '=', False)], limit=1)
+                partner_id = self.env['res.partner'].search([('name', '=', customer), ('id_custom', '=', customer_id), '|', ('active', '=', True), ('active', '=', False)], limit=1)
                 parent_id = self.env['project.task'].search([('name', '=', parent_task)], limit=1)
                 company_id = self.env['res.company'].search([('name', '=', company)], limit=1)
                 displayed_image_id = self.env['ir.attachment'].search([('name', '=', cover_image)], limit=1)
