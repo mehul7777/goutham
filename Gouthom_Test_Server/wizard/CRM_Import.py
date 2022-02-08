@@ -110,7 +110,7 @@ class CRMWizard(models.TransientModel):
                     # 'day_open': days_to_assign,
                     # 'day_close': days_to_close,
                     'referred': referred_by,
-                    'stage_id': stage_id.id,
+                    # 'stage_id': stage_id.id,
                     'type': type,
                 }
                 print(crm_val)
