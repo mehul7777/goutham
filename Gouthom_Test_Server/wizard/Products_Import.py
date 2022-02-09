@@ -171,7 +171,7 @@ class ProductWizard(models.TransientModel):
                         'property_stock_inventory': property_stock_inventory.id,
                         'property_account_income_id': property_account_income_id.id,
                         'property_account_expense_id': property_account_expense_id.id,
-                        'active': active,
+                        'active': True if active == "True" else False,
                         'seller_ids': lst
                     }
                     pro_id = self.env['product.template'].create(product_val)
