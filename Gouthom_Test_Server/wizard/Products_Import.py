@@ -62,20 +62,21 @@ class ProductWizard(models.TransientModel):
                 invoice_policy = value[24]
                 re_invoice_policy = value[25]
                 vendor_vendor = value[26]
-                vendor_vendor_product_code = value[27]
-                vendor_product_variant = value[28]
-                vendor_minimal_quantity = value[29]
-                vendor_unit_of_measure = value[30]
-                vendor_price = value[31]
-                vendor_currency = value[32]
-                vendor_start_date = value[33] or False
-                vendor_end_date = value[34] or False
-                routes = value[35]
-                responsible = value[36]
-                production_location = value[37]
-                inventory_location = value[38]
-                income_account = value[39]
-                expense_account = value[40]
+                vendor_vendor_id = value[27]
+                vendor_vendor_product_code = value[28]
+                vendor_product_variant = value[29]
+                vendor_minimal_quantity = value[30]
+                vendor_unit_of_measure = value[31]
+                vendor_price = value[32]
+                vendor_currency = value[33]
+                vendor_start_date = value[34] or False
+                vendor_end_date = value[35] or False
+                routes = value[36]
+                responsible = value[37]
+                production_location = value[38]
+                inventory_location = value[39]
+                income_account = value[40]
+                expense_account = value[41]
 
                 categ_id = self.env['product.category'].search([('name', '=', product_category)], limit=1) #change this before commiting replace display_name to name
                 # order_planner_policy = self.env['sale.order.planning.policy'].search([('name', '=', order_planner_policy)])
@@ -116,7 +117,7 @@ class ProductWizard(models.TransientModel):
                 # else:
                 #     pt_id.message_subscribe([follower_id.id])
 
-                vendor_name = self.env['res.partner'].search([('name', '=', vendor_vendor), '|', ('active', '=', True), ('active', '=', False)], limit=1)
+                vendor_name = self.env['res.partner'].search([('name', '=', vendor_vendor), ('id_custom', '=', vendor_vendor_id), '|', ('active', '=', True), ('active', '=', False)], limit=1)
                 vendor_product_id = self.env['product.product'].search([('name', '=', vendor_product_variant)], limit=1)
                 vendor_product_uom = self.env['uom.uom'].search([('name', '=', vendor_unit_of_measure)], limit=1)
                 vendor_currency_id = self.env['res.currency'].search([('name', '=', vendor_currency)], limit=1)
