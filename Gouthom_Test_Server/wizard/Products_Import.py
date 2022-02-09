@@ -77,6 +77,7 @@ class ProductWizard(models.TransientModel):
                 inventory_location = value[39]
                 income_account = value[40]
                 expense_account = value[41]
+                active = value[42]
 
                 categ_id = self.env['product.category'].search([('name', '=', product_category)], limit=1) #change this before commiting replace display_name to name
                 # order_planner_policy = self.env['sale.order.planning.policy'].search([('name', '=', order_planner_policy)])
@@ -170,6 +171,7 @@ class ProductWizard(models.TransientModel):
                         'property_stock_inventory': property_stock_inventory.id,
                         'property_account_income_id': property_account_income_id.id,
                         'property_account_expense_id': property_account_expense_id.id,
+                        'active': active,
                         'seller_ids': lst
                     }
                     pro_id = self.env['product.template'].create(product_val)
