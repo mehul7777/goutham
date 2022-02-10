@@ -92,8 +92,8 @@ class SOWizard(models.TransientModel):
                 source = value[55]
                 status = value[56]
 
-                print(order_lines_product)
-                if order_lines_product == " ":
+                # print(order_lines_product)
+                if not order_lines_product:
                     order_lines_product = 'Service'
                     order_lines_internal_reference = 'Service'
 

@@ -64,6 +64,7 @@ class PO1Wizard(models.TransientModel):
                 fiscal_position = value[26]
                 status = value[27]
 
+                # print(order_lines_product)
                 if not order_lines_product:
                     order_lines_product = 'Service'
                     order_lines_internal_reference = 'Service'
