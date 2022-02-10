@@ -30,68 +30,79 @@ class SOWizard(models.TransientModel):
             row_num += 1
         so_id = ''
         for key, value in data_dict.items():
-            # try:
             if key == 0:
                 header_list.append(value)
             else:
-                # so_id = ''
                 print(value)
                 order_reference = value[0]
                 customer = value[1]
-                invoice_address = value[2]
-                delivery_address = value[3]
-                customer_po = value[4]
-                customer_reference = value[5]
-                quotation_template = value[6]
-                confirmation_date = value[7] or False
+                customer_id = value[2]
+                invoice_address = value[3]
+                delivery_address = value[4]
+                customer_po = value[5]
+                customer_reference = value[6]
+                quotation_template = value[7]
                 can_be_used_for_forecast = value[8]
-                pricelist = value[9]
-                payment_terms = value[10]
-                project_start_date = value[11] or False
-                project_end_date = value[12] or False
-                delivery_method = value[13]
-                point_of_contact = value[14]
-                point_of_contact_po = value[15]
-                appear_on_pdf = value[16]
-                notes = value[17]
-                order_lines_is_a_service = value[18]
-                order_lines_product = value[19]
-                order_lines_oem = value[20]
-                order_lines_description = value[21]
-                order_lines_ordered_quantity = value[22]
-                order_lines_delivered_quantity = value[23]
-                order_lines_invoiced_quantity = value[24]
-                order_lines_unit_of_measure = value[25]
-                order_lines_analytic_tags = value[26]
-                order_lines_warehouse = value[27]
-                order_lines_unit_price = value[28]
-                order_lines_taxes = value[29] or None
-                order_lines_discount = value[30]
-                warehouse = value[31]
-                shipping_policy = value[32]
-                planned_date = value[33] or False
-                requested_date = value[34] or False
-                sales_person = value[35]
-                project_manager = value[36]
-                tags = value[37]
-                sales_team = value[38]
-                online_signature = value[39]
-                online_payment = value[40]
-                company = value[41]
-                analytic_account = value[42]
-                lead_or_opportunity = value[43]
-                order_date = value[44] or False
-                fiscal_position = value[45]
-                status = value[46]
-                invoice_status = value[47]
-                source_document = value[48]
+                confirmation_date = value[9] or False
+                pricelist = value[10]
+                payment_terms = value[11]
+                project_start_date = value[12] or False
+                project_end_date = value[13] or False
+                shipping_account = value[14]
+                delivery_method = value[15]
+                point_of_contact = value[16]
+                point_of_contact_id = value[17]
+                point_of_contact_po = value[18]
+                appear_on_pdf = value[19]
+                notes = value[20]
+                order_lines_is_a_service = value[21]
+                order_lines_product = value[22]
+                order_lines_internal_reference = value[23]
+                order_lines_oem = value[24]
+                order_lines_description = value[25]
+                order_lines_ordered_quantity = value[26]
+                order_lines_delivered_quantity = value[27]
+                order_lines_invoiced_quantity = value[28]
+                order_lines_unit_of_measure = value[29]
+                order_lines_analytic_tags = value[30]
+                order_lines_warehouse = value[31]
+                order_lines_unit_price = value[32]
+                order_lines_taxes = value[33] or None
+                order_lines_discount = value[34]
+                warehouse = value[35]
+                shipping_policy = value[36]
+                planned_date = value[37] or False
+                requested_date = value[38] or False
+                sales_person = value[39]
+                project_manager = value[40]
+                tags = value[41]
+                sales_team = value[42]
+                online_signature = value[43]
+                online_payment = value[44]
+                company = value[45]
+                analytic_account = value[46]
+                lead_or_opportunity = value[47]
+                order_date = value[48] or False
+                fiscal_position = value[49]
+                invoice_status = value[50]
+                ignore_exceptions = value[51]
+                source_document = value[52]
+                campaign = value[53]
+                medium = value[54]
+                source = value[55]
+                status = value[56]
 
-                product_id = self.env['product.product'].search([('name', '=', order_lines_product)], limit=1)
+                print(order_lines_product)
+                if order_lines_product == " ":
+                    order_lines_product = 'Service'
+                    order_lines_internal_reference = 'Service'
+
+                product_id = self.env['product.product'].search([('name', '=', order_lines_product), ('default_code', '=', order_lines_internal_reference)], limit=1)
                 product_uom_id = self.env['uom.uom'].search([('name', '=', order_lines_unit_of_measure)], limit=1)
                 analytic_tags_ids = self.env["account.analytic.tag"].search([('name', '=', order_lines_analytic_tags)], limit=1)
                 tax_id = self.env["account.tax"].search([('name', '=', order_lines_taxes)], limit=1)
                 order_lines_warehouse_id = self.env["stock.warehouse"].search([('name', '=', order_lines_warehouse)], limit=1)
-                print(analytic_tags_ids.ids, tax_id.ids)
+                # print(analytic_tags_ids.ids, tax_id.ids)
 
                 warehouse_id = self.env["stock.warehouse"].search([('name', '=', warehouse)], limit=1)
                 user_id = self.env["res.users"].search(
@@ -108,24 +119,13 @@ class SOWizard(models.TransientModel):
                 analytic_account_id = self.env["account.analytic.account"].search(
                     [('name', '=', analytic_account), '|', ('active', '=', True), ('active', '=', False)], limit=1)
                 opportunity_id = self.env["crm.lead"].search([('name', '=', lead_or_opportunity)], limit=1)
+
                 lst = []
                 if order_reference:
                     if order_lines_product:
-                        if not product_id:
-                            products_val = {
-                                'name': order_lines_product
-                            }
-                            product_id = self.env['product.product'].create(products_val)
-
-                        if not analytic_tags_ids:
-                            analytic_tags_vals = {
-                                'name': analytic_tags_ids
-                            }
-                            analytic_tags_ids = self.env['account.analytic.tag'].create(analytic_tags_vals)
-
                         so_line_vals = (0, 0, {
                             'is_service': True if order_lines_is_a_service == "True" else False,
-                            'product_id': product_id[0].id,
+                            'product_id': product_id.id,
                             'product_oem_code': order_lines_oem,
                             'name': order_lines_description,
                             'product_uom_qty': order_lines_ordered_quantity,
@@ -135,33 +135,27 @@ class SOWizard(models.TransientModel):
                             'price_unit': order_lines_unit_price,
                             'tax_id': [(6, 0, tax_id.ids)],
                             'discount': order_lines_discount,
+                            # 'display_type': 'line_note',
                             # 'order_id': so_id.id
                         })
+                        print("so_line_vals1", so_line_vals)
                         lst.append(so_line_vals)
-                        sol_id = self.env['sale.order.line'].create(so_line_vals)
-                        print("sol_id", sol_id)
-                        print(so_line_vals)
 
-                    part_id = self.env["res.partner"].search([('name', '=', customer), '|', ('active', '=', True), ('active', '=', False)], limit=1)
+                    part_id = self.env["res.partner"].search([('name', '=', customer), ('id_custom', '=', customer_id), '|', ('active', '=', True), ('active', '=', False)], limit=1)
                     invoice_addr = self.env["res.partner"].search([('parent_id', '=', part_id.id), ("type", "=", 'invoice')], limit=1)
-                    delivery_addr = self.env["res.partner"].search([('parent_id', '=', part_id.id), ("type", "=", 'delivery')], limit=1)
-                    # part_invo_id = self.env["res.partner"].search([('name', '=', invoice_address)])
-                    # part_ship_id = self.env["res.partner"].search([('name', '=', delivery_address)])
-                    sale_ord_temp_id = self.env["sale.order.template"].search([('name', '=', quotation_template)], limit=1)
-                    priceli_id = self.env["product.pricelist"].search([('name', '=', pricelist)], limit=1)
-                    point_of_contact_id = self.env["res.partner"].search([('name', '=', point_of_contact), '|', ('active', '=', True), ('active', '=', False)], limit=1)
-
-                    if not part_id:
-                        cutomers_val = {
-                            'name': customer
-                        }
-                        part_id = self.env['res.partner'].create(cutomers_val)
-
                     if not invoice_addr:
                         invoice_addr = part_id
 
+                    delivery_addr = self.env["res.partner"].search([('parent_id', '=', part_id.id), ("type", "=", 'delivery')], limit=1)
                     if not delivery_addr:
                         delivery_addr = part_id
+
+                    sale_ord_temp_id = self.env["sale.order.template"].search([('name', '=', quotation_template)], limit=1)
+                    priceli_id = self.env["product.pricelist"].search([('name', '=', pricelist)], limit=1)
+                    point_of_contact_id = self.env["res.partner"].search([('name', '=', point_of_contact), ('id_custom', '=', point_of_contact_id), '|', ('active', '=', True), ('active', '=', False)], limit=1)
+                    campaign_id = self.env["utm.campaign"].search([('name', '=', campaign)])
+                    medium_id = self.env["utm.medium"].search([('name', '=', medium)])
+                    source_id = self.env["utm.source"].search([('name', '=', source)])
 
                     search_sale_order = self.env["sale.order"].search([('name', '=', order_reference)])
 
@@ -202,14 +196,15 @@ class SOWizard(models.TransientModel):
                         'tag_ids': [(6, 0, tag_ids.ids)],
                         'analytic_account_id': analytic_account_id.id,
                         'opportunity_id': opportunity_id.id,
+                        'campaign_id': campaign_id.id,
+                        'medium_id': medium_id.id,
+                        'source_id': source_id.id,
                         'order_line': lst,
                     }
                     if not search_sale_order:
                         so_id = self.env['sale.order'].create(so_val)
                         print("so_id", so_id)
                         print(so_val)
-                    # else:
-                    #     search_sale_order.write(so_val)
                 else:
                     if order_lines_product:
                         so_line_vals = (0, 0, {
