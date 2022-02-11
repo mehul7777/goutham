@@ -58,6 +58,9 @@ class ProjectWizard(models.TransientModel):
                 sales_order = value[21]
                 active = value[22]
 
+                if not analytic_account:
+                    analytic_account = 'NOT DEFINE'
+
                 user_id = self.env['res.users'].search([('name', '=', project_manager), '|', ('active', '=', True), ('active', '=', False)], limit=1)
                 custom_created_by_id = self.env['res.users'].search([('name', '=', created_by), '|', ('active', '=', True), ('active', '=', False)], limit=1)
                 partner_id = self.env['res.partner'].search([('name', '=', customer), ('id_custom', '=', customer_id)], limit=1)
