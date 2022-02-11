@@ -64,5 +64,4 @@ class AnalyticAccountWizard(models.TransientModel):
                     analytic_account_id = self.env['account.analytic.account'].create(analytic_account_val)
                     print(analytic_account_id)
                 else:
-                    search_analytic_account.write(analytic_account_val)
-
+                    search_analytic_account.write({'active': False if active == "False" else True})
