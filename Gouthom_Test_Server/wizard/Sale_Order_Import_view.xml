@@ -10,7 +10,8 @@
                     <field name="load_file"/>
                 </group>
                 <footer>
-                    <button name="import_so_data" string="Import" type="object" class="oe_highlight"/>
+                    <button name="import_so_data" string="Import Sale Order" type="object" class="oe_highlight"/>
+                    <button name="create_so_line_data" string="Create Sale Order Line" type="object" class="oe_highlight"/>
                     <button string="Cancel" class="btn btn-default" special="cancel"/>
                 </footer>
             </form>

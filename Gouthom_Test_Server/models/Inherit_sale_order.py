@@ -16,6 +16,7 @@ class SaleOrder(models.Model):
     notes = fields.Text(string="Notes")
     planned_date = fields.Datetime(string="Planned Date")
     requested_date = fields.Datetime(string="Requested Date")
+    custom_so_id = fields.Integer(string="Custom SO ID")
 
 
 class SaleOrderLine(models.Model):
