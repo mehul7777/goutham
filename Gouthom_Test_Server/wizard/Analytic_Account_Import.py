@@ -43,7 +43,7 @@ class AnalyticAccountWizard(models.TransientModel):
                 currency = value[7]
                 active = value[8]
 
-                search_analytic_account = self.env['account.analytic.account'].search([('name', '=', analytic_account)])
+                search_analytic_account = self.env['account.analytic.account'].search([('name', '=', analytic_account), ('custom_id', '=', id)])
 
                 partner_id = self.env['res.partner'].search([('name', '=', customer), ('id_custom', '=', customer_id)])
                 group_id = self.env['account.analytic.group'].search([('name', '=', group)])
@@ -64,4 +64,5 @@ class AnalyticAccountWizard(models.TransientModel):
                     analytic_account_id = self.env['account.analytic.account'].create(analytic_account_val)
                     print(analytic_account_id)
                 else:
-                    search_analytic_account.write({'active': False if active == "False" else True})
+                    search_analytic_account.write(analytic_account_val)
+
