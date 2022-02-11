@@ -69,6 +69,9 @@ class PO1Wizard(models.TransientModel):
                     order_lines_product = 'Service'
                     order_lines_internal_reference = 'Service'
 
+                if not order_lines_analytic_account:
+                    order_lines_analytic_account = 'NOT DEFINE'
+
                 c_id = self.env['res.currency'].search([('name', '=', currency)], limit=1)
                 part_id = self.env['res.partner'].search([('name', '=', vendor), ('id_custom', '=', vendor_id), '|', ('active', '=', True), ('active', '=', False)], limit=1)
                 use_id = self.env['res.users'].search([('name', '=', purchase_representative), '|', ('active', '=', True), ('active', '=', False)], limit=1)

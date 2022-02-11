@@ -48,19 +48,20 @@ class ProjectWizard(models.TransientModel):
                 customer = value[11]
                 customer_id = value[12]
                 analytic_account = value[13]
-                sub_task_project = value[14]
-                sequence = value[15]
-                company = value[16]
-                working_time = value[17]
-                alias_name = value[18]
-                alias_contact_name = value[19]
-                sales_order = value[20]
-                active = value[21]
+                analytic_account_id = value[14]
+                sub_task_project = value[15]
+                sequence = value[16]
+                company = value[17]
+                working_time = value[18]
+                alias_name = value[19]
+                alias_contact_name = value[20]
+                sales_order = value[21]
+                active = value[22]
 
                 user_id = self.env['res.users'].search([('name', '=', project_manager), '|', ('active', '=', True), ('active', '=', False)], limit=1)
                 custom_created_by_id = self.env['res.users'].search([('name', '=', created_by), '|', ('active', '=', True), ('active', '=', False)], limit=1)
                 partner_id = self.env['res.partner'].search([('name', '=', customer), ('id_custom', '=', customer_id)], limit=1)
-                analytic_account_id = self.env['account.analytic.account'].search([('name', '=', analytic_account), '|', ('active', '=', True), ('active', '=', False)], limit=1)
+                analytic_account_id = self.env['account.analytic.account'].search([('name', '=', analytic_account), ('custom_id', '=', analytic_account_id), '|', ('active', '=', True), ('active', '=', False)], limit=1)
                 subtask_project_id = self.env['project.project'].search([('name', '=', sub_task_project)], limit=1)
                 company_id = self.env['res.company'].search([('name', '=', company)], limit=1)
                 resource_calendar_id = self.env['resource.calendar'].search([('name', '=', working_time)], limit=1)
