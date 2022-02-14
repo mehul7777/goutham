@@ -69,6 +69,7 @@ class PO1Wizard(models.TransientModel):
                 search_purchase_order = self.env['purchase.order'].search([('name', '=', order_reference), ('custom_po_id', '=', id)])
 
                 po_order_val = {
+                    'custom_po_id': id,
                     'name': order_reference,
                     'partner_id': part_id.id,
                     'partner_ref': vendor_reference,
