@@ -230,7 +230,7 @@ class SOWizard(models.TransientModel):
                         'price_unit': order_lines_unit_price,
                         'tax_id': [(6, 0, tax_id.ids)],
                         'discount': order_lines_discount,
-                        'display_type': 'line_note' if not order_lines_unit_of_measure,
+                        'display_type': 'line_note' if not order_lines_unit_of_measure else None,
                         'order_id': order_id.id
                     }
                     self.env["sale.order.line"].create(so_line_vals)
