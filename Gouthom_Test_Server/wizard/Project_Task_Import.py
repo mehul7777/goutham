@@ -76,7 +76,7 @@ class ProjectTaskWizard(models.TransientModel):
                         'user_id': user_id.id,
                         'starting_date': starting_date,
                         'date_end': ending_date,
-                        'sale_line_id': sale_line_id.id,
+                        # 'sale_line_id': sale_line_id.id,
                         'tag_ids': [(6, 0, tag_ids.ids)],
                         'date_deadline': deadline,
                         'create_date': created_on,
