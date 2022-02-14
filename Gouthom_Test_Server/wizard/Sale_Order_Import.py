@@ -216,6 +216,7 @@ class SOWizard(models.TransientModel):
                 order_lines_warehouse_id = self.env["stock.warehouse"].search([('name', '=', order_lines_warehouse)],
                                                                               limit=1)
                 order_id = self.env["sale.order"].search([('custom_so_id', '=', sale_order_id)])
+
                 if order_lines_product:
                     so_line_vals = {
                         'is_service': True if order_lines_is_a_service == "True" else False,
@@ -229,13 +230,10 @@ class SOWizard(models.TransientModel):
                         'price_unit': order_lines_unit_price,
                         'tax_id': [(6, 0, tax_id.ids)],
                         'discount': order_lines_discount,
-                        # 'display_type': 'line_note' if not order_lines_unit_of_measure else False,
+                        'display_type': 'line_note' if not order_lines_unit_of_measure else False,
                         'order_id': order_id.id
                     }
-                    if order_lines_unit_of_measure:
-                        self.env["sale.order.line"].create(so_line_vals)
-                    else:
-                        self.env["sale.order.line"].create({'order_id': order_id.id, 'display_type': 'line_note'})
+                    self.env["sale.order.line"].create(so_line_vals)
 
     # def import_so_data(self):
     #     print("Import is working")
