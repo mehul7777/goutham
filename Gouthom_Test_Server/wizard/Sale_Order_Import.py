@@ -207,7 +207,7 @@ class SOWizard(models.TransientModel):
                     order_lines_internal_reference = 'Service'
 
                 product_id = self.env['product.product'].search(
-                    [('name', '=', order_lines_product), ('default_code', '=', order_lines_internal_reference)],
+                    [('name', '=', order_lines_product), ('default_code', '=', order_lines_internal_reference), '|', ('active', '=', True), ('active', '=', False)],
                     limit=1)
                 product_uom_id = self.env['uom.uom'].search([('name', '=', order_lines_unit_of_measure)], limit=1)
                 analytic_tags_ids = self.env["account.analytic.tag"].search([('name', '=', order_lines_analytic_tags)],
