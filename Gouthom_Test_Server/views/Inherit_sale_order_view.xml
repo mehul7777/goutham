@@ -52,6 +52,9 @@
                 <xpath expr="//field[@name='payment_term_id']" position="after">
                     <field name="carrier_id"/>
                 </xpath>
+                <xpath expr="//field[@name='partner_shipping_id']" position="after">
+                    <field name="custom_so_id"/>
+                </xpath>
             </field>
         </record>
     </data>
