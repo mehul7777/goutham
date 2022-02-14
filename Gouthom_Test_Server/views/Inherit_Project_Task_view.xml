@@ -24,6 +24,9 @@
                 <xpath expr="//field[@name='project_id']" position="before">
                     <field name="custom_task_id"/>
                 </xpath>
+                <xpath expr="//field[@name='partner_id']" position="before">
+                    <field name="company_id"/>
+                </xpath>
             </field>
         </record>
     </data>

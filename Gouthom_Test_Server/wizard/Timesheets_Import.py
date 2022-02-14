@@ -33,22 +33,27 @@ class TimesheetWizard(models.TransientModel):
                 header_list.append(value)
             else:
                 # print(value)
-                date = value[0]
-                employee = value[1]
-                project = value[2]
-                task = value[3]
-                description = value[4]
-                quantity = value[5]
-                company = value[6]
-                analytic_account = value[7]
+                id = [0]
+                date = value[1]
+                employee = value[2]
+                employee_custom_id = value[3]
+                project = value[4]
+                project_custom_id = value[5]
+                task = value[6]
+                task_custom_id = value[7]
+                description = value[8]
+                quantity = value[9]
+                company = value[10]
+                analytic_account = value[11]
 
-                employee_id = self.env['hr.employee'].search([('name', '=', employee), '|', ('active', '=', True), ('active', '=', False)], limit=1)
-                project_id = self.env['project.project'].search([('name', '=', project), '|', ('active', '=', True), ('active', '=', False)], limit=1)
-                task_id = self.env['project.task'].search([('name', '=', task), '|', ('active', '=', True), ('active', '=', False)], limit=1)
+                employee_id = self.env['hr.employee'].search([('name', '=', employee), ('custom_id', '=', employee_custom_id), '|', ('active', '=', True), ('active', '=', False)], limit=1)
+                project_id = self.env['project.project'].search([('name', '=', project), ('custom_id', '=', project_custom_id), '|', ('active', '=', True), ('active', '=', False)], limit=1)
+                task_id = self.env['project.task'].search([('name', '=', task),('custom_task_id', '=', task_custom_id), '|', ('active', '=', True), ('active', '=', False)], limit=1)
                 account_id = self.env['account.analytic.account'].search([('name', '=', analytic_account), '|', ('active', '=', True), ('active', '=', False)], limit=1)
                 company_id = self.env['res.company'].search([('name', '=', company)], limit=1)
 
                 timesheet_val = {
+                    'custom_timesheet_id': id,
                     'date': date,
                     'employee_id': employee_id.id,
                     'project_id': project_id.id,
