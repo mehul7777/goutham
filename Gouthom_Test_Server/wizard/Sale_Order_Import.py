@@ -232,7 +232,10 @@ class SOWizard(models.TransientModel):
                         'display_type': 'line_note' if not order_lines_unit_of_measure else False,
                         'order_id': order_id.id
                     }
-                    self.env["sale.order.line"].create(so_line_vals)
+                    if order_lines_unit_of_measure:
+                        self.env["sale.order.line"].create(so_line_vals)
+                    else:
+                        self.env["sale.order.line"].create({'display_type': 'line_note'})
 
     # def import_so_data(self):
     #     print("Import is working")
