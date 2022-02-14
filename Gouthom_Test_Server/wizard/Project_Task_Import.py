@@ -34,29 +34,31 @@ class ProjectTaskWizard(models.TransientModel):
                 header_list.append(value)
             else:
                 # print(value)
-                title = value[0]
-                project = value[1]
-                assigned_to = value[2]
-                starting_date = value[3] or False
-                ending_date = value[4] or False
-                sales_order_item = value[5]
-                tags = value[6]
-                deadline = value[7] or False
-                created_on = value[8]
-                sequence = value[9]
-                customer = value[10]
-                customer_id = value[11]
-                email = value[12]
-                watchers_emails = value[13]
-                parent_task = value[14]
-                company = value[15]
-                cover_image = value[16]
-                assigning_date = value[17] or False
-                last_stage_update = value[18] or False
-                stage = value[19]
-                active = value[20]
+                id = value[0]
+                title = value[1]
+                project = value[2]
+                project_id = value[3]
+                assigned_to = value[4]
+                starting_date = value[5] or False
+                ending_date = value[6] or False
+                sales_order_item = value[7]
+                tags = value[8]
+                deadline = value[9] or False
+                created_on = value[10]
+                sequence = value[11]
+                customer = value[12]
+                customer_id = value[13]
+                email = value[14]
+                watchers_emails = value[15]
+                parent_task = value[16]
+                company = value[17]
+                cover_image = value[18]
+                assigning_date = value[19] or False
+                last_stage_update = value[20] or False
+                stage = value[21]
+                active = value[22]
 
-                project_id = self.env['project.project'].search([('name', '=', project), '|', ('active', '=', True), ('active', '=', False)], limit=1)
+                project_id = self.env['project.project'].search([('name', '=', project), ('custom_id', '=', project_id), '|', ('active', '=', True), ('active', '=', False)], limit=1)
                 user_id = self.env['res.users'].search([('name', '=', assigned_to), '|', ('active', '=', True), ('active', '=', False)], limit=1)
                 sale_line_id = self.env['sale.order.line'].search([('name', '=', sales_order_item)], limit=1)
                 tag_ids = self.env['project.tags'].search([('name', '=', tags)], limit=1)
@@ -68,6 +70,7 @@ class ProjectTaskWizard(models.TransientModel):
 
                 if title:
                     tasks_val = {
+                        'custom_task_id': id,
                         'name': title,
                         'project_id': project_id.id,
                         'user_id': user_id.id,

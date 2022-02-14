@@ -6,3 +6,4 @@ class ProTask(models.Model):
 
     starting_date = fields.Datetime(string="Starting Date")
     custom_create_date = fields.Datetime(string="Created On")
+    custom_task_id = fields.Integer(string="Custom Task ID")
