@@ -130,31 +130,49 @@ class PO1Wizard(models.TransientModel):
                 if not order_lines_analytic_account:
                     order_lines_analytic_account = 'NOT DEFINE'
 
-                pro_id = self.env['product.product'].search(
-                    [('name', '=', order_lines_product), ('default_code', '=', order_lines_internal_reference), '|',
-                     ('active', '=', True), ('active', '=', False)], limit=1)
+                # pro_id = self.env['product.product'].search(
+                #     [('name', '=', order_lines_product), ('default_code', '=', order_lines_internal_reference), '|',
+                #      ('active', '=', True), ('active', '=', False)], limit=1)
+                pro_id = False
+                product_uom_id = self.env['uom.uom'].search([('name', '=', order_lines_unit_of_measure)], limit=1)
+                product_count = self.env['product.product'].search_count(
+                    [('name', '=', order_lines_product), '|', ('active', '=', True), ('active', '=', False)])
+                if product_count:
+                    if product_count > 1:
+                        pro_id = self.env['product.product'].search(
+                            [('uom_id', '=', product_uom_id.id), ('name', '=', order_lines_product),
+                             ('default_code', '=', order_lines_internal_reference), '|', ('active', '=', True),
+                             ('active', '=', False)])
+                    else:
+                        pro_id = self.env['product.product'].search(
+                            [('name', '=', order_lines_product), '|', ('active', '=', True), ('active', '=', False)])
+
                 account_analytic_id = self.env['account.analytic.account'].search(
                     [('name', '=', order_lines_analytic_account), '|', ('active', '=', True), ('active', '=', False)],
                     limit=1)
                 tax_id = self.env['account.tax'].search([('name', '=', order_lines_taxes)], limit=1)
                 analytic_tag_ids = self.env['account.analytic.tag'].search([('name', '=', order_lines_analytic_tags)])
-                product_uom_id = self.env['uom.uom'].search([('name', '=', order_lines_unit_of_measure)], limit=1)
 
                 order_id = self.env["purchase.order"].search([('custom_po_id', '=', purchase_order_id)])
 
-                po_line_vals = {
-                    'product_id': pro_id.id,
-                    'name': order_lines_description,
-                    'date_planned': order_lines_scheduled_date,
-                    'account_analytic_id': account_analytic_id.id,
-                    'analytic_tag_ids': [(6, 0, analytic_tag_ids.ids)],
-                    'product_qty': order_lines_quantity,
-                    'product_uom': product_uom_id.id,
-                    'price_unit': order_lines_price_unit,
-                    'taxes_id': [(6, 0, tax_id.ids)],
-                    'order_id': order_id.id
-                }
-                self.env["purchase.order.line"].create(po_line_vals)
+                lst = []
+                if order_lines_product and pro_id:
+                    po_line_vals = {
+                        'product_id': pro_id.id,
+                        'name': order_lines_description,
+                        'date_planned': order_lines_scheduled_date,
+                        'account_analytic_id': account_analytic_id.id,
+                        'analytic_tag_ids': [(6, 0, analytic_tag_ids.ids)],
+                        'product_qty': order_lines_quantity,
+                        'product_uom': product_uom_id.id,
+                        'price_unit': order_lines_price_unit,
+                        'taxes_id': [(6, 0, tax_id.ids)],
+                        'order_id': order_id.id
+                    }
+                    self.env["purchase.order.line"].create(po_line_vals)
+                else:
+                    lst.append(order_lines_product)
+                    order_id.write({'note': lst})
 
     # def import_po1_data(self):
     #     print("Import is working")
