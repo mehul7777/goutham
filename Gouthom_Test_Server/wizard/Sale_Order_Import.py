@@ -205,19 +205,28 @@ class SOWizard(models.TransientModel):
                 if not order_lines_product:
                     order_lines_product = 'Service'
                     order_lines_internal_reference = 'Service'
-
-                product_id = self.env['product.product'].search(
-                    [('name', '=', order_lines_product), ('default_code', '=', order_lines_internal_reference), '|', ('active', '=', True), ('active', '=', False)],
-                    limit=1)
+                product_id = False
                 product_uom_id = self.env['uom.uom'].search([('name', '=', order_lines_unit_of_measure)], limit=1)
+                product_count = self.env['product.product'].search_count(
+                    [('name', '=', order_lines_product), '|', ('active', '=', True), ('active', '=', False)])
+                if product_count:
+                    if product_count > 1:
+                        product_id = self.env['product.product'].search(
+                            [('uom_id', '=', product_uom_id.id), ('name', '=', order_lines_product),
+                             ('default_code', '=', order_lines_internal_reference), '|', ('active', '=', True),
+                             ('active', '=', False)])
+                    else:
+                        product_id = self.env['product.product'].search(
+                            [('name', '=', order_lines_product), '|', ('active', '=', True), ('active', '=', False)])
+
                 analytic_tags_ids = self.env["account.analytic.tag"].search([('name', '=', order_lines_analytic_tags)],
                                                                             limit=1)
                 tax_id = self.env["account.tax"].search([('name', '=', order_lines_taxes)], limit=1)
                 order_lines_warehouse_id = self.env["stock.warehouse"].search([('name', '=', order_lines_warehouse)],
                                                                               limit=1)
                 order_id = self.env["sale.order"].search([('custom_so_id', '=', sale_order_id)])
-
-                if order_lines_product:
+                lst = []
+                if order_lines_product and product_id:
                     so_line_vals = {
                         'is_service': True if order_lines_is_a_service == "True" else False,
                         'product_id': product_id.id,
@@ -234,6 +243,10 @@ class SOWizard(models.TransientModel):
                         'order_id': order_id.id
                     }
                     self.env["sale.order.line"].create(so_line_vals)
+                else:
+                    lst.append(order_lines_product)
+                    order_id.write({'note': lst})
+
 
     # def import_so_data(self):
     #     print("Import is working")
