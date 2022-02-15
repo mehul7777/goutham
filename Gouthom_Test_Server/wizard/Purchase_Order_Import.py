@@ -142,10 +142,10 @@ class PO1Wizard(models.TransientModel):
                         pro_id = self.env['product.product'].search(
                             [('uom_id', '=', product_uom_id.id), ('name', '=', order_lines_product),
                              ('default_code', '=', order_lines_internal_reference), '|', ('active', '=', True),
-                             ('active', '=', False)])
+                             ('active', '=', False)], limit=1)
                     else:
                         pro_id = self.env['product.product'].search(
-                            [('name', '=', order_lines_product), '|', ('active', '=', True), ('active', '=', False)])
+                            [('name', '=', order_lines_product), '|', ('active', '=', True), ('active', '=', False)], limit=1)
 
                 account_analytic_id = self.env['account.analytic.account'].search(
                     [('name', '=', order_lines_analytic_account), '|', ('active', '=', True), ('active', '=', False)],
