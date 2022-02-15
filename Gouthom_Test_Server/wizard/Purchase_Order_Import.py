@@ -172,7 +172,7 @@ class PO1Wizard(models.TransientModel):
                     self.env["purchase.order.line"].create(po_line_vals)
                 else:
                     lst.append(order_lines_product)
-                    order_id.write({'note': lst})
+                    order_id.write({'notes': lst})
 
     # def import_po1_data(self):
     #     print("Import is working")
