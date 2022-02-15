@@ -33,7 +33,7 @@ class TimesheetWizard(models.TransientModel):
                 header_list.append(value)
             else:
                 # print(value)
-                id = [0]
+                id = value[0]
                 date = value[1]
                 employee = value[2]
                 employee_custom_id = value[3]
