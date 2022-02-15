@@ -29,6 +29,7 @@
         'wizard/Customer_Invoices_Import_view.xml',
         'wizard/Vendor_Bills_Import_view.xml',
         'wizard/Account_Journal_Import_view.xml',
+        'wizard/Hr_Expense_Import_view.xml',
         'views/Inherit_Template_view.xml',
         'views/inherit_res_partner.xml',
         'views/Inherit_sale_order_view.xml',
@@ -39,6 +40,7 @@
         'views/Inherit_Project_Task_view.xml',
         'views/Inherit_hr_employee_view.xml',
         'views/Inherit_Account_Move_view.xml',
+        'views/Inherit_Hr_Expense_view.xml',
 
     ],
     'installable': True,
