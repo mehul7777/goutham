@@ -12,6 +12,7 @@
                 <footer>
                     <button name="import_po1_data" string="Import Purchase Order" type="object" class="oe_highlight"/>
                     <button name="create_po1_line_data" string="Create Purchase Order Line" type="object" class="oe_highlight"/>
+                    <button name="change_status_of_po" string="Change PO Status" type="object" class="oe_highlight"/>
                     <button string="Cancel" class="btn btn-default" special="cancel"/>
                 </footer>
             </form>

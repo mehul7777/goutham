@@ -12,6 +12,7 @@
                 <footer>
                     <button name="import_so_data" string="Import Sale Order" type="object" class="oe_highlight"/>
                     <button name="create_so_line_data" string="Create Sale Order Line" type="object" class="oe_highlight"/>
+                    <button name="change_status_of_so" string="Change SO Status" type="object" class="oe_highlight"/>
                     <button string="Cancel" class="btn btn-default" special="cancel"/>
                 </footer>
             </form>

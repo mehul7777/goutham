@@ -247,6 +247,34 @@ class SOWizard(models.TransientModel):
                     lst.append(order_lines_product)
                     order_id.write({'note': lst})
 
+    def change_status_of_so(self):
+        print("Change status of so is working")
+        csv_data = self.load_file
+        file_obj = TemporaryFile('wb+')
+        csv_data = base64.decodebytes(csv_data)
+        file_obj.write(csv_data)
+        file_obj.seek(0)
+        str_csv_data = file_obj.read().decode('utf-8')
+        lis = csv.reader(io.StringIO(str_csv_data), delimiter=',')
+        row_num = 0
+        header_list = []
+        data_dict = {}
+        for row in lis:
+            data_dict.update({row_num: row})
+            row_num += 1
+        for key, value in data_dict.items():
+            if key == 0:
+                header_list.append(value)
+            else:
+                print(value)
+                id = value[0]
+                order_reference = value[1]
+                status = value[2]
+
+                search_sale_order = self.env["sale.order"].search([('custom_so_id', '=', id)])
+
+                if search_sale_order:
+                    search_sale_order.write({'name': order_reference, 'state': status})
 
     # def import_so_data(self):
     #     print("Import is working")
