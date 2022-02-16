@@ -271,10 +271,10 @@ class SOWizard(models.TransientModel):
                 order_reference = value[1]
                 status = value[2]
 
-                search_sale_order = self.env["sale.order"].search([('custom_so_id', '=', id)])
+                search_sale_order = self.env["sale.order"].search([('name', '=', order_reference), ('custom_so_id', '=', id)])
 
                 if search_sale_order:
-                    search_sale_order.write({'name': order_reference, 'state': status})
+                    search_sale_order.write({'state': status})
 
     # def import_so_data(self):
     #     print("Import is working")
