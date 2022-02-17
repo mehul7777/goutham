@@ -11,6 +11,17 @@ class InheritAccountMove(models.Model):
     account_id = fields.Many2one(comodel_name="account.account", string="Account")
     journal_entry_id = fields.Many2one(comodel_name="account.move", string="Journal Entry")
     source_document = fields.Char(string="Source Document")
+    custom_id = fields.Integer(string="Custom ID")
+    purchase_representative_id = fields.Many2one(comodel_name="res.users", string="Purchase Representative")
+
+
+class InheritAccountMoveLine(models.Model):
+    _inherit = "account.move.line"
+
+    x_studio_category = fields.Selection([
+        ('direct', "Direct"),
+        ('indirect', "InDirect"),
+    ], string="Category")
 
 
 class InheritAccountPayment(models.Model):

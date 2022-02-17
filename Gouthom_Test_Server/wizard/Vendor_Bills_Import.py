@@ -112,35 +112,38 @@ class VendorBillWizard(models.TransientModel):
                 type = value[0]
                 number = value[1]
                 partner = value[2]
-                payment_ref = value[3]
-                invoice_date = value[4]
-                due_date = value[5]
-                currency = value[6]
-                invoice_lines_product = value[7]
-                invoice_lines_description = value[8]
-                invoice_lines_asset_category = value[9]
-                invoice_lines_account = value[10]
-                invoice_lines_analytic_account = value[11]
-                invoice_lines_analytic_tags = value[12]
-                invoice_lines_category = value[13]
-                invoice_lines_quantity = value[14]
-                invoice_lines_unit_of_measure = value[15]
-                invoice_lines_unit_price = value[16]
-                invoice_lines_discount = value[17]
-                invoice_lines_taxes = value[18]
-                journal = value[19]
-                account = value[20]
-                accounting_date = value[21]
-                reference_or_description = value[22]
-                incoterm = value[23]
-                fiscal_position = value[24]
-                payment_terms = value[25]
-                journal_entry = value[26]
-                company = value[27]
-                status = value[28]
+                partner_custom_id = value[3]
+                payment_ref = value[4]
+                source_document = value[5]
+                invoice_date = value[6]
+                due_date = value[7]
+                currency = value[8]
+                invoice_lines_product = value[9]
+                invoice_lines_product_internal_reference = value[10]
+                invoice_lines_description = value[11]
+                invoice_lines_asset_category = value[12]
+                invoice_lines_account = value[13]
+                invoice_lines_analytic_account = value[14]
+                invoice_lines_analytic_tags = value[15]
+                invoice_lines_category = value[16]
+                invoice_lines_quantity = value[17]
+                invoice_lines_unit_of_measure = value[18]
+                invoice_lines_unit_price = value[19]
+                invoice_lines_discount = value[20]
+                invoice_lines_taxes = value[21]
+                purchase_representative = value[22]
+                journal = value[23]
+                account = value[24]
+                accounting_date = value[25]
+                reference_or_description = value[26]
+                incoterm = value[27]
+                fiscal_position = value[28]
+                payment_terms = value[29]
+                journal_entry = value[30]
+                company = value[31]
 
                 # For main class
-                partner_id = self.env["res.partner"].search([('name', '=', partner), '|', ('active', '=', True), ('active', '=', False)], limit=1)
+                partner_id = self.env["res.partner"].search([('name', '=', partner), ('id_custom', '=', partner_custom_id), '|', ('active', '=', True), ('active', '=', False)], limit=1)
                 currency_id = self.env["res.currency"].search([('name', '=', currency)], limit=1)
                 journal_id = self.env["account.journal"].search([('name', '=', journal)], limit=1)
                 account_id = self.env["account.account"].search([('name', '=', account)], limit=1)
@@ -151,7 +154,8 @@ class VendorBillWizard(models.TransientModel):
                 company_id = self.env["res.company"].search([('name', '=', company)], limit=1)
 
                 # For one2many
-                product_id = self.env["product.product"].search([('name', '=', invoice_lines_product)], limit=1)
+                product_id = self.env["product.product"].search(["|", ('name', '=', invoice_lines_product),
+                        ('default_code', '=', invoice_lines_product_internal_reference), '|', ('active', '=', True), ('active', '=', False)], limit=1)
                 asset_category_id = self.env["account.asset.category"].search([('name', '=', invoice_lines_asset_category)], limit=1)
                 invoice_line_account_id = self.env["account.account"].search([('name', '=', invoice_lines_account)], limit=1)
                 analytic_account_id = self.env['account.analytic.account'].search(
@@ -161,6 +165,9 @@ class VendorBillWizard(models.TransientModel):
                                                                            limit=1)
                 product_uom_id = self.env['uom.uom'].search([('name', '=', invoice_lines_unit_of_measure)], limit=1)
                 tax_ids = self.env['account.tax'].search([('name', '=', invoice_lines_taxes)], limit=1)
+                purchase_representative_id = self.env['res.users'].search(
+                    [('name', '=', purchase_representative), '|', ('active', '=', True), ('active', '=', False)],
+                    limit=1)
 
                 lst = []
                 if type:
@@ -172,7 +179,7 @@ class VendorBillWizard(models.TransientModel):
                             'account_id': invoice_line_account_id.id,
                             'analytic_account_id': analytic_account_id.id,
                             'analytic_tag_ids': [(6, 0, analytic_tag_ids.ids)],
-                            # 'invoice_lines_category': invoice_lines_category, # create this field
+                            'x_studio_category': invoice_lines_category,
                             'quantity': invoice_lines_quantity,
                             'product_uom_id': product_uom_id.id,
                             'price_unit': invoice_lines_unit_price,
@@ -198,7 +205,9 @@ class VendorBillWizard(models.TransientModel):
                         'invoice_payment_term_id': invoice_payment_term_id.id,
                         'journal_entry_id': journal_entry_id.id,
                         'company_id': company_id.id,
-                        'state': "draft",
+                        'source_document': source_document,
+                        'purchase_representative_id': purchase_representative_id.id,
+                        'ref': reference_or_description,
                         'invoice_line_ids': lst,
                     }
                     vb_id = self.env['account.move'].sudo().create(vendor_bill_vals)
@@ -212,13 +221,14 @@ class VendorBillWizard(models.TransientModel):
                             'account_id': invoice_line_account_id.id,
                             'analytic_account_id': analytic_account_id.id,
                             'analytic_tag_ids': [(6, 0, analytic_tag_ids.ids)],
-                            # 'invoice_lines_category': invoice_lines_category, # create this field
+                            'x_studio_category': invoice_lines_category,
                             'quantity': invoice_lines_quantity,
                             'product_uom_id': product_uom_id.id,
                             'price_unit': invoice_lines_unit_price,
                             'discount': invoice_lines_discount,
                             'tax_ids': [(6, 0, tax_ids.ids)],
                         })
-                        lst.append(vendor_bill_line_vals)
-                        vb_line_id = vb_id.write({'invoice_line_ids': lst})
-                        print(vb_line_id)
+                        if vb_id:
+                            lst.append(vendor_bill_line_vals)
+                            vb_line_id = vb_id.write({'invoice_line_ids': lst})
+                            print(vb_line_id)
