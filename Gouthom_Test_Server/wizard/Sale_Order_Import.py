@@ -253,32 +253,40 @@ class SOWizard(models.TransientModel):
 
     def change_status_of_so(self):
         print("Change status of so is working")
-        csv_data = self.load_file
-        file_obj = TemporaryFile('wb+')
-        csv_data = base64.decodebytes(csv_data)
-        file_obj.write(csv_data)
-        file_obj.seek(0)
-        str_csv_data = file_obj.read().decode('utf-8')
-        lis = csv.reader(io.StringIO(str_csv_data), delimiter=',')
-        row_num = 0
-        header_list = []
-        data_dict = {}
-        for row in lis:
-            data_dict.update({row_num: row})
-            row_num += 1
-        for key, value in data_dict.items():
-            if key == 0:
-                header_list.append(value)
-            else:
-                print(value)
-                id = value[0]
-                order_reference = value[1]
-                status = value[2]
+        # csv_data = self.load_file
+        # file_obj = TemporaryFile('wb+')
+        # csv_data = base64.decodebytes(csv_data)
+        # file_obj.write(csv_data)
+        # file_obj.seek(0)
+        # str_csv_data = file_obj.read().decode('utf-8')
+        # lis = csv.reader(io.StringIO(str_csv_data), delimiter=',')
+        # row_num = 0
+        # header_list = []
+        # data_dict = {}
+        # for row in lis:
+        #     data_dict.update({row_num: row})
+        #     row_num += 1
+        # for key, value in data_dict.items():
+        #     if key == 0:
+        #         header_list.append(value)
+        #     else:
+        #         print(value)
+                # id = value[0]
+                # order_reference = value[1]
+                # status = value[2]
+                #
+                # search_sale_order = self.env["sale.order"].search([('name', '=', order_reference), ('custom_so_id', '=', id)])
+                #
+                # if search_sale_order:
+                #     search_sale_order.write({'state': status})
 
-                search_sale_order = self.env["sale.order"].search([('name', '=', order_reference), ('custom_so_id', '=', id)])
+        search_sale_order_line = self.env["sale.order.line"].search([('product_id', '=', 10252)])
 
-                if search_sale_order:
-                    search_sale_order.write({'state': status})
+        if search_sale_order_line:
+            search_sale_order_line.write({'product_uom_qty': 0.065})
+
+
+
 
     # def import_so_data(self):
     #     print("Import is working")
