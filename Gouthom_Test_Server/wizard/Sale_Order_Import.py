@@ -77,6 +77,8 @@ class SOWizard(models.TransientModel):
                 campaign = value[41]
                 medium = value[42]
                 source = value[43]
+                validity_start_date = value[44]
+                validity = value[45]
 
                 warehouse_id = self.env["stock.warehouse"].search([('name', '=', warehouse)], limit=1)
                 user_id = self.env["res.users"].search(
@@ -145,8 +147,8 @@ class SOWizard(models.TransientModel):
                     'user_id': user_id.id,
                     'project_manager': project_manager_id.id,
                     'team_id': team_id.id,
-                    'require_signature': online_signature,
-                    'require_payment': online_payment,
+                    'require_signature': True if online_signature == "True" else False,
+                    'require_payment': True if online_payment == "True" else False,
                     'company_id': company_id.id,
                     'commitment_date': confirmation_date,
                     'fiscal_position_id': fiscal_position_id.id,
@@ -160,6 +162,8 @@ class SOWizard(models.TransientModel):
                     'campaign_id': campaign_id.id,
                     'medium_id': medium_id.id,
                     'source_id': source_id.id,
+                    'x_studio_validity_start_date': validity_start_date,
+                    'validity_date': validity,
                 }
                 if not search_sale_order:
                     so_id = self.env['sale.order'].create(so_val)
@@ -267,37 +271,14 @@ class SOWizard(models.TransientModel):
                 header_list.append(value)
             else:
                 print(value)
-                # id = value[0]
-                # order_reference = value[1]
-                # status = value[2]
-                #
-                # search_sale_order = self.env["sale.order"].search([('name', '=', order_reference), ('custom_so_id', '=', id)])
-                #
-                # if search_sale_order:
-                #     search_sale_order.write({'state': status})
                 id = value[0]
                 order_reference = value[1]
-                validity_start_date = value[2]
-                validity = value[3]
-                delivery_method = value[4]
-                online_signature = value[5]
-                online_payment = value[6]
+                status = value[2]
 
-                search_sale_order = self.env["sale.order"].search(
-                    [('name', '=', order_reference), ('custom_so_id', '=', id)])
-
-                carrier_id = self.env["delivery.carrier"].search([('name', '=', delivery_method)], limit=1)
+                search_sale_order = self.env["sale.order"].search([('name', '=', order_reference), ('custom_so_id', '=', id)])
 
                 if search_sale_order:
-                    search_sale_order.write(
-                        {
-                            'x_studio_validity_start_date': validity_start_date,
-                            'validity_date': validity,
-                            'carrier_id': carrier_id.id,
-                            'require_signature': True if online_signature == "True" else False,
-                            'require_payment': True if online_payment == "True" else False,
-                        }
-                    )
+                    search_sale_order.write({'state': status})
 
     # def import_so_data(self):
     #     print("Import is working")
