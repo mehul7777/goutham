@@ -17,6 +17,7 @@ class SaleOrder(models.Model):
     planned_date = fields.Datetime(string="Planned Date")
     requested_date = fields.Datetime(string="Requested Date")
     custom_so_id = fields.Integer(string="Custom SO ID")
+    x_studio_validity_start_date = fields.Datetime(string="Validity - Start Date")
 
 
 class SaleOrderLine(models.Model):

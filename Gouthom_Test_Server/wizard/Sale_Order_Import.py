@@ -267,14 +267,37 @@ class SOWizard(models.TransientModel):
                 header_list.append(value)
             else:
                 print(value)
+                # id = value[0]
+                # order_reference = value[1]
+                # status = value[2]
+                #
+                # search_sale_order = self.env["sale.order"].search([('name', '=', order_reference), ('custom_so_id', '=', id)])
+                #
+                # if search_sale_order:
+                #     search_sale_order.write({'state': status})
                 id = value[0]
                 order_reference = value[1]
-                status = value[2]
+                validity_start_date = value[2]
+                validity = value[3]
+                delivery_method = value[4]
+                online_signature = value[5]
+                online_payment = value[6]
 
-                search_sale_order = self.env["sale.order"].search([('name', '=', order_reference), ('custom_so_id', '=', id)])
+                search_sale_order = self.env["sale.order"].search(
+                    [('name', '=', order_reference), ('custom_so_id', '=', id)])
+
+                carrier_id = self.env["delivery.carrier"].search([('name', '=', delivery_method)], limit=1)
 
                 if search_sale_order:
-                    search_sale_order.write({'state': status})
+                    search_sale_order.write(
+                        {
+                            'x_studio_validity_start_date': validity_start_date,
+                            'validity_date': validity,
+                            'carrier_id': carrier_id.id,
+                            'require_signature': True if online_signature == "True" else False,
+                            'require_payment': True if online_payment == "True" else False,
+                        }
+                    )
 
     # def import_so_data(self):
     #     print("Import is working")

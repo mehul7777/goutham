@@ -55,6 +55,9 @@
                 <xpath expr="//field[@name='partner_shipping_id']" position="after">
                     <field name="custom_so_id"/>
                 </xpath>
+                <xpath expr="//field[@name='validity_date']" position="before">
+                    <field name="x_studio_validity_start_date"/>
+                </xpath>
             </field>
         </record>
     </data>
