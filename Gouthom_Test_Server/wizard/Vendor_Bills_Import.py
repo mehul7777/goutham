@@ -143,6 +143,10 @@ class VendorBillWizard(models.TransientModel):
                 journal_entry = value[31]
                 company = value[32]
 
+                if not invoice_lines_product:
+                    invoice_lines_product = 'Service'
+                    invoice_lines_product_internal_reference = 'Service'
+
                 # For main class
                 partner_id = self.env["res.partner"].search([('name', '=', partner), ('id_custom', '=', partner_custom_id), '|', ('active', '=', True), ('active', '=', False)], limit=1)
                 currency_id = self.env["res.currency"].search([('name', '=', currency)], limit=1)
