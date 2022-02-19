@@ -121,47 +121,50 @@ class CustomerInvoiceWizard(models.TransientModel):
                 header_list.append(value)
             else:
                 print(value)
-                type = value[0]
-                number = value[1]
-                partner = value[2]
-                delivery_address = value[3]
-                payment_terms = value[4]
-                reference_description = value[5]
-                customer_po = value[6]
-                invoice_date = value[7] or False
-                due_date = value[8] or False
-                sales_person = value[9]
-                project_manager = value[10]
-                sales_team = value[11]
-                currency = value[12]
-                point_of_contact = value[13]
-                point_of_contact_po = value[14]
-                invoice_lines_product = value[15]
-                invoice_lines_description = value[16]
-                invoice_lines_account = value[17]
-                invoice_lines_analytic_account = value[18]
-                invoice_lines_analytic_tags = value[19]
-                invoice_lines_quantity = value[20]
-                invoice_lines_unit_of_measure = value[21]
-                invoice_lines_unit_price = value[22]
-                invoice_lines_discount = value[23]
-                invoice_lines_taxes = value[24]
-                journal = value[25]
-                account = value[26]
-                company = value[27]
-                payment_ref = value[28]
-                incoterm = value[29]
-                fiscal_position = value[30]
-                journal_entry = value[31]
-                source_document = value[32]
-                # tax_lines_description = value[33]
-                # tax_lines_tax_account = value[34]
-                # tax_lines_analytic_account = value[35]
-                # tax_lines_analytic_tags = value[36]
-                status = value[33]
+                id = value[0]
+                type = value[1]
+                number = value[2]
+                partner = value[3]
+                partner_custom_id = value[4]
+                delivery_address = value[5]
+                payment_terms = value[6]
+                reference_description = value[7]
+                customer_po = value[8]
+                invoice_date = value[9] or False
+                due_date = value[10] or False
+                sales_person = value[11]
+                project_manager = value[12]
+                sales_team = value[13]
+                currency = value[14]
+                point_of_contact = value[15]
+                point_of_contact_po = value[16]
+                invoice_lines_display_type = value[17]
+                invoice_lines_product = value[18]
+                invoice_lines_product_internal_reference = value[19]
+                invoice_lines_description = value[20]
+                invoice_lines_account = value[21]
+                invoice_lines_analytic_account = value[22]
+                invoice_lines_analytic_tags = value[23]
+                invoice_lines_quantity = value[24]
+                invoice_lines_unit_of_measure = value[25]
+                invoice_lines_unit_price = value[26]
+                invoice_lines_discount = value[27]
+                invoice_lines_taxes = value[28]
+                journal = value[29]
+                account = value[30]
+                company = value[31]
+                payment_ref = value[32]
+                incoterm = value[33]
+                fiscal_position = value[34]
+                journal_entry = value[35]
+                source_document = value[36]
+
+                if not invoice_lines_product and invoice_lines_unit_of_measure:
+                    invoice_lines_product = 'Service'
+                    invoice_lines_product_internal_reference = 'Service'
 
                 part_id = self.env['res.partner'].search(
-                    [('name', '=', partner), '|', ('active', '=', True), ('active', '=', False)], limit=1)
+                    [('name', '=', partner),('id_custom', '=', partner_custom_id), '|', ('active', '=', True), ('active', '=', False)], limit=1)
                 jour_id = self.env['account.journal'].search([('name', '=', journal)], limit=1)
                 ino_use_id = self.env['res.users'].search(
                     [('name', '=', sales_person), '|', ('active', '=', True), ('active', '=', False)], limit=1)
@@ -184,7 +187,7 @@ class CustomerInvoiceWizard(models.TransientModel):
                     [('name', '=', delivery_address), '|', ('active', '=', True), ('active', '=', False)], limit=1)
 
                 pro_id = self.env['product.product'].search(
-                    [('name', '=', invoice_lines_product), '|', ('active', '=', True), ('active', '=', False)], limit=1)
+                    ['|', ('name', '=', invoice_lines_product), ('default_code', '=', invoice_lines_product_internal_reference),'|', ('active', '=', True), ('active', '=', False)], limit=1)
                 acc_id = self.env['account.account'].search([('name', '=', invoice_lines_account)], limit=1)
                 ana_acc_id = self.env['account.analytic.account'].search(
                     [('name', '=', invoice_lines_analytic_account), '|', ('active', '=', True), ('active', '=', False)],
@@ -194,13 +197,15 @@ class CustomerInvoiceWizard(models.TransientModel):
                 pro_uom_id = self.env['uom.uom'].search([('name', '=', invoice_lines_unit_of_measure)], limit=1)
                 tax_ids = self.env['account.tax'].search([('name', '=', invoice_lines_taxes)], limit=1)
 
-                # tax_account_id = self.env['account.account'].search([('name', '=', tax_lines_tax_account)], limit=1)
-                # tax_analytic_account_id = self.env['account.analytic.account'].search([('name', '=', tax_lines_analytic_account), '|', ('active', '=', True), ('active', '=', False)], limit=1)
-                # tax_analytic_tag_ids = self.env['account.analytic.tag'].search([('name', '=', tax_lines_analytic_tags)], limit=1)
-
                 lst = []
-                # tax_lines_lst = []
                 if type:
+                    if not invoice_lines_unit_of_measure:
+                        vals = (0, 0, {
+                            'display_type': invoice_lines_display_type,
+                            'name': invoice_lines_description,
+                        })
+
+                        lst.append(vals)
                     if invoice_lines_product:
                         vals = (0, 0, {
                             'product_id': pro_id.id,
@@ -217,17 +222,8 @@ class CustomerInvoiceWizard(models.TransientModel):
 
                         lst.append(vals)
 
-                    # if tax_lines_tax_account:
-                    #     tax_lines_val = (0, 0, {
-                    #         'name': tax_lines_description,
-                    #         'account_id': tax_account_id.id,
-                    #         'analytic_account_id': tax_analytic_account_id.id,
-                    #         'analytic_tag_ids': [(6, 0, tax_analytic_tag_ids.ids)],
-                    #     })
-                    #
-                    #     tax_lines_lst.append(tax_lines_val)
-
                     ci_val = {
+                        'custom_id': id,
                         'move_type': type,
                         'name': number,
                         'partner_id': part_id.id,
@@ -251,13 +247,20 @@ class CustomerInvoiceWizard(models.TransientModel):
                         'currency_id': cur_id.id,
                         'company_id': com_id.id,
                         'fiscal_position_id': fis_pos_id.id,
-                        'state': status,
                         'invoice_line_ids': lst,
-                        # 'line_ids': tax_lines_lst,
                     }
                     ci_id = self.env['account.move'].sudo().create(ci_val)
                     print("ci_val", ci_val)
                 else:
+                    if not invoice_lines_unit_of_measure:
+                        vals = (0, 0, {
+                            'display_type': invoice_lines_display_type,
+                            'name': invoice_lines_description,
+                        })
+
+                        lst.append(vals)
+                        ci_line_id = ci_id.write({'invoice_line_ids': lst})
+                        print(ci_line_id)
                     if invoice_lines_product:
                         vals = (0, 0, {
                             'product_id': pro_id.id,
@@ -274,14 +277,3 @@ class CustomerInvoiceWizard(models.TransientModel):
                         lst.append(vals)
                         ci_line_id = ci_id.write({'invoice_line_ids': lst})
                         print(ci_line_id)
-
-                    # if tax_lines_tax_account:
-                    #     tax_lines_val = (0, 0, {
-                    #         'name': tax_lines_description,
-                    #         'account_id': tax_account_id.id,
-                    #         'analytic_account_id': tax_analytic_account_id.id,
-                    #         'analytic_tag_ids': [(6, 0, tax_analytic_tag_ids.ids)],
-                    #     })
-                    #
-                    #     tax_lines_lst.append(tax_lines_val)
-                    #     ci_tax_line_id = ci_id.write({'line_ids': tax_lines_lst})
