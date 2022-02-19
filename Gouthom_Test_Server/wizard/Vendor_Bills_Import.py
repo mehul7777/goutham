@@ -147,6 +147,9 @@ class VendorBillWizard(models.TransientModel):
                     invoice_lines_product = 'Service'
                     invoice_lines_product_internal_reference = 'Service'
 
+                if not invoice_lines_analytic_account:
+                    invoice_lines_analytic_account = 'NOT DEFINE'
+
                 # For main class
                 partner_id = self.env["res.partner"].search([('name', '=', partner), ('id_custom', '=', partner_custom_id), '|', ('active', '=', True), ('active', '=', False)], limit=1)
                 currency_id = self.env["res.currency"].search([('name', '=', currency)], limit=1)

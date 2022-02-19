@@ -163,6 +163,9 @@ class CustomerInvoiceWizard(models.TransientModel):
                     invoice_lines_product = 'Service'
                     invoice_lines_product_internal_reference = 'Service'
 
+                if not invoice_lines_analytic_account:
+                    invoice_lines_analytic_account = 'NOT DEFINE'
+
                 part_id = self.env['res.partner'].search(
                     [('name', '=', partner),('id_custom', '=', partner_custom_id), '|', ('active', '=', True), ('active', '=', False)], limit=1)
                 jour_id = self.env['account.journal'].search([('name', '=', journal)], limit=1)
