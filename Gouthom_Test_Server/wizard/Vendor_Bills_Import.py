@@ -66,27 +66,18 @@ class VendorBillWizard(models.TransientModel):
                 header_list.append(value)
             else:
                 print(value)
-                number = value[0]
+                id = value[0]
                 payments_widget = value[1]
 
                 payments_widget_dict = json.loads(payments_widget)
-                print(payments_widget_dict['content'])
 
                 search_vendor_bills = self.env["account.move"].search(
-                    [('name', '=', number), ('move_type', '=', 'in_invoice'), ('state', '=', 'posted'),
+                    [('custom_id', '=', id), ('move_type', '=', 'in_invoice'), ('state', '=', 'posted'),
                      ('payment_state', '=', 'not_paid')])
 
-                print(search_vendor_bills)
-                not_done =[]
                 for payment_values in payments_widget_dict['content']:
-                    print("\n")
-                    print("journal_name :", payment_values['journal_name'])
-                    print("amount :", payment_values['amount'])
-                    print("date :", payment_values['date'])
-                    print("ref :", payment_values['ref'])
-
                     journal_id = self.env["account.journal"].search([('name', '=', payment_values['journal_name'])])
-                    # # journal_id_stripe = self.env['account.journal'].sudo().search([('code', '=', 'BANK')], limit=1).id
+
                     if search_vendor_bills:
                         payment_wizard = self.env['account.payment.register'].with_context(active_model='account.move',
                                                                                        active_ids=search_vendor_bills.ids).create(
@@ -102,16 +93,6 @@ class VendorBillWizard(models.TransientModel):
                             })
                         account_payment = payment_wizard._create_payments()
                         account_payment.write({'custom_number': payment_values['ref']})
-                #         try:
-                #             account_payment = payment_wizard._create_payments()
-                #             account_payment.write({'custom_number': payment_values['ref']})
-                #         except Exception:
-                #             not_done.append(payment_values)
-                #             pass
-                # if len(not_done):
-                #     search_vendor_bills.write({'state': 'draft'})
-                #     search_vendor_bills.write({'narration': not_done})
-                #     search_vendor_bills.action_post()
 
     def import_vendor_bill_data(self):
         print("Import is working")
