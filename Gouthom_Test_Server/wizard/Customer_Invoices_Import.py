@@ -17,11 +17,36 @@ class CustomerInvoiceWizard(models.TransientModel):
     load_file = fields.Binary("Load File")
 
     def post_draft_invoice(self):
-        search_cust_invoice = self.env["account.move"].search(
-            [('move_type', '=', 'out_invoice'), ('state', '=', 'draft'), ('payment_state', '=', 'not_paid')], limit=200)
-        for invoice in search_cust_invoice:
-            print(invoice.id)
-            invoice.action_post()
+        csv_data = self.load_file
+        file_obj = TemporaryFile('wb+')
+        csv_data = base64.decodebytes(csv_data)
+        file_obj.write(csv_data)
+        file_obj.seek(0)
+        str_csv_data = file_obj.read().decode('utf-8')
+        lis = csv.reader(io.StringIO(str_csv_data), delimiter=',')
+        row_num = 0
+        header_list = []
+        data_dict = {}
+        for row in lis:
+            data_dict.update({row_num: row})
+            row_num += 1
+        for key, value in data_dict.items():
+            if key == 0:
+                header_list.append(value)
+            else:
+                print(value)
+                id = value[0]
+                status = value[1]
+
+                search_cust_invoice = self.env["account.move"].search(
+                    [('move_type', '=', 'out_invoice'), ('custom_id', '=', id),
+                     ('state', '=', 'draft'), ('payment_state', '=', 'not_paid')])
+
+                if search_cust_invoice:
+                    if status == "paid":
+                        search_cust_invoice.action_post()
+                    else:
+                        search_cust_invoice.write({'state': status})
 
     def paid_post_invoice(self):
         # print("Import is working for create payment")

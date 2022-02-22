@@ -15,11 +15,36 @@ class VendorBillWizard(models.TransientModel):
     load_file = fields.Binary("Load File")
 
     def post_draft_bills(self):
-        search_vendor_bills = self.env["account.move"].search(
-            [('move_type', '=', 'in_invoice'), ('state', '=', 'draft'), ('payment_state', '=', 'not_paid')], limit=500)
-        for bill in search_vendor_bills:
-            print(bill.id)
-            bill.action_post()
+        csv_data = self.load_file
+        file_obj = TemporaryFile('wb+')
+        csv_data = base64.decodebytes(csv_data)
+        file_obj.write(csv_data)
+        file_obj.seek(0)
+        str_csv_data = file_obj.read().decode('utf-8')
+        lis = csv.reader(io.StringIO(str_csv_data), delimiter=',')
+        row_num = 0
+        header_list = []
+        data_dict = {}
+        for row in lis:
+            data_dict.update({row_num: row})
+            row_num += 1
+        for key, value in data_dict.items():
+            if key == 0:
+                header_list.append(value)
+            else:
+                print(value)
+                id = value[0]
+                status = value[1]
+
+                search_vendor_bill = self.env["account.move"].search(
+                    [('move_type', '=', 'in_invoice'), ('custom_id', '=', id),
+                     ('state', '=', 'draft'), ('payment_state', '=', 'not_paid')])
+
+                if search_vendor_bill:
+                    if status == "paid":
+                        search_vendor_bill.action_post()
+                    else:
+                        search_vendor_bill.write({'state': status})
 
     def paid_post_bills(self):
         print("Import is working for vendor bill payment")
