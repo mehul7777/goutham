@@ -9,3 +9,4 @@ from . import Inherit_hr_employee
 from . import Inherit_Account_Move
 from . import Inherit_purchase_order
 from . import Inherit_Hr_Expense
+from . import Inherit_Expenses_Sheet

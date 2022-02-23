@@ -83,6 +83,8 @@ class HrExpenseWizard(models.TransientModel):
                                                                             limit=1)
                 company_id = self.env["res.company"].search([('name', '=', company)], limit=1)
 
+                search_hr_expense = self.env["hr.expense"].search([('custom_expense_id', '=', id)])
+
                 expense_vals = {
                     'custom_expense_id': id,
                     'name': description,
@@ -106,4 +108,7 @@ class HrExpenseWizard(models.TransientModel):
                     'payment_mode': paid_by,
                     'state': status
                 }
-                self.env['hr.expense'].create(expense_vals)
+                if not search_hr_expense:
+                    self.env['hr.expense'].create(expense_vals)
+                else:
+                    search_hr_expense.write(expense_vals)

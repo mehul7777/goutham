@@ -14,3 +14,4 @@ from . import Customer_Invoices_Import
 from . import Vendor_Bills_Import
 from . import Account_Journal_Import
 from . import Hr_Expense_Import
+from . import Hr_Expense_Sheet_Import
