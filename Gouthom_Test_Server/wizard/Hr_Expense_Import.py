@@ -3,6 +3,7 @@ import csv
 import io, base64
 from tempfile import TemporaryFile
 import logging
+import time
 
 _logger = logging.getLogger(__name__)
 
@@ -106,9 +107,48 @@ class HrExpenseWizard(models.TransientModel):
                     'company_id': company_id.id,
                     'total_amount': total,
                     'payment_mode': paid_by,
-                    'state': status
                 }
                 if not search_hr_expense:
                     self.env['hr.expense'].create(expense_vals)
                 else:
                     search_hr_expense.write(expense_vals)
+
+    def create_report_for_expense(self):
+        print("Import is working")
+        csv_data = self.load_file
+        file_obj = TemporaryFile('wb+')
+        csv_data = base64.decodebytes(csv_data)
+        file_obj.write(csv_data)
+        file_obj.seek(0)
+        str_csv_data = file_obj.read().decode('utf-8')
+        lis = csv.reader(io.StringIO(str_csv_data), delimiter=',')
+        row_num = 0
+        header_list = []
+        data_dict = {}
+
+        for row in lis:
+            data_dict.update({row_num: row})
+            row_num += 1
+        for key, value in data_dict.items():
+            if key == 0:
+                header_list.append(value)
+            else:
+                print(value)
+                expense_id = value[0]
+                expense_report_status = value[1].strip()
+
+                search_hr_expense = self.env["hr.expense"].search([('custom_expense_id', '=', expense_id)])
+
+                if search_hr_expense:
+                    if expense_report_status == "draft":
+                        search_hr_expense.write({'state': expense_report_status})
+                    elif expense_report_status == "reported":
+                        search_hr_expense.action_submit_expenses()
+                    elif expense_report_status == "approve":
+                        search_hr_expense.approve_expense_sheets()
+                    elif expense_report_status == "post" or "done":
+                        search_hr_expense.action_submit_expenses()
+                        time.sleep(2)
+                        self.env["hr.expense.sheet"].approve_expense_sheets()
+                        time.sleep(2)
+                        self.env["hr.expense.sheet"].action_sheet_move_create()
