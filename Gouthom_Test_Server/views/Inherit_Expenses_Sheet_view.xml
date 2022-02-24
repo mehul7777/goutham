@@ -9,6 +9,9 @@
                 <xpath expr="//field[@name='employee_id']" position="before">
                     <field name="custom_expense_sheet_id"/>
                 </xpath>
+                <xpath expr="//field[@name='company_id']" position="after">
+                    <field name="create_custom_date"/>
+                </xpath>
             </field>
         </record>
     </data>

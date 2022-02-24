@@ -64,6 +64,7 @@ class HrExpenseSheetWizard(models.TransientModel):
                 created_on = value[26]
                 bank_journal = value[27]
                 status = value[28]
+                date = value[29]
 
                 employee_id = self.env['hr.employee'].search(
                     [('name', '=', employee), ('custom_id', '=', employee_custom_id), '|', ('active', '=', True),
@@ -124,8 +125,10 @@ class HrExpenseSheetWizard(models.TransientModel):
                         'user_id': user_id.id,
                         'company_id': company_id.id,
                         'create_date': created_on,
+                        'create_custom_date': created_on,
                         'bank_journal_id': bank_journal_id.id,
                         'state': status,
+                        'accounting_date': date,
                         'expense_line_ids': lst
                     }
                     expense_sheet_id = self.env['hr.expense.sheet'].sudo().create(expense_sheet_vals)
