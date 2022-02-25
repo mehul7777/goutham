@@ -72,10 +72,13 @@ class HrExpenseWizard(models.TransientModel):
                 product_uom_id = self.env['uom.uom'].search([('name', '=', unit_of_measure)], limit=1)
                 tax_id = self.env["account.tax"].search([('name', '=', taxes)], limit=1)
                 account_id = self.env["account.account"].search([('name', '=', account_name)], limit=1)
-                employee_id = self.env['hr.employee'].search([('name', '=', employee), ('custom_id', '=', employee_custom_id),
-                                                              '|', ('active', '=', True), ('active', '=', False)], limit=1)
-                sales_opportunity_id = self.env['crm.lead'].search([('name', '=', sale_order_lead_opportunity)], limit=1)
-                sale_order_id = self.env['sale.order'].search([('name', '=', sales_order),('custom_so_id', '=', sales_order_custom_id)], limit=1)
+                employee_id = self.env['hr.employee'].search(
+                    [('name', '=', employee), ('custom_id', '=', employee_custom_id),
+                     '|', ('active', '=', True), ('active', '=', False)], limit=1)
+                sales_opportunity_id = self.env['crm.lead'].search([('name', '=', sale_order_lead_opportunity)],
+                                                                   limit=1)
+                sale_order_id = self.env['sale.order'].search(
+                    [('name', '=', sales_order), ('custom_so_id', '=', sales_order_custom_id)], limit=1)
                 currency_id = self.env['res.currency'].search([('name', '=', currency)], limit=1)
                 account_analytic_id = self.env['account.analytic.account'].search(
                     [('name', '=', analytic_account), '|', ('active', '=', True), ('active', '=', False)],
@@ -145,10 +148,26 @@ class HrExpenseWizard(models.TransientModel):
                     elif expense_report_status == "reported":
                         search_hr_expense.action_submit_expenses()
                     elif expense_report_status == "approve":
-                        search_hr_expense.approve_expense_sheets()
+                        sheet = search_hr_expense.action_submit_expenses()
+                        if sheet:
+                            sheet_id = sheet['res_id']
+                            if sheet_id:
+                                sheet_record_id = self.env['hr.expense.sheet'].browse(sheet_id)
+                                if sheet_record_id:
+                                    # time.sleep(2)
+                                    search_hr_expense.action_view_sheet()
+                                    # time.sleep(2)
+                                    sheet_record_id.approve_expense_sheets()
                     elif expense_report_status == "post" or "done":
-                        search_hr_expense.action_submit_expenses()
-                        time.sleep(2)
-                        self.env["hr.expense.sheet"].approve_expense_sheets()
-                        time.sleep(2)
-                        self.env["hr.expense.sheet"].action_sheet_move_create()
+                        sheet = search_hr_expense.action_submit_expenses()
+                        if sheet:
+                            sheet_id = sheet['res_id']
+                            if sheet_id:
+                                sheet_record_id = self.env['hr.expense.sheet'].browse(sheet_id)
+                                if sheet_record_id:
+                                    # time.sleep(2)
+                                    search_hr_expense.action_view_sheet()
+                                    # time.sleep(2)
+                                    sheet_record_id.approve_expense_sheets()
+                                    # time.sleep(2)
+                                    sheet_record_id.action_sheet_move_create()

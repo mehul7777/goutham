@@ -13,6 +13,7 @@ class InheritAccountMove(models.Model):
     source_document = fields.Char(string="Source Document")
     custom_id = fields.Integer(string="Custom ID")
     purchase_representative_id = fields.Many2one(comodel_name="res.users", string="Purchase Representative")
+    custom_number = fields.Char(string="Custom Number")
 
 
 class InheritAccountMoveLine(models.Model):

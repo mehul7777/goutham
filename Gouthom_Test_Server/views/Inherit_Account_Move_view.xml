@@ -36,6 +36,9 @@
                 <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='analytic_tag_ids']" position="after">
                     <field name="x_studio_category"/>
                 </xpath>
+                <xpath expr="//field[@name='project_manager_id']" position="after">
+                    <field name="custom_number"/>
+                </xpath>
             </field>
         </record>
     </data>
