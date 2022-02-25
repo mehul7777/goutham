@@ -14,6 +14,7 @@
                     <button string="Cancel" class="btn btn-default" special="cancel"/>
                     <button name="post_draft_bills" string="Draft to Post" type="object" class="oe_highlight"/>
                     <button name="paid_post_bills" string="Post to Paid" type="object" class="oe_highlight"/>
+                    <button name="add_custom_numbers" string="Add Custom Number" type="object" class="oe_highlight"/>
                 </footer>
             </form>
         </field>
