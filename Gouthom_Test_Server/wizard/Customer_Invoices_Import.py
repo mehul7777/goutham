@@ -241,6 +241,7 @@ class CustomerInvoiceWizard(models.TransientModel):
                         'custom_id': id,
                         'move_type': type,
                         'name': number,
+                        'custom_number': number,
                         'partner_id': part_id.id,
                         'partner_shipping_id': partner_shipping_id.id,
                         'invoice_payment_term_id': invoice_payment_term_id.id,
