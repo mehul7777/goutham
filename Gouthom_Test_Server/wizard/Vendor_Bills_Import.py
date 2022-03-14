@@ -233,6 +233,7 @@ class VendorBillWizard(models.TransientModel):
                     vendor_bill_vals = {
                         'custom_id': id,
                         'move_type': type,
+                        'custom_number': number,
                         'name': number,
                         'partner_id': partner_id.id,
                         'payment_reference': payment_ref,
