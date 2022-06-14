@@ -46,7 +46,7 @@ class AccountAccountWizard(models.TransientModel):
                 tag_ids = self.env['account.account.tag'].search([('name', '=', tags)])
                 tax_ids = self.env['account.tax'].search([('name', '=', default_taxes)])
 
-                search_name = self.env['account.account'].search([('name', '=', name), ('code', '=', code)])
+                search_name = self.env['account.account'].search(['|', ('name', '=', name), ('code', '=', code)])
 
                 if not search_name:
                     coa_val = {
