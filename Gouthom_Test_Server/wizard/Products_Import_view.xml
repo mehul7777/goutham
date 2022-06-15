@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <record id="view_product_wizard_form" model="ir.ui.view">
+    <record id="view_product_product_wizard_form" model="ir.ui.view">
         <field name="name">view.product.wizard.form</field>
         <field name="model">product.wizard</field>
         <field name="type">form</field>
@@ -17,13 +17,13 @@
         </field>
     </record>
 
-    <record id="product_wizard_action_record" model="ir.actions.act_window">
+    <record id="product_product_wizard_action_record" model="ir.actions.act_window">
         <field name="name">Import Product(s)</field>
         <field name="res_model">product.wizard</field>
         <field name="view_mode">form</field>
-        <field name="view_id" ref="view_product_wizard_form"/>
+        <field name="view_id" ref="view_product_product_wizard_form"/>
         <field name="target">new</field>
-        <field name="binding_model_id" ref="product.model_product_template"/>
+        <field name="binding_model_id" ref="product.model_product_product"/>
         <field name="binding_view_types">list</field>
     </record>
 
