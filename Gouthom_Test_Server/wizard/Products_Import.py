@@ -125,19 +125,19 @@ class ProductWizard(models.TransientModel):
 
                 lst = []
                 if name:
-                    if vendor_vendor:
-                        vendors_val = (0, 0, {
-                            'name': vendor_name.id,
-                            'product_code': vendor_vendor_product_code,
-                            'product_id': vendor_product_id.id,
-                            'min_qty': vendor_minimal_quantity,
-                            'product_uom': vendor_product_uom.id,
-                            'price': vendor_price,
-                            'currency_id': vendor_currency_id.id,
-                            'date_start': vendor_start_date,
-                            'date_end': vendor_end_date,
-                        })
-                        lst.append(vendors_val)
+                    # if vendor_vendor:
+                    #     vendors_val = (0, 0, {
+                    #         'name': vendor_name.id,
+                    #         'product_code': vendor_vendor_product_code,
+                    #         'product_id': vendor_product_id.id,
+                    #         'min_qty': vendor_minimal_quantity,
+                    #         'product_uom': vendor_product_uom.id,
+                    #         'price': vendor_price,
+                    #         'currency_id': vendor_currency_id.id,
+                    #         'date_start': vendor_start_date,
+                    #         'date_end': vendor_end_date,
+                    #     })
+                    #     lst.append(vendors_val)
 
                     product_val = {
                         'default_code': internal_reference,
@@ -174,21 +174,21 @@ class ProductWizard(models.TransientModel):
                         'active': True if active == "True" else False,
                         'seller_ids': lst
                     }
-                    pro_id = self.env['product.template'].create(product_val)
+                    pro_id = self.env['product.product'].create(product_val)
                     # print("product_val", product_id)
-                else:
-                    if vendor_vendor:
-                        vendors_val = (0, 0, {
-                            'name': vendor_name.id,
-                            'product_code': vendor_vendor_product_code,
-                            'product_id': vendor_product_id.id,
-                            'min_qty': vendor_minimal_quantity,
-                            'product_uom': vendor_product_uom.id,
-                            'price': vendor_price,
-                            'currency_id': vendor_currency_id.id,
-                            'date_start': vendor_start_date,
-                            'date_end': vendor_end_date,
-                        })
-                        if pro_id:
-                            lst.append(vendors_val)
-                            pro_id.write({'seller_ids': lst})
+                # else:
+                #     if vendor_vendor:
+                #         vendors_val = (0, 0, {
+                #             'name': vendor_name.id,
+                #             'product_code': vendor_vendor_product_code,
+                #             'product_id': vendor_product_id.id,
+                #             'min_qty': vendor_minimal_quantity,
+                #             'product_uom': vendor_product_uom.id,
+                #             'price': vendor_price,
+                #             'currency_id': vendor_currency_id.id,
+                #             'date_start': vendor_start_date,
+                #             'date_end': vendor_end_date,
+                #         })
+                #         if pro_id:
+                #             lst.append(vendors_val)
+                #             pro_id.write({'seller_ids': lst})
