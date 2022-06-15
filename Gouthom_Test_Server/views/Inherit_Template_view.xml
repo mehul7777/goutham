@@ -37,5 +37,42 @@
                 </xpath>
             </field>
         </record>
+
+        <record id="product_product_inherit_view_training" model="ir.ui.view">
+            <field name="name">product.product.inherit.view.training</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_normal_form_view"/>
+            <field name="arch" type="xml">
+<!--                <xpath expr="//notebook" position="before">-->
+<!--                    <div>-->
+<!--                        <field name="can_be_expensed"/>-->
+<!--                        <label for="can_be_expensed"/>-->
+<!--                    </div>-->
+<!--                </xpath>-->
+                <xpath expr="//field[@name='barcode']" position="after">
+                    <field name="order_planner_policy"/>
+                </xpath>
+                <xpath expr="//field[@name='order_planner_policy']" position="after">
+                    <field name="version"/>
+                </xpath>
+                <xpath expr="//field[@name='version']" position="after">
+                    <field name="loaded_cost"/>
+                </xpath>
+                <xpath expr="//field[@name='loaded_cost']" position="after">
+                    <field name="sales_person_minimum_cost"/>
+                </xpath>
+                <xpath expr="//field[@name='company_id']" position="before">
+                    <field name="tax_cloud_category"/>
+                </xpath>
+                <xpath expr="//field[@name='default_code']" position="after">
+                    <field name="oem"/>
+                </xpath>
+                <xpath expr="//field[@name='loaded_cost']" position="after">
+                    <field name="create_date_custom"/>
+                    <field name="create_uid_custom"/>
+
+                </xpath>
+            </field>
+        </record>
     </data>
 </odoo>
