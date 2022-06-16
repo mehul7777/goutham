@@ -61,24 +61,24 @@ class ProductWizard(models.TransientModel):
                 purchase_unit_of_measure = value[23]
                 invoice_policy = value[24]
                 re_invoice_policy = value[25]
-                vendor_vendor = value[26]
-                vendor_vendor_id = value[27]
-                vendor_vendor_product_code = value[28]
-                vendor_product_variant = value[29]
-                vendor_minimal_quantity = value[30]
-                vendor_unit_of_measure = value[31]
-                vendor_price = value[32]
-                vendor_currency = value[33]
-                vendor_start_date = value[34] or False
-                vendor_end_date = value[35] or False
-                routes = value[36]
-                responsible = value[37]
-                production_location = value[38]
-                inventory_location = value[39]
-                income_account = value[40]
-                expense_account = value[41]
-                active = value[42]
-                custom_id = value[43]
+                # vendor_vendor = value[26]
+                # vendor_vendor_id = value[27]
+                # vendor_vendor_product_code = value[28]
+                # vendor_product_variant = value[29]
+                # vendor_minimal_quantity = value[30]
+                # vendor_unit_of_measure = value[31]
+                # vendor_price = value[32]
+                # vendor_currency = value[33]
+                # vendor_start_date = value[34] or False
+                # vendor_end_date = value[35] or False
+                routes = value[26]
+                responsible = value[27]
+                production_location = value[28]
+                inventory_location = value[29]
+                income_account = value[30]
+                expense_account = value[31]
+                active = value[32]
+                custom_id = value[33]
 
                 categ_id = self.env['product.category'].search([('name', '=', product_category)], limit=1) #change this before commiting replace display_name to name
                 # order_planner_policy = self.env['sale.order.planning.policy'].search([('name', '=', order_planner_policy)])
@@ -126,19 +126,19 @@ class ProductWizard(models.TransientModel):
 
                 lst = []
                 if name:
-                    if vendor_vendor:
-                        vendors_val = (0, 0, {
-                            'name': vendor_name.id,
-                            'product_code': vendor_vendor_product_code,
-                            'product_id': vendor_product_id.id,
-                            'min_qty': vendor_minimal_quantity,
-                            'product_uom': vendor_product_uom.id,
-                            'price': vendor_price,
-                            'currency_id': vendor_currency_id.id,
-                            'date_start': vendor_start_date,
-                            'date_end': vendor_end_date,
-                        })
-                        lst.append(vendors_val)
+                    # if vendor_vendor:
+                    #     vendors_val = (0, 0, {
+                    #         'name': vendor_name.id,
+                    #         'product_code': vendor_vendor_product_code,
+                    #         'product_id': vendor_product_id.id,
+                    #         'min_qty': vendor_minimal_quantity,
+                    #         'product_uom': vendor_product_uom.id,
+                    #         'price': vendor_price,
+                    #         'currency_id': vendor_currency_id.id,
+                    #         'date_start': vendor_start_date,
+                    #         'date_end': vendor_end_date,
+                    #     })
+                    #     lst.append(vendors_val)
 
                     product_val = {
                         'default_code': internal_reference,
@@ -174,23 +174,23 @@ class ProductWizard(models.TransientModel):
                         'property_account_income_id': property_account_income_id.id,
                         'property_account_expense_id': property_account_expense_id.id,
                         'active': True if active == "True" else False,
-                        'seller_ids': lst
+                        # 'seller_ids': lst
                     }
                     pro_id = self.env['product.product'].create(product_val)
                     # print("product_val", product_id)
-                else:
-                    if vendor_vendor:
-                        vendors_val = (0, 0, {
-                            'name': vendor_name.id,
-                            'product_code': vendor_vendor_product_code,
-                            'product_id': vendor_product_id.id,
-                            'min_qty': vendor_minimal_quantity,
-                            'product_uom': vendor_product_uom.id,
-                            'price': vendor_price,
-                            'currency_id': vendor_currency_id.id,
-                            'date_start': vendor_start_date,
-                            'date_end': vendor_end_date,
-                        })
-                        if pro_id:
-                            lst.append(vendors_val)
-                            pro_id.write({'seller_ids': lst})
+                # else:
+                    # if vendor_vendor:
+                    #     vendors_val = (0, 0, {
+                    #         'name': vendor_name.id,
+                    #         'product_code': vendor_vendor_product_code,
+                    #         'product_id': vendor_product_id.id,
+                    #         'min_qty': vendor_minimal_quantity,
+                    #         'product_uom': vendor_product_uom.id,
+                    #         'price': vendor_price,
+                    #         'currency_id': vendor_currency_id.id,
+                    #         'date_start': vendor_start_date,
+                    #         'date_end': vendor_end_date,
+                    #     })
+                    #     if pro_id:
+                    #         lst.append(vendors_val)
+                    #         pro_id.write({'seller_ids': lst})
