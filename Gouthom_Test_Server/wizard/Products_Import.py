@@ -119,10 +119,10 @@ class ProductWizard(models.TransientModel):
                 # else:
                 #     pt_id.message_subscribe([follower_id.id])
 
-                vendor_name = self.env['res.partner'].search([('name', '=', vendor_vendor), ('id_custom', '=', vendor_vendor_id), '|', ('active', '=', True), ('active', '=', False)], limit=1)
-                vendor_product_id = self.env['product.product'].search([('name', '=', vendor_product_variant)], limit=1)
-                vendor_product_uom = self.env['uom.uom'].search([('name', '=', vendor_unit_of_measure)], limit=1)
-                vendor_currency_id = self.env['res.currency'].search([('name', '=', vendor_currency)], limit=1)
+                # vendor_name = self.env['res.partner'].search([('name', '=', vendor_vendor), ('id_custom', '=', vendor_vendor_id), '|', ('active', '=', True), ('active', '=', False)], limit=1)
+                # vendor_product_id = self.env['product.product'].search([('name', '=', vendor_product_variant)], limit=1)
+                # vendor_product_uom = self.env['uom.uom'].search([('name', '=', vendor_unit_of_measure)], limit=1)
+                # vendor_currency_id = self.env['res.currency'].search([('name', '=', vendor_currency)], limit=1)
 
                 lst = []
                 if name:
