@@ -78,6 +78,7 @@ class ProductWizard(models.TransientModel):
                 income_account = value[40]
                 expense_account = value[41]
                 active = value[42]
+                custom_id = value[43]
 
                 categ_id = self.env['product.category'].search([('name', '=', product_category)], limit=1) #change this before commiting replace display_name to name
                 # order_planner_policy = self.env['sale.order.planning.policy'].search([('name', '=', order_planner_policy)])
@@ -141,6 +142,7 @@ class ProductWizard(models.TransientModel):
 
                     product_val = {
                         'default_code': internal_reference,
+                        'custom_id': custom_id,
                         'name': name,
                         'sale_ok': True if can_be_sold == "True" else False,
                         'purchase_ok': True if can_be_purchased == "True" else False,

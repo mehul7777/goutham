@@ -13,3 +13,4 @@ class ProductTemplate(models.Model):
     tax_cloud_category = fields.Many2one(comodel_name="product.tic.category", string="TaxCloud Category")
     create_date_custom = fields.Datetime(string="Created On")
     create_uid_custom = fields.Many2one(comodel_name="res.users", string="Created By")
+    custom_id = fields.Integer(string="Custom ID")
