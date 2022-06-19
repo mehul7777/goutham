@@ -35,43 +35,44 @@ class VPIWizard(models.TransientModel):
             else:
                 # print(value)
                 vendor = value[0]
-                vendor_product_name = value[1]
-                vendor_product_code = value[2]
-                delivery_lead_time = value[3]
-                company = value[4]
-                product_template = value[5]
-                price = value[6]
-                minimal_quantity = value[7]
-                start_date = value[8] or None
-                end_date = value[9] or None
-                product_variant = value[10]
-                currency = value[11]
+                vendor_id = value[1]
+                vendor_product_name = value[2]
+                vendor_product_code = value[3]
+                delivery_lead_time = value[4]
+                company = value[5]
+                product_template = value[6]
+                price = value[7]
+                minimal_quantity = value[8]
+                start_date = value[9] or None
+                end_date = value[10] or None
+                product_variant = value[11]
+                currency = value[12]
 
-                ven_id = self.env['res.partner'].search([('name', '=', vendor)], limit=1)
+                ven_id = self.env['res.partner'].search([('name', '=', vendor), ('id_custom', '=', vendor_id)], limit=1)
                 com_id = self.env['res.company'].search([('name', '=', company)], limit=1)
                 pro_tmp_id = self.env['product.template'].search([('name', '=', product_template)], limit=1)
                 product_id = self.env['product.product'].search([('name', '=', product_variant)], limit=1)
                 currency_id = self.env['res.currency'].search([('name', '=', currency)], limit=1)
 
-                if not ven_id:
-                    vendors_val = {
-                        'name': vendor
-                    }
-                    ven_id = self.env['res.partner'].create(vendors_val)
+                # if not ven_id:
+                #     vendors_val = {
+                #         'name': vendor
+                #     }
+                #     ven_id = self.env['res.partner'].create(vendors_val)
 
-                if not pro_tmp_id:
-                    products_val = {
-                        'name': product_template
-                    }
-                    pro_tmp_id = self.env['product.template'].create(products_val)
+                # if not pro_tmp_id:
+                #     products_val = {
+                #         'name': product_template
+                #     }
+                #     pro_tmp_id = self.env['product.template'].create(products_val)
 
                 vpi_val = {
-                    'name': ven_id[0].id,
+                    'name': ven_id.id,
                     'product_name': vendor_product_name,
                     'product_code': vendor_product_code,
                     'delay': delivery_lead_time,
                     'company_id': com_id.id,
-                    'product_tmpl_id': pro_tmp_id[0].id,
+                    'product_tmpl_id': pro_tmp_id.id,
                     'price': price,
                     'min_qty': minimal_quantity,
                     'date_start': start_date,

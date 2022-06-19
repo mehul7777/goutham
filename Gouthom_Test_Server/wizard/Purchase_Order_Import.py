@@ -122,6 +122,7 @@ class PO1Wizard(models.TransientModel):
                 order_lines_unit_of_measure = value[9]
                 order_lines_price_unit = value[10]
                 order_lines_taxes = value[11]
+                order_lines_display_type = value[12]
 
                 if not order_lines_product:
                     order_lines_product = 'Service'
@@ -156,23 +157,25 @@ class PO1Wizard(models.TransientModel):
                 order_id = self.env["purchase.order"].search([('custom_po_id', '=', purchase_order_id)])
 
                 lst = []
-                if order_lines_product and pro_id:
-                    po_line_vals = {
-                        'product_id': pro_id.id,
-                        'name': order_lines_description,
-                        'date_planned': order_lines_scheduled_date,
-                        'account_analytic_id': account_analytic_id.id,
-                        'analytic_tag_ids': [(6, 0, analytic_tag_ids.ids)],
-                        'product_qty': order_lines_quantity,
-                        'product_uom': product_uom_id.id,
-                        'price_unit': order_lines_price_unit,
-                        'taxes_id': [(6, 0, tax_id.ids)],
-                        'order_id': order_id.id
-                    }
-                    self.env["purchase.order.line"].create(po_line_vals)
-                else:
-                    lst.append(order_lines_product)
-                    order_id.write({'notes': lst})
+                if purchase_order_id:
+                    if order_lines_product and pro_id:
+                        po_line_vals = {
+                            'product_id': pro_id.id,
+                            'name': order_lines_description,
+                            'date_planned': order_lines_scheduled_date,
+                            'account_analytic_id': account_analytic_id.id,
+                            'analytic_tag_ids': [(6, 0, analytic_tag_ids.ids)],
+                            'product_qty': order_lines_quantity,
+                            'product_uom': product_uom_id.id,
+                            'price_unit': order_lines_price_unit,
+                            'taxes_id': [(6, 0, tax_id.ids)],
+                            'display_type': order_lines_display_type if not order_lines_unit_of_measure else None,
+                            'order_id': order_id.id
+                        }
+                        self.env["purchase.order.line"].create(po_line_vals)
+                    else:
+                        lst.append(order_lines_product)
+                        order_id.write({'notes': lst})
 
     def change_status_of_po(self):
         print("Change status of po is working")

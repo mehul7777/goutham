@@ -205,6 +205,7 @@ class SOWizard(models.TransientModel):
                 order_lines_unit_price = value[12]
                 order_lines_taxes = value[13] or None
                 order_lines_discount = value[14]
+                order_lines_display_type = value[15]
 
                 if not order_lines_product:
                     order_lines_product = 'Service'
@@ -230,26 +231,28 @@ class SOWizard(models.TransientModel):
                                                                               limit=1)
                 order_id = self.env["sale.order"].search([('custom_so_id', '=', sale_order_id)])
                 lst = []
-                if order_lines_product and product_id:
-                    so_line_vals = {
-                        'is_service': True if order_lines_is_a_service == "True" else False,
-                        'product_id': product_id.id,
-                        'product_oem_code': order_lines_oem,
-                        'name': order_lines_description,
-                        'product_uom_qty': order_lines_ordered_quantity,
-                        'warehouse_id': order_lines_warehouse_id.id,
-                        'product_uom': product_uom_id.id,
-                        'analytic_tag_ids': [(6, 0, analytic_tags_ids.ids)],
-                        'price_unit': order_lines_unit_price,
-                        'tax_id': [(6, 0, tax_id.ids)],
-                        'discount': order_lines_discount,
-                        'display_type': 'line_note' if not order_lines_unit_of_measure else None,
-                        'order_id': order_id.id
-                    }
-                    self.env["sale.order.line"].create(so_line_vals)
-                else:
-                    lst.append(order_lines_product)
-                    order_id.write({'note': lst})
+
+                if sale_order_id:
+                    if order_lines_product and product_id:
+                        so_line_vals = {
+                            'is_service': True if order_lines_is_a_service == "True" else False,
+                            'product_id': product_id.id,
+                            'product_oem_code': order_lines_oem,
+                            'name': order_lines_description,
+                            'product_uom_qty': order_lines_ordered_quantity,
+                            'warehouse_id': order_lines_warehouse_id.id,
+                            'product_uom': product_uom_id.id,
+                            'analytic_tag_ids': [(6, 0, analytic_tags_ids.ids)],
+                            'price_unit': order_lines_unit_price,
+                            'tax_id': [(6, 0, tax_id.ids)],
+                            'discount': order_lines_discount,
+                            'display_type': order_lines_display_type if not order_lines_unit_of_measure else None,
+                            'order_id': order_id.id
+                        }
+                        self.env["sale.order.line"].create(so_line_vals)
+                    else:
+                        lst.append(order_lines_product)
+                        order_id.write({'note': lst})
 
     def change_status_of_so(self):
         print("Change status of so is working")
