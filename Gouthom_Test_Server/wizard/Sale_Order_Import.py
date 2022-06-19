@@ -77,8 +77,8 @@ class SOWizard(models.TransientModel):
                 campaign = value[41]
                 medium = value[42]
                 source = value[43]
-                validity_start_date = value[44]
-                validity = value[45]
+                validity_start_date = value[44] or False
+                validity = value[45] or False
 
                 warehouse_id = self.env["stock.warehouse"].search([('name', '=', warehouse)], limit=1)
                 user_id = self.env["res.users"].search(
