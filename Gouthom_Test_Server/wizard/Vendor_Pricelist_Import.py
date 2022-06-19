@@ -48,7 +48,8 @@ class VPIWizard(models.TransientModel):
                 product_variant = value[11]
                 currency = value[12]
 
-                ven_id = self.env['res.partner'].search([('name', '=', vendor), ('id_custom', '=', vendor_id)], limit=1)
+                ven_id = self.env['res.partner'].search([('name', '=', vendor), ('id_custom', '=', vendor_id), '|', ('active', '=', True),
+                     ('active', '=', False)], limit=1)
                 com_id = self.env['res.company'].search([('name', '=', company)], limit=1)
                 pro_tmp_id = self.env['product.template'].search([('name', '=', product_template)], limit=1)
                 product_id = self.env['product.product'].search([('name', '=', product_variant)], limit=1)
