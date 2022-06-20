@@ -56,7 +56,7 @@ class TimesheetWizard(models.TransientModel):
 
                 timesheet_val = {
                     'custom_timesheet_id': id,
-                    'date': datetime.datetime.strptime(date, "%d/%m/%Y").strftime("%Y-%m-%d"),
+                    'date': datetime.datetime.strptime(date, "%Y-%m-%d").strftime("%Y-%m-%d") if "-" in date else datetime.datetime.strptime(date, "%d/%m/%Y").strftime("%Y-%m-%d"),
                     'employee_id': employee_id.id,
                     'project_id': project_id.id,
                     'task_id': task_id.id,
