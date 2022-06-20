@@ -122,7 +122,6 @@ class PO1Wizard(models.TransientModel):
                 order_lines_unit_of_measure = value[9]
                 order_lines_price_unit = value[10]
                 order_lines_taxes = value[11]
-                order_lines_display_type = value[12]
 
                 if not order_lines_product:
                     order_lines_product = 'Service'
@@ -169,7 +168,7 @@ class PO1Wizard(models.TransientModel):
                             'product_uom': product_uom_id.id,
                             'price_unit': order_lines_price_unit,
                             'taxes_id': [(6, 0, tax_id.ids)],
-                            'display_type': order_lines_display_type if not order_lines_unit_of_measure else None,
+                            'display_type': "line_note" if not order_lines_unit_of_measure else None,
                             'order_id': order_id.id
                         }
                         self.env["purchase.order.line"].create(po_line_vals)
