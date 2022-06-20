@@ -1,3 +1,5 @@
+import datetime
+
 from odoo import api, fields, models
 import csv
 import io, base64
@@ -54,7 +56,7 @@ class TimesheetWizard(models.TransientModel):
 
                 timesheet_val = {
                     'custom_timesheet_id': id,
-                    'date': date,
+                    'date': datetime.datetime.strptime(date, "%d/%m/%Y").strftime("%Y-%m-%d"),
                     'employee_id': employee_id.id,
                     'project_id': project_id.id,
                     'task_id': task_id.id,
