@@ -157,7 +157,7 @@ class PO1Wizard(models.TransientModel):
                 order_id = self.env["purchase.order"].search([('custom_po_id', '=', purchase_order_id)])
 
                 lst = []
-                if purchase_order_id:
+                if order_id:
                     if order_lines_product and pro_id:
                         po_line_vals = {
                             'product_id': pro_id.id,

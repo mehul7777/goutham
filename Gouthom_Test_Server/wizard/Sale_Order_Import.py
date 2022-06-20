@@ -232,7 +232,7 @@ class SOWizard(models.TransientModel):
                 order_id = self.env["sale.order"].search([('custom_so_id', '=', sale_order_id)])
                 lst = []
 
-                if sale_order_id:
+                if order_id:
                     if order_lines_product and product_id:
                         so_line_vals = {
                             'is_service': True if order_lines_is_a_service == "True" else False,
