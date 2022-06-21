@@ -1,3 +1,5 @@
+import datetime
+
 from odoo import api, fields, models
 import csv
 import io, base64
@@ -99,7 +101,7 @@ class HrExpenseWizard(models.TransientModel):
                     'product_uom_id': product_uom_id.id,
                     'tax_ids': [(6, 0, tax_id.ids)],
                     'reference': bill_reference,
-                    'date': date,
+                    'date': datetime.datetime.strptime(date, "%Y-%m-%d").strftime("%Y-%m-%d") if "-" in date else datetime.datetime.strptime(date, "%d/%m/%Y").strftime("%Y-%m-%d"),
                     'account_id': account_id.id,
                     'employee_id': employee_id.id,
                     'sales_opportunity_id': sales_opportunity_id.id,
