@@ -200,7 +200,7 @@ class PO1Wizard(models.TransientModel):
                 order_reference = value[1]
                 status = value[2]
 
-                search_purchase_order = self.env["purchase.order"].search([('name', '=', order_reference), ('custom_po_id', '=', id)])
+                search_purchase_order = self.env["purchase.order"].search([('custom_po_id', '=', id)])
 
                 if search_purchase_order:
                     search_purchase_order.write({'state': status})
