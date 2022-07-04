@@ -118,6 +118,37 @@ class HrExpenseWizard(models.TransientModel):
                 else:
                     search_hr_expense.write(expense_vals)
 
+    def change_expense_status(self):
+        print("Import is working")
+        csv_data = self.load_file
+        file_obj = TemporaryFile('wb+')
+        csv_data = base64.decodebytes(csv_data)
+        file_obj.write(csv_data)
+        file_obj.seek(0)
+        str_csv_data = file_obj.read().decode('utf-8')
+        lis = csv.reader(io.StringIO(str_csv_data), delimiter=',')
+        row_num = 0
+        header_list = []
+        data_dict = {}
+
+        for row in lis:
+            data_dict.update({row_num: row})
+            row_num += 1
+        for key, value in data_dict.items():
+            if key == 0:
+                header_list.append(value)
+            else:
+                id = value[0]
+                status = value[1]
+
+                search_expense = self.env["hr.expense"].search([('custom_expense_id', '=', id)])
+
+                expense_vals = {
+                    'state': status,
+                }
+                if search_expense:
+                    search_expense.write(expense_vals)
+
     def create_report_for_expense(self):
         print("Import is working")
         csv_data = self.load_file

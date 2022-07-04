@@ -12,6 +12,7 @@
                 <footer>
                     <button name="import_expense_data" string="Import" type="object" class="oe_highlight"/>
                     <button name="create_report_for_expense" string="Create Report" type="object" class="oe_highlight"/>
+                    <button name="change_expense_status" string="Change Status" type="object" class="oe_highlight"/>
                     <button string="Cancel" class="btn btn-default" special="cancel"/>
                 </footer>
             </form>
