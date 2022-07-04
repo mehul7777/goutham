@@ -119,7 +119,7 @@ class HrExpenseWizard(models.TransientModel):
                     search_hr_expense.write(expense_vals)
 
     def change_expense_status(self):
-        print("Import is working")
+        # print("Import is working")
         csv_data = self.load_file
         file_obj = TemporaryFile('wb+')
         csv_data = base64.decodebytes(csv_data)
